@@ -35,6 +35,7 @@ public class BallAlpha : MonoBehaviour
                 _ball.transform.position = _startPoint;
                 _points.Clear();
                 _lineRenderer.positionCount = 0;
+                _plane.transform.position = new Vector3(0, -200, 0);
             }
             if (Input.GetMouseButton(0))
             {
