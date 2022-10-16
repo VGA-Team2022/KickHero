@@ -17,10 +17,12 @@ public class BallAlpha : MonoBehaviour
     LineRenderer _lineRenderer;
     Vector3[] _route;
     bool _isMove = false;
+    Vector3 _startPoint;
     // Start is called before the first frame update
     void Start()
     {
         _lineRenderer = GetComponent<LineRenderer>();
+        _startPoint = _ball.transform.position;
     }
 
     // Update is called once per frame
@@ -30,6 +32,7 @@ public class BallAlpha : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                _ball.transform.position = _startPoint;
                 _points.Clear();
                 _lineRenderer.positionCount = 0;
             }
