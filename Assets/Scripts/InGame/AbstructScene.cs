@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 public abstract class AbstructScene : MonoBehaviour
 {
@@ -9,7 +8,7 @@ public abstract class AbstructScene : MonoBehaviour
     {
         _applicationOperator = appOperator;
     }
-    public abstract void Load();
+    public abstract UniTask Load(object[] objects);
     public abstract void Open();
-    public abstract void UnLoad();
+    public abstract UniTask UnLoad();
 }

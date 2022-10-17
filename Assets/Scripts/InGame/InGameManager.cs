@@ -1,18 +1,29 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameManager : MonoBehaviour
+public class InGameManager : AbstructScene
 {
-    // Start is called before the first frame update
-    void Start()
+    public override async UniTask Load(object[] objects)
+    {
+        await UniTask.Yield();
+        Debug.Log("LoadíÜ"+objects);
+    }
+
+    public override void Open()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override async UniTask UnLoad()
     {
-        
+        await UniTask.Yield();
+        Debug.Log("ÉAÉìÉçÅ[Éh");
+    }
+
+    public void LoadScene(string sceneName)
+    {
+
     }
 }
