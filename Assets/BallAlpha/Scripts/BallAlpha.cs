@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
 
@@ -10,13 +11,21 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class BallAlpha : MonoBehaviour
 {
+    [Tooltip("ボールの跳び方")]
+    [SerializeField] KickType _kickType;
+    [Tooltip("ボールのスピード")]
+    [SerializeField] float _speed = 10;
+    [SerializeField] float _curve = 1;
     [Header("========これより下は触らない====================")]
     [SerializeField] GameObject _ball;
+    [SerializeField] GameObject _ball2;
     [SerializeField] GameObject _plane;
     List<Vector3> _points = new List<Vector3>();
     LineRenderer _lineRenderer;
     Vector3[] _route;
     bool _isMove = false;
+    Vector3 _forward;
+    Vector3 _up;
     Vector3 _startPoint;
     // Start is called before the first frame update
     void Start()
@@ -51,6 +60,8 @@ public class BallAlpha : MonoBehaviour
                 _lineRenderer.positionCount = 0;
             }
         }
+        Debug.DrawRay(_startPoint, _forward * 100);
+        Debug.DrawRay(_ball2.transform.position, _up * -100);
     }
 
     IEnumerator Point()
@@ -75,6 +86,25 @@ public class BallAlpha : MonoBehaviour
                     Debug.DrawLine(ray.origin, hit.point);
                 }
             }
+            if (_kickType == KickType.Curve)
+            {
+                Vector3 goal = _route.Last();
+                Vector3 relayPoint = new Vector3(_route.Sum(v => v.x) / _route.Length, _route.Sum(v => v.y) / _route.Length, _route.Sum(v => v.z) / _route.Length);
+                _ball2.transform.position = relayPoint;
+                float length = Vector3.Distance(_startPoint, relayPoint) + Vector3.Distance(relayPoint, goal);
+                float num = length / _speed;
+                _route = new Vector3[Mathf.CeilToInt(num)];
+                Vector3 sr = relayPoint - _startPoint;
+                Vector3 rg = goal - relayPoint;
+                _forward = (goal - _startPoint).normalized;
+                _up = Vector3.Cross(Vector3.Cross(rg, sr), _forward).normalized;
+                for (int k = 0; k < _route.Length; k++)
+                {
+                    float t = Mathf.Abs(Mathf.Cos(((k - _route.Length / 2f) / _route.Length) * Mathf.PI));
+                    _route[k] = Vector3.Lerp(_startPoint, goal, (1f / _route.Length) * (k + 1)) + _up * t * Vector3.Dot(_up, relayPoint - _startPoint) * _curve;
+                    Debug.Log(t);
+                }
+            }
             StartCoroutine(Move());
         }
     }
@@ -82,11 +112,19 @@ public class BallAlpha : MonoBehaviour
     IEnumerator Move()
     {
         _isMove = true;
-        for(int i = 0; i < _route.Length; i++)
+        for (int i = 0; i < _route.Length; i++)
         {
             _ball.transform.position = _route[i];
             yield return null;
         }
-        _isMove = false;    
+        _isMove = false;
     }
+}
+
+
+enum KickType
+{
+    Straight,
+    Curve,
+    Technical,
 }
