@@ -6,14 +6,18 @@ using UnityEngine.UI;
 
 public class SceneChange : MonoBehaviour
 {
+    /// <summary>フェードアウト用のパネル</summary>
     [SerializeField] GameObject _panel;
 
+    /// <summary>フェードアウト用のパネルのイメージを取得するための変数</summary>
     Image _panelImage;
 
+    /// <summary>イメージのα値を取得するための変数</summary>
     float _alphaData;
+    /// <summary>フェードアウトする時の感覚</summary>
+    [SerializeField] float _fadeDate = 0.001f;
 
-    float _fadeDate = 0.001f;
-
+    /// <summary>フェードアウトするかどうか判定するフラグ</summary>
     bool _fadeFrag = false;
 
     // Start is called before the first frame update
@@ -21,7 +25,6 @@ public class SceneChange : MonoBehaviour
     {
         _panelImage = _panel.GetComponent<Image>();
         _alphaData = _panelImage.color.a;
-        Debug.Log("最初のα値は" + _alphaData);
         _panel.SetActive(false);
     }
 
@@ -34,29 +37,24 @@ public class SceneChange : MonoBehaviour
         }
     }
 
+    //スタートボタンを押したときにフェードを行うフラグを変更する関数
     public void Isfade()
     {
         _fadeFrag = true;
     }
 
-    void PlayGmaim()
-    {
-        //ステージセレクトシーンへ移動
-        SceneManager.CreateScene("");
-    }
-
+    //フェードアウトを行った後にシーンを切り替える関数
     void Fade()
     {
         _panel.SetActive(true);
         _alphaData += _fadeDate;
         _panelImage.color = new(0, 0, 0, _alphaData);
-        Debug.Log("今のα値は" + _alphaData);
 
         if (_alphaData > 1)
         {
-            Debug.Log("反応している");
             _fadeFrag = false;
-            PlayGmaim();
+            //ステージセレクトシーンへ移動
+            SceneManager.CreateScene("");
         }
     }
 }
