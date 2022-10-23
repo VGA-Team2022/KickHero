@@ -73,8 +73,8 @@ public class BallAlpha : MonoBehaviour
         {
             _route[_route.Length - 1] = hit.point;
             _plane.transform.position = Vector3.Lerp(_ball.transform.position, hit.point, 0.5f);
-            float rotX = Mathf.Atan2(hit.point.y - _ball.transform.position.y, hit.point.z - _ball.transform.position.z);
-            _plane.transform.eulerAngles = new Vector3(-rotX / Mathf.PI * 180, _plane.transform.eulerAngles.y, _plane.transform.eulerAngles.z);
+            float rotX = -Mathf.Atan2(hit.point.y - _ball.transform.position.y, hit.point.z - _ball.transform.position.z) / Mathf.PI * 180;
+            _plane.transform.eulerAngles = new Vector3(rotX, Camera.main.transform.eulerAngles.y, 0);
 
             yield return new WaitForFixedUpdate();
             for (int i = 0; i < _points.Count - 1; i++)
@@ -86,10 +86,11 @@ public class BallAlpha : MonoBehaviour
                     Debug.DrawLine(ray.origin, hit.point);
                 }
             }
+            UnityEditor.EditorApplication.isPaused = true;
             if (_kickType == KickType.Curve)
             {
                 Vector3 goal = _route.Last();
-                Vector3 relayPoint = new Vector3(_route.Sum(v => v.x) / _route.Length, _route.Sum(v => v.y) / _route.Length, _route.Sum(v => v.z) / _route.Length);
+                Vector3 relayPoint = new Vector3(_route.Average(v => v.x), _route.Average(v => v.y), _route.Average(v => v.z));
                 _ball2.transform.position = relayPoint;
                 float length = Vector3.Distance(_startPoint, relayPoint) + Vector3.Distance(relayPoint, goal);
                 float num = length / _speed;
