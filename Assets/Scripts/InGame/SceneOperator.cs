@@ -19,6 +19,7 @@ public class SceneOperator : MonoBehaviour
         await SceneManager.LoadSceneAsync(sceneName);
         var absScene = GetActiveAbstructScene(SceneManager.GetSceneByName(sceneName));
         absScene.SetOperator(_applicationOperator);
+
         await absScene.Load(_objectArgs);
         absScene.Open();
     }

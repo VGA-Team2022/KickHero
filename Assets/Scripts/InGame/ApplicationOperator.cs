@@ -1,23 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 public class ApplicationOperator
 {
     SceneOperator _sceneOperator;
-    public ApplicationOperator()
-    {
-        var objs = new object[] {"Hello World"};
-        GameObject go = new GameObject("SceneOperator");
-        go.AddComponent<SceneOperator>().SetUp(this, objs);
-    }
+    public SceneOperator GetSceneOperator => _sceneOperator;
 
-    public SceneOperator SetUp()
+    public async UniTask SetUp()
     {
         var objs = new object[] { "Hello World" };
         GameObject go = new GameObject("SceneOperator");
-        var so = go.AddComponent<SceneOperator>();
-        so.SetUp(this, objs);
-        return so;
+        _sceneOperator = go.AddComponent<SceneOperator>();
+        _sceneOperator.SetUp(this, objs);
+        Debug.Log($"現在のシーン{SceneManager.GetActiveScene().name}");
+        await _sceneOperator.LoadScene("Menu");
+        Debug.Log($"変更後のシーン{SceneManager.GetActiveScene().name}");
     }
 }

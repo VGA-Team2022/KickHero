@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,8 @@ public class InGameManager : AbstructScene
 {
     public override async UniTask Load(object[] objects)
     {
-        await UniTask.Yield();
+        var token = this.GetCancellationTokenOnDestroy();
+        await UniTask.DelayFrame(1000, cancellationToken: token);
         Debug.Log("Load’†"+objects);
     }
 
