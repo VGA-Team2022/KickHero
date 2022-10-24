@@ -250,6 +250,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: InGameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1101910383979168321, guid: 8362bc2f5848f6747bce7ab66006c892,
+        type: 3}
+      propertyPath: _hoge
+      value: Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 1101910383979168322, guid: 8362bc2f5848f6747bce7ab66006c892,
         type: 3}
       propertyPath: m_RootOrder

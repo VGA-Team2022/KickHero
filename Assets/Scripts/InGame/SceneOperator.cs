@@ -3,7 +3,7 @@ using System.Threading;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 
-public class SceneOperator : MonoBehaviour
+public class SceneOperator
 {
     ApplicationOperator _applicationOperator;
     object[] _objectArgs;
@@ -16,8 +16,10 @@ public class SceneOperator : MonoBehaviour
     }
     public async UniTask LoadScene(string sceneName)
     {
+        Debug.Log(GetActiveAbstructScene(SceneManager.GetActiveScene())._hoge);
         await SceneManager.LoadSceneAsync(sceneName);
         var absScene = GetActiveAbstructScene(SceneManager.GetSceneByName(sceneName));
+        Debug.Log(absScene._hoge);
         absScene.SetOperator(_applicationOperator);
 
         await absScene.Load(_objectArgs);

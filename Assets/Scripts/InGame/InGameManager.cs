@@ -3,25 +3,29 @@ using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class InGameManager : AbstructScene
 {
     public override async UniTask Load(object[] objects)
     {
-        var token = this.GetCancellationTokenOnDestroy();
-        await UniTask.DelayFrame(1000, cancellationToken: token);
-        Debug.Log("Load中"+objects);
+        foreach (var obj in objects)
+        {
+            Debug.Log($"Load中{obj}");
+        }
+        
+        await UniTask.DelayFrame(1000);        
     }
 
     public override void Open()
     {
-        
+        Debug.Log("Open");
     }
 
     public override async UniTask UnLoad()
     {
-        await UniTask.Yield();
-        Debug.Log("アンロード");
+        Debug.Log($"アンロード{UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}");
+        await UniTask.Yield();        
     }
 
     public void LoadScene(string sceneName)

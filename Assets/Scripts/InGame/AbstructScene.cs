@@ -4,6 +4,9 @@ using Cysharp.Threading.Tasks;
 
 public abstract class AbstructScene : MonoBehaviour
 {
+    [SerializeField]
+    public string _hoge = "";
+
     protected ApplicationOperator _applicationOperator = null;
     public void SetOperator(ApplicationOperator appOperator)
     {

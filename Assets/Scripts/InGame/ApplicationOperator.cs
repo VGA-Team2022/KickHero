@@ -12,8 +12,7 @@ public class ApplicationOperator
     public async UniTask SetUp()
     {
         var objs = new object[] { "Hello World" };
-        GameObject go = new GameObject("SceneOperator");
-        _sceneOperator = go.AddComponent<SceneOperator>();
+        _sceneOperator = new SceneOperator();
         _sceneOperator.SetUp(this, objs);
         Debug.Log($"åªç›ÇÃÉVÅ[Éì{SceneManager.GetActiveScene().name}");
         await _sceneOperator.LoadScene("Menu");
