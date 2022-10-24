@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public class BallRoute
 {
-    List<RouteNode> _nodrs;
+    List<RouteNode> _nodrs = new List<RouteNode>();
 
     /// <summary>ŠÔ‚Ì‡Œv</summary>
     public float AllTime { get => _nodrs.Sum(n => n.Time); }
