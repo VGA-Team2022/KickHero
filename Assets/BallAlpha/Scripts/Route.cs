@@ -13,7 +13,7 @@ public class BallRoute
     List<RouteNode> _nodrs = new List<RouteNode>();
 
     /// <summary>éûä‘ÇÃçáåv</summary>
-    public float AllTime { get => _nodrs.Sum(n => n.Time); }
+    public float AllTime { get => _nodrs.LastOrDefault().Time - _nodrs.FirstOrDefault().Time; }
     public float MaxTime { get => _nodrs.Max(n => n.Time); }
     public float MinTime { get => _nodrs.Min(n => n.Time); }
     /// <summary>ìπÇÃÇËÇÃçáåv</summary>
@@ -31,6 +31,32 @@ public class BallRoute
         }
     }
 
+    public int Count { get => _nodrs.Count; }
+
+    public RouteNode this[int index]
+    {
+        get
+        {
+            return _nodrs[index];
+        }
+    }
+
+    public Vector3[] Positons
+    {
+        get
+        {
+            Vector3[] positions = new Vector3[_nodrs.Count];
+            for(int i = 0; i < positions.Length; i++)
+            {
+                positions[i] = _nodrs[i].Point;
+            }
+
+            return positions;
+        }
+    }
+
+
+
     public void AddNode(Vector3 point, float time)
     {
         _nodrs.Add(new RouteNode(point, time));
@@ -39,9 +65,13 @@ public class BallRoute
 
     public Vector3? PointInCaseTime(float time)
     {
-        if(time < MinTime || time > MaxTime)
+        if(time < MinTime)
         {
-            return null;
+            return _nodrs.FirstOrDefault().Point;
+        }
+        else if(time > MaxTime)
+        {
+            return _nodrs.LastOrDefault().Point;
         }
         Vector3? point = null;
         for(int i = 1; i < _nodrs.Count; i++)
@@ -56,20 +86,54 @@ public class BallRoute
     }
     public bool TryPointInCaseTime(float time, out Vector3 point)
     {
-        point = Vector3.zero;
-        if (time < MinTime || time > MaxTime)
+        Vector3? buf = PointInCaseTime(time);
+        if (buf == null)
         {
+            point = Vector3.zero;
             return false;
         }
+        else
+        {
+            point = buf.Value;
+            return true;
+        }
+    }
+    public Vector3? PointInCaseDistance(float way)
+    {
+        if (way < 0)
+        {
+            return _nodrs.FirstOrDefault().Point;
+        }
+        else if(way > AllWay)
+        {
+            return _nodrs.LastOrDefault().Point;
+        }
+        Vector3? point = null;
+        float distance = 0;
         for (int i = 1; i < _nodrs.Count; i++)
         {
-            if (_nodrs[i].Time > time)
+            distance += Vector3.Distance(_nodrs[i - 1].Point, _nodrs[i].Point);
+            if (distance > way)
             {
-                point = Vector3.Lerp(_nodrs[i - 1].Point, _nodrs[i].Point, (time - _nodrs[i - 1].Time) / (_nodrs[i].Time - _nodrs[i - 1].Time));
-                return true;
+                point = Vector3.Lerp(_nodrs[i].Point, _nodrs[i - 1].Point, (distance - way) / (Vector3.Distance(_nodrs[i].Point ,_nodrs[i - 1].Point)));
+                break;
             }
         }
-        return false;
+        return point;
+    }
+    public bool TryPointInCaseDistance(float way, out Vector3 point)
+    {
+        Vector3? buf = PointInCaseDistance(way);
+        if (buf == null)
+        {
+            point = Vector3.zero;
+            return false;
+        }
+        else
+        {
+            point = buf.Value;
+            return true;
+        }
     }
 }
 
