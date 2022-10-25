@@ -43,20 +43,16 @@ public class BallMove : MonoBehaviour
         if (_mode == CarryMode.Time)
         {
             _time = _route.MinTime;
-            Debug.Log(_route.AllTime);
             while (_time <= _route.MaxTime)
             {
-                //Debug.Log($"{_time}, {_ballRoute.MaxTime}");
                 yield return new WaitForFixedUpdate();
                 _time += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
-                Debug.Log(_accele);
                 if (_route.TryPointInCaseTime(_time, out Vector3 point))
                 {
                     transform.position = point;
                 }
             }
-            Debug.Log(_time - _route.MinTime);
         }
         else if(_mode == CarryMode.Distance)
         {
@@ -72,10 +68,6 @@ public class BallMove : MonoBehaviour
                     transform.position = point;
                 }
             }
-            //Debug.Log(1);
-            //if (_route.TryPointInCaseDistance(_route.AllWay - 1, out Vector3 point)){
-            //    transform.position = point;
-            //}
         }
         _accele = 0;
     }
