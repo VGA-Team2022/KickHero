@@ -53,7 +53,6 @@ public class LineReader : MonoBehaviour
     {
         BallRoute route = null;
         Ray ray = Camera.main.ScreenPointToRay(position);
-        //UnityEditor.EditorApplication.isPaused = true;
         if (Physics.Raycast(ray, out RaycastHit hit, 1000))
         {
             float rotX = -Mathf.Atan2(_start.transform.position.y - hit.point.y, _start.transform.position.z - hit.point.z) / Mathf.PI * 180;

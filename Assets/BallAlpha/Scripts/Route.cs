@@ -14,7 +14,9 @@ public class BallRoute
 
     /// <summary>時間の合計</summary>
     public float AllTime { get => _nodrs.LastOrDefault().Time - _nodrs.FirstOrDefault().Time; }
+    /// <summary>時間の最大値</summary>
     public float MaxTime { get => _nodrs.Max(n => n.Time); }
+    /// <summary>時間の最低値</summary>
     public float MinTime { get => _nodrs.Min(n => n.Time); }
     /// <summary>道のりの合計</summary>
     public float AllWay
@@ -31,8 +33,14 @@ public class BallRoute
         }
     }
 
+    /// <summary>ノードの数</summary>
     public int Count { get => _nodrs.Count; }
 
+    /// <summary>
+    /// RouteNode配列
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public RouteNode this[int index]
     {
         get
@@ -41,6 +49,9 @@ public class BallRoute
         }
     }
 
+    /// <summary>
+    /// Potisionの配列
+    /// </summary>
     public Vector3[] Positons
     {
         get
@@ -56,13 +67,22 @@ public class BallRoute
     }
 
 
-
+    /// <summary>
+    /// ノードを追加する
+    /// </summary>
+    /// <param name="point"></param>
+    /// <param name="time"></param>
     public void AddNode(Vector3 point, float time)
     {
         _nodrs.Add(new RouteNode(point, time));
         _nodrs.Sort();
     }
 
+    /// <summary>
+    /// 時間に対応した座標を返す
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
     public Vector3? PointInCaseTime(float time)
     {
         if(time < MinTime)
@@ -84,6 +104,13 @@ public class BallRoute
         }
         return point;
     }
+
+    /// <summary>
+    /// 時間に対応した座標を返す
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="point"></param>
+    /// <returns></returns>
     public bool TryPointInCaseTime(float time, out Vector3 point)
     {
         Vector3? buf = PointInCaseTime(time);
@@ -98,6 +125,12 @@ public class BallRoute
             return true;
         }
     }
+
+    /// <summary>
+    /// 距離に対応した座標を返す
+    /// </summary>
+    /// <param name="way"></param>
+    /// <returns></returns>
     public Vector3? PointInCaseDistance(float way)
     {
         if (way < 0)
@@ -121,6 +154,13 @@ public class BallRoute
         }
         return point;
     }
+
+    /// <summary>
+    /// 時間に対応した座標を返す
+    /// </summary>
+    /// <param name="way"></param>
+    /// <param name="point"></param>
+    /// <returns></returns>
     public bool TryPointInCaseDistance(float way, out Vector3 point)
     {
         Vector3? buf = PointInCaseDistance(way);
@@ -137,6 +177,9 @@ public class BallRoute
     }
 }
 
+/// <summary>
+/// 道を記録するノード
+/// </summary>
 public struct RouteNode : IComparable<RouteNode>
 {
 

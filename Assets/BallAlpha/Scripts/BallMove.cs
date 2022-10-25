@@ -19,6 +19,11 @@ public class BallMove : MonoBehaviour
     public float Speed { get => _speed; set => _speed = value; }
     public float Acceleration { get => _acceleration; set => _acceleration = value; }
 
+    /// <summary>
+    /// ƒ‹[ƒg‚ğw’è‚µ‚Â‚Â”­Ë‚·‚é
+    /// </summary>
+    /// <param name="route"></param>
+    /// <returns></returns>
     public bool Shoot(BallRoute route)
     {
         _route = route;

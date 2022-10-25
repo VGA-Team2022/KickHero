@@ -86,7 +86,6 @@ public class BallAlpha : MonoBehaviour
                     Debug.DrawLine(ray.origin, hit.point);
                 }
             }
-            UnityEditor.EditorApplication.isPaused = true;
             if (_kickType == KickType.Curve)
             {
                 Vector3 goal = _route.Last();

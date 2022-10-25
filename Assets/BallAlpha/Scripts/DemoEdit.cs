@@ -9,16 +9,25 @@ public class DemoEdit : MonoBehaviour
     [SerializeField] InputField _acceleration;
     [SerializeField] InputField _speed;
     [SerializeField] Text _mode;
+    [SerializeField] Text _speedText;
+    [SerializeField] Text _speedText2;
 
     private void Start()
     {
         if (_ball.Mode == BallMove.CarryMode.Distance)
         {
             _mode.text = $"Mode : {nameof(BallMove.CarryMode.Distance)}";
+            _speedText.text = "m/s";
+            _speedText.text = "‘¬“x";
         }
+        else
         {
             _mode.text = $"Mode : {nameof(BallMove.CarryMode.Time)}";
+            _speedText.text = "”{";
+            _speedText.text = "”{—¦";
         }
+        _acceleration.text = _ball.Acceleration.ToString();
+        _speed.text = _ball.Speed.ToString();
     }
 
 
@@ -45,11 +54,15 @@ public class DemoEdit : MonoBehaviour
             {
                 _mode.text = $"Mode : {nameof(BallMove.CarryMode.Time)}";
                 _ball.Mode = BallMove.CarryMode.Time;
+                _speedText.text = "”{";
+                _speedText2.text = "”{—¦";
             }
             else
             {
                 _mode.text = $"Mode : {nameof(BallMove.CarryMode.Distance)}";
                 _ball.Mode = BallMove.CarryMode.Distance;
+                _speedText.text = "m/s";
+                _speedText2.text = "‘¬“x";
             }
         }
     }
