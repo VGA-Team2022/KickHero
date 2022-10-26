@@ -5,6 +5,9 @@ using Cysharp.Threading.Tasks;
 
 public class SceneOperator
 {
+    /// <summary>
+    /// シーン間で保持する文字列
+    /// </summary>
     string _message;
 
     public SceneOperator(string message)
@@ -19,15 +22,24 @@ public class SceneOperator
 
     public async UniTask LoadScene(string sceneName)
     {
-        Debug.Log(GetActiveAbstructScene(SceneManager.GetActiveScene()).name);
+        //シーンを破棄
+        await GetActiveAbstructScene(SceneManager.GetActiveScene()).UnLoad();
+
+        //シーンをロード
         await SceneManager.LoadSceneAsync(sceneName);
+
+        //ロード先のAbstructSceneを取得
         var absScene = GetActiveAbstructScene(SceneManager.GetSceneByName(sceneName));
-        Debug.Log(SceneManager.GetActiveScene().name);
         absScene.SetOperator(this);
+
+        //ロード時の処理を呼ぶ
         await absScene.Load(_message);
         absScene.Open();
     }
 
+    /// <summary>
+    /// シーン内のRootObjectsからAbstructSceneを返す
+    /// </summary>
     AbstructScene GetActiveAbstructScene(Scene scene)
     {
         AbstructScene abstructScene = null;
@@ -36,6 +48,7 @@ public class SceneOperator
             if (obj.TryGetComponent(out AbstructScene getAbstructScene))
             {
                 abstructScene = getAbstructScene;
+                break;
             }
         }
         if (abstructScene)

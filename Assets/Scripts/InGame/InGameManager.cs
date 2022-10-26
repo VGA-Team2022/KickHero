@@ -1,53 +1,62 @@
-using Cysharp.Threading.Tasks;
-using System.Threading;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
+using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 public class InGameManager : AbstructScene
 {
-    [SerializeField]
-    UnityEngine.UI.Button _loadButton;
-    [SerializeField]
-    UnityEngine.UI.Button _inputButton;
-    [SerializeField]
-    protected UnityEngine.UI.Text _text;
-    [SerializeField]
-    string _sceneName;
-    [SerializeField]
-    protected UnityEngine.UI.InputField _inputField = null;
+    /// <summary>シーン内で使用する文字列</summary>
+    protected string _message = "";
 
-    [SerializeField]
-    protected string _hoge = "";
+    [Header("コンポーネント")]
+    [SerializeField,Tooltip("押下時にロードが呼ばれるボタン")]
+    Button _loadButton;
+
+    [SerializeField,Tooltip("押下時に変数が変更されるボタン")]
+    Button _inputButton;
+
+    [SerializeField,Tooltip("次のシーンに渡したい文字列を入力するフィールド")]
+    protected InputField _inputField = null;
+
+    [SerializeField,Tooltip("現在保持されている変数を表示するText")]
+    protected Text _text;
+
+    [Header("ロード関連")]
+    [SerializeField,Tooltip("ロード先のシーン名")]
+    string _sceneName;
 
     protected override void OnAwake()
     {
+        //押下時に指定のシーンにロードする。
         _loadButton.onClick.AddListener(() => { LoadScene(_sceneName, _inputField.text); });
+
+        //押下時に次のシーンに渡す文字列を変更する
         _inputButton.onClick.AddListener(() => {
             if (_sceneOperator == null)
             {
                 _sceneOperator = new SceneOperator(_inputField.text);
             }
-            _sceneOperator.SetUp(_inputField.text);
+            else
+            {
+                _sceneOperator.SetUp(_inputField.text);
+            }         
         });
     }
     public override async UniTask Load(string message)
     {
-        _hoge = message;       
-        Debug.Log($"Load中");
-        await UniTask.DelayFrame(0);
+        _message = message;
+        await UniTask.Yield();
     }
 
+    /// <summary>
+    /// シーンがロードされた後に呼ばれる
+    /// </summary>
     public override void Open()
     {
-        _text.text = _hoge;
-        Debug.Log("Open");
+        _text.text = _message;
     }
 
     public override async UniTask UnLoad()
     {
-        Debug.Log($"アンロード{UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}");
         await UniTask.Yield();
     }
 }
