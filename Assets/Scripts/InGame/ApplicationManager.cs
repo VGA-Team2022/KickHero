@@ -4,13 +4,21 @@ using UnityEngine;
 public class ApplicationManager : MonoBehaviour
 {
     ApplicationOperator _applicationOperator;
+    [SerializeField]
+    UnityEngine.UI.Button _button;
+    [SerializeField]
+    string _sceneName = "Menu";
     private void Awake()
     {
-        _applicationOperator = new ApplicationOperator();
-         
+        _button.onClick.AddListener(() => { LoadScene(_sceneName); });
     }
-    async private void Start()
+
+    public async void LoadScene(string sceneName)
     {
-        await _applicationOperator.SetUp();
+        if (_applicationOperator==null)
+        {
+            _applicationOperator = new ApplicationOperator();
+        }
+        await _applicationOperator.LoadScene(sceneName);
     }
 }
