@@ -4,15 +4,28 @@ using Cysharp.Threading.Tasks;
 
 public abstract class AbstructScene : MonoBehaviour
 {
-    [SerializeField]
-    public string _hoge = "";
+    protected SceneOperator _sceneOperator;
 
-    protected ApplicationOperator _applicationOperator = null;
-    public void SetOperator(ApplicationOperator appOperator)
+    private void Awake()
     {
-        _applicationOperator = appOperator;
+        OnAwake();
     }
-    public abstract UniTask Load(object[] objects);
+    protected virtual void OnAwake() { }
+
+    public async void LoadScene(string sceneName,string message)
+    {
+        //ç≈èâÇÃÇ›èâä˙âª
+        if (_sceneOperator == null)
+        {
+            _sceneOperator = new SceneOperator(message);
+        }
+        await _sceneOperator.LoadScene(sceneName);
+    }
+    public void SetOperator(SceneOperator appOperator)
+    {
+        _sceneOperator = appOperator;
+    }
+    public abstract UniTask Load(string message);
     public abstract void Open();
     public abstract UniTask UnLoad();
 }

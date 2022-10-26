@@ -5,24 +5,26 @@ using Cysharp.Threading.Tasks;
 
 public class SceneOperator
 {
-    ApplicationOperator _applicationOperator;
-    object[] _objectArgs;
+    string _message;
 
-    public void SetUp(ApplicationOperator appOperator, object[] args)
+    public SceneOperator(string message)
     {
-        _applicationOperator = appOperator;
-        var objs = new object[] { args, this };
-        _objectArgs = objs;
+        SetUp(message);
     }
+
+    public void SetUp(string message)
+    {
+        _message = message;
+    }
+
     public async UniTask LoadScene(string sceneName)
     {
-        Debug.Log(GetActiveAbstructScene(SceneManager.GetActiveScene())._hoge);
+        Debug.Log(GetActiveAbstructScene(SceneManager.GetActiveScene()).name);
         await SceneManager.LoadSceneAsync(sceneName);
         var absScene = GetActiveAbstructScene(SceneManager.GetSceneByName(sceneName));
-        Debug.Log(absScene._hoge);
-        absScene.SetOperator(_applicationOperator);
-
-        await absScene.Load(_objectArgs);
+        Debug.Log(SceneManager.GetActiveScene().name);
+        absScene.SetOperator(this);
+        await absScene.Load(_message);
         absScene.Open();
     }
 
