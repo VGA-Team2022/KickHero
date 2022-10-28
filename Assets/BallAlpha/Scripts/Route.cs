@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public class BallRoute
 {
-    List<RouteNode> _nodrs = new List<RouteNode>();
+    List<Node> _nodrs = new List<Node>();
 
     /// <summary>時間の合計</summary>
     public float AllTime { get => _nodrs.LastOrDefault().Time - _nodrs.FirstOrDefault().Time; }
@@ -41,7 +41,7 @@ public class BallRoute
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    public RouteNode this[int index]
+    public Node this[int index]
     {
         get
         {
@@ -74,7 +74,7 @@ public class BallRoute
     /// <param name="time"></param>
     public void AddNode(Vector3 point, float time)
     {
-        _nodrs.Add(new RouteNode(point, time));
+        _nodrs.Add(new Node(point, time));
         _nodrs.Sort();
     }
 
@@ -175,35 +175,34 @@ public class BallRoute
             return true;
         }
     }
-}
-
-/// <summary>
-/// 道を記録するノード
-/// </summary>
-public struct RouteNode : IComparable<RouteNode>
-{
-
-    public RouteNode(Vector3 point, float time)
+    /// <summary>
+    /// 道を記録するノード
+    /// </summary>
+    public struct Node : IComparable<Node>
     {
-        Point = point;
-        Time = time;
-    }
-    public Vector3 Point;
-    public float Time;
 
-    int IComparable<RouteNode>.CompareTo(RouteNode other)
-    {
-        if (Time > other.Time)
+        public Node(Vector3 point, float time)
         {
-            return 1;
+            Point = point;
+            Time = time;
         }
-        else if (Time < other.Time)
+        public Vector3 Point;
+        public float Time;
+
+        int IComparable<Node>.CompareTo(Node other)
         {
-            return -1;
-        }
-        else
-        {
-            return 0;
+            if (Time > other.Time)
+            {
+                return 1;
+            }
+            else if (Time < other.Time)
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
