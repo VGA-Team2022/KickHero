@@ -44,7 +44,13 @@ public class LineReader : MonoBehaviour
             {
                 _lineRenderer.positionCount = route.Count;
                 _lineRenderer.SetPositions(route.Positons);
-                _ball.Shoot(route);
+                if (_ball)
+                {
+                    if (_ball.TryRouteSet(route))
+                    {
+                        _ball.Shoot();
+                    }
+                }
             }
         }
     }
