@@ -62,9 +62,20 @@ public class BallMove : MonoBehaviour
                 yield return new WaitForFixedUpdate();
                 _time += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
-                if (_route.TryPointInCaseTime(_time, out Vector3 point))
+                if (_route.TryGetPointInCaseTime(_time, out Vector3 point))
                 {
                     transform.position = point;
+                }
+                else
+                {
+                    if(Mathf.Abs(_route.MinTime - _time) > Mathf.Abs(_route.MaxTime - _time))
+                    {
+                        transform.position = _route.Positons.Last();
+                    }
+                    else
+                    {
+                        transform.position = _route.Positons.First();
+                    }
                 }
             }
         }
@@ -77,9 +88,20 @@ public class BallMove : MonoBehaviour
                 yield return new WaitForFixedUpdate();
                 _time += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
-                if (_route.TryPointInCaseDistance(_time, out Vector3 point))
+                if (_route.TryGetPointInCaseDistance(_time, out Vector3 point))
                 {
                     transform.position = point;
+                }
+                else
+                {
+                    if(_time > _route.AllWay - _time)
+                    {
+                        transform.position = _route.Positons.Last();
+                    }
+                    else
+                    {
+                        transform.position = _route.Positons.First();
+                    }
                 }
             }
         }

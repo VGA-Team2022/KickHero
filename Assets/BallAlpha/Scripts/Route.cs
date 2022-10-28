@@ -83,15 +83,15 @@ public class BallRoute
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    public Vector3? PointInCaseTime(float time)
+    public Vector3? GetPointInCaseTime(float time)
     {
         if(time < MinTime)
         {
-            return _nodrs.FirstOrDefault().Point;
+            return null;
         }
         else if(time > MaxTime)
         {
-            return _nodrs.LastOrDefault().Point;
+            return null;
         }
         Vector3? point = null;
         for(int i = 1; i < _nodrs.Count; i++)
@@ -111,9 +111,9 @@ public class BallRoute
     /// <param name="time"></param>
     /// <param name="point"></param>
     /// <returns></returns>
-    public bool TryPointInCaseTime(float time, out Vector3 point)
+    public bool TryGetPointInCaseTime(float time, out Vector3 point)
     {
-        Vector3? buf = PointInCaseTime(time);
+        Vector3? buf = GetPointInCaseTime(time);
         if (buf == null)
         {
             point = Vector3.zero;
@@ -131,15 +131,15 @@ public class BallRoute
     /// </summary>
     /// <param name="way"></param>
     /// <returns></returns>
-    public Vector3? PointInCaseDistance(float way)
+    public Vector3? GetPointInCaseDistance(float way)
     {
         if (way < 0)
         {
-            return _nodrs.FirstOrDefault().Point;
+            return null;
         }
         else if(way > AllWay)
         {
-            return _nodrs.LastOrDefault().Point;
+            return null;
         }
         Vector3? point = null;
         float distance = 0;
@@ -161,9 +161,9 @@ public class BallRoute
     /// <param name="way"></param>
     /// <param name="point"></param>
     /// <returns></returns>
-    public bool TryPointInCaseDistance(float way, out Vector3 point)
+    public bool TryGetPointInCaseDistance(float way, out Vector3 point)
     {
-        Vector3? buf = PointInCaseDistance(way);
+        Vector3? buf = GetPointInCaseDistance(way);
         if (buf == null)
         {
             point = Vector3.zero;
