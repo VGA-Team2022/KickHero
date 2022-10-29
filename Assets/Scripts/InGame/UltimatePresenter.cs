@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class UltimatePresenter : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField,Tooltip("ビュークラスのインスタンス")]
     UltimateView _ultimateView = null;
 
+    /// <summary>モデルのインスタンス</summary>
     UltimateModel _ultimateModel = null;
-    [SerializeField]
+    [SerializeField,Tooltip("アルティメットの最大値")]
     int _maxUltimateValue = 10;
     void Start()
     {
@@ -17,6 +18,7 @@ public class UltimatePresenter : MonoBehaviour
 
     public void Init()
     {
+        //インスタンス生成、引数は(最大値,Action<int>,GameObject)
         _ultimateModel = new UltimateModel(
             _maxUltimateValue,
             x =>
@@ -26,6 +28,9 @@ public class UltimatePresenter : MonoBehaviour
             _ultimateView.gameObject);
     }
 
+    /// <summary>
+    /// 値を外部から変更する関数
+    /// </summary>
     public void ChangeValue(int value)
     {
         _ultimateModel.ChangeUltimateValue(value);
