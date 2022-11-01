@@ -4,15 +4,5 @@ using UnityEngine;
 
 public class BallView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Vector3 Position { get => transform.position; set => transform.position = value; }
 }

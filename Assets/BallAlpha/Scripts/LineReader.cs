@@ -9,7 +9,8 @@ using UnityEngine.UIElements;
 public class LineReader : MonoBehaviour
 {
     [SerializeField] Transform _start;
-    [SerializeField] BallMove _ball;
+    //[SerializeField] BallMove _ball;
+    [SerializeField] BallModel _ballModel;
 
     LineRenderer _lineRenderer;
     List<(float time, Vector3 point)> _points = new List<(float, Vector3)>();
@@ -44,11 +45,11 @@ public class LineReader : MonoBehaviour
             {
                 _lineRenderer.positionCount = route.Count;
                 _lineRenderer.SetPositions(route.Positons);
-                if (_ball)
+                if (_ballModel != null)
                 {
-                    if (_ball.TryRouteSet(route))
+                    if (_ballModel.TryRouteSet(route))
                     {
-                        _ball.Shoot();
+                        _ballModel.Shoot(this);
                     }
                 }
             }
