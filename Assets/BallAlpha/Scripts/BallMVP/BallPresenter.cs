@@ -9,18 +9,38 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] float _acceleration = 0;
     [SerializeField] BallModel.CarryMode _mode = BallModel.CarryMode.Time;
 
+    BallModel _ballModel;
+
+    public BallModel BallModel
+    {
+        get
+        {
+            if(_ballModel == null)
+            {
+                Init();
+            }
+            return _ballModel;
+        }
+        set => _ballModel = value;
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
-        BallModel ballModel = new BallModel(
+        Init();
+    }
+
+    void Init()
+    {
+        _ballModel = new BallModel(
             value =>
             {
                 _view.Position = value;
             },
             _view.gameObject);
-        ballModel.Mode = _mode;
-        ballModel.Acceleration = _acceleration;
-        ballModel.Speed = _speed;
+        _ballModel.Mode = _mode;
+        _ballModel.Acceleration = _acceleration;
+        _ballModel.Speed = _speed;
     }
 }

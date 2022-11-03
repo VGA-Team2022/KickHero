@@ -10,7 +10,7 @@ public class LineReader : MonoBehaviour
 {
     [SerializeField] Transform _start;
     //[SerializeField] BallMove _ball;
-    [SerializeField] BallModel _ballModel;
+    [SerializeField] BallPresenter _ballPresenter;
 
     LineRenderer _lineRenderer;
     List<(float time, Vector3 point)> _points = new List<(float, Vector3)>();
@@ -45,11 +45,12 @@ public class LineReader : MonoBehaviour
             {
                 _lineRenderer.positionCount = route.Count;
                 _lineRenderer.SetPositions(route.Positons);
-                if (_ballModel != null)
+                if (_ballPresenter)
                 {
-                    if (_ballModel.TryRouteSet(route))
+                    BallModel ballModel = _ballPresenter.BallModel;
+                    if (_ballPresenter.BallModel.TryRouteSet(route))
                     {
-                        _ballModel.Shoot(this);
+                        _ballPresenter.BallModel.Shoot();
                     }
                 }
             }
@@ -77,4 +78,5 @@ public class LineReader : MonoBehaviour
         }
         return route;
     }
+
 }

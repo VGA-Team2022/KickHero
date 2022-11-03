@@ -11,6 +11,7 @@ public class BallModel
 
 
     ReactiveProperty<Vector3> _position = new ReactiveProperty<Vector3>();
+    CancellationTokenSource _source = new CancellationTokenSource();
 
     float _time = default;
     float _accele = default;
@@ -32,16 +33,24 @@ public class BallModel
     }
 
     /// <summary>
-    /// ルートを指定しつつ発射する
+    /// 発射する
     /// </summary>
     /// <param name="route"></param>
     /// <returns></returns>
-    public bool Shoot(MonoBehaviour monoBehaviour)
+    public bool Shoot()
     {
-        monoBehaviour.StartCoroutine(Carry());
+        //if(_source.Token.G)
+        if(_route == null) { return false; }
+        Carry(_source.Token).Forget();
         return true;
     }
 
+    /// <summary>
+    /// ルートの設定を試みる
+    /// 飛行中は再設定できない
+    /// </summary>
+    /// <param name="route"></param>
+    /// <returns></returns>
     public bool TryRouteSet(BallRoute route)
     {
         if (!_isCarry)
@@ -52,14 +61,10 @@ public class BallModel
         return false;
     }
 
-    async UniTask Carry2(CancellationToken cancellation_token)
-    {
-        await UniTask.Yield(PlayerLoopTiming.FixedUpdate, cancellation_token);
-
-    }
 
 
-    IEnumerator Carry()
+    
+    async UniTask Carry(CancellationToken token)
     {
         _isCarry = true;
         if (_mode == CarryMode.Time)
@@ -67,7 +72,12 @@ public class BallModel
             _time = _route.MinTime;
             while (_time <= _route.MaxTime)
             {
-                yield return new WaitForFixedUpdate();
+                //yield return new WaitForFixedUpdate();
+                 await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _source.Token);
+                if(this == null)
+                {
+                    Debug.Log(5);
+                }
                 _time += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
                 if (_route.TryGetPointInCaseTime(_time, out Vector3 point))
@@ -96,7 +106,8 @@ public class BallModel
             while (_time <= _route.AllWay)
             {
                 //Debug.Log($"{_time}, {_ballRoute.MaxTime}");
-                yield return new WaitForFixedUpdate();
+
+                await UniTask.Yield(PlayerLoopTiming.FixedUpdate, token);
                 _time += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
                 if (_route.TryGetPointInCaseDistance(_time, out Vector3 point))
