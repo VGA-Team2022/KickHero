@@ -37,10 +37,14 @@ public class BallModel
         }
     }
 
+    public ReactiveProperty<Vector3> Position { get => _position;}
+
     public BallModel(System.Action<Vector3> action, GameObject gameObject)
     {
         _position.Subscribe(action).AddTo(gameObject);
     }
+
+    public BallModel() { }
 
     ~BallModel()
     {
@@ -67,6 +71,25 @@ public class BallModel
     {
         _tokenSource?.Cancel();
         _isCarry = false;
+    }
+
+    /// <summary>
+    /// Positionをサブスクライブする
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="gameObject"></param>
+    public void Subscribe(System.Action<Vector3> action, GameObject gameObject)
+    {
+        _position.Subscribe(action).AddTo(gameObject);
+    }
+    /// <summary>
+    /// Positionをサブスクライブする
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="component"></param>
+    public void Subscribe(System.Action<Vector3> action, Component component)
+    {
+        _position.Subscribe(action).AddTo(component);
     }
 
     /// <summary>
