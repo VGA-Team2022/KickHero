@@ -11,7 +11,7 @@ public class BallModel
 
 
     ReactiveProperty<Vector3> _position = new ReactiveProperty<Vector3>();
-    CancellationTokenSource _source = new CancellationTokenSource();
+    CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
     float _time = default;
     float _accele = default;
@@ -20,16 +20,31 @@ public class BallModel
     float _acceleration = default;
     CarryMode _mode = default;
     BallRoute _route = default;
+    Transform _startTransform = default;
 
     public CarryMode Mode { get => _mode; set => _mode = value; }
     public float Speed { get => _speed; set => _speed = value; }
     public float Acceleration { get => _acceleration; set => _acceleration = value; }
     public BallRoute Route { get => _route; }
-
+    public Transform StartTransform { get => _startTransform;
+        set
+        {
+            _startTransform = value;
+            if (!_isCarry)
+            {
+                _position.Value = _startTransform.position;
+            }
+        }
+    }
 
     public BallModel(System.Action<Vector3> action, GameObject gameObject)
     {
         _position.Subscribe(action).AddTo(gameObject);
+    }
+
+    ~BallModel()
+    {
+        _tokenSource.Cancel();
     }
 
     /// <summary>
@@ -41,7 +56,7 @@ public class BallModel
     {
         //if(_source.Token.G)
         if(_route == null) { return false; }
-        Carry(_source.Token).Forget();
+        Carry().Forget();
         return true;
     }
 
@@ -64,7 +79,7 @@ public class BallModel
 
 
     
-    async UniTask Carry(CancellationToken token)
+    async UniTask Carry()
     {
         _isCarry = true;
         if (_mode == CarryMode.Time)
@@ -73,7 +88,8 @@ public class BallModel
             while (_time <= _route.MaxTime)
             {
                 //yield return new WaitForFixedUpdate();
-                 await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _source.Token);
+                
+                 await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
                 if(this == null)
                 {
                     Debug.Log(5);
@@ -107,7 +123,7 @@ public class BallModel
             {
                 //Debug.Log($"{_time}, {_ballRoute.MaxTime}");
 
-                await UniTask.Yield(PlayerLoopTiming.FixedUpdate, token);
+                await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
                 _time += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
                 if (_route.TryGetPointInCaseDistance(_time, out Vector3 point))

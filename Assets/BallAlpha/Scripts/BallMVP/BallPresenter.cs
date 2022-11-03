@@ -8,6 +8,7 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] float _speed = 1;
     [SerializeField] float _acceleration = 0;
     [SerializeField] BallModel.CarryMode _mode = BallModel.CarryMode.Time;
+    [SerializeField] Transform _startTransfrom = default;
 
     BallModel _ballModel;
 
@@ -42,5 +43,6 @@ public class BallPresenter : MonoBehaviour
         _ballModel.Mode = _mode;
         _ballModel.Acceleration = _acceleration;
         _ballModel.Speed = _speed;
+        _ballModel.StartTransform = _startTransfrom;
     }
 }
