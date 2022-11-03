@@ -61,6 +61,25 @@ public class BallModel
     }
 
     /// <summary>
+    /// 現在の移動を終了する
+    /// </summary>
+    void Cancel()
+    {
+        _tokenSource?.Cancel();
+        _isCarry = false;
+    }
+
+    /// <summary>
+    /// 初期位置に戻る
+    /// </summary>
+    public void Collection()
+    {
+        if (_startTransform)
+        {
+            _position.Value = _startTransform.position;
+        }
+    }
+    /// <summary>
     /// ルートの設定を試みる
     /// 飛行中は再設定できない
     /// </summary>
