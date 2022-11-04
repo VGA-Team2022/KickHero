@@ -9,12 +9,15 @@ using System.Threading;
 public class BallModel
 {
 
-
+    /// <summary>ボールのPosition</summary>
     ReactiveProperty<Vector3> _position = new ReactiveProperty<Vector3>();
+    /// <summary>処理のトークン</summary>
     CancellationTokenSource _tokenSource = new CancellationTokenSource();
-
-    float _time = default;
+    /// <summary>進行状況</summary>
+    float _progressStatus = default;
+    /// <summary>加速分</summary>
     float _accele = default;
+    /// <summary>実行中か否か</summary>
     bool _isCarry = default;
     float _speed = default;
     float _acceleration = default;
@@ -37,7 +40,7 @@ public class BallModel
         }
     }
 
-    public ReactiveProperty<Vector3> Position { get => _position;}
+    //public ReactiveProperty<Vector3> Position { get => _position;}
 
     public BallModel(System.Action<Vector3> action, GameObject gameObject)
     {
@@ -48,7 +51,7 @@ public class BallModel
 
     ~BallModel()
     {
-        _tokenSource.Cancel();
+        _tokenSource?.Cancel();
     }
 
     /// <summary>
@@ -58,7 +61,7 @@ public class BallModel
     /// <returns></returns>
     public bool Shoot()
     {
-        //if(_source.Token.G)
+        _tokenSource = new CancellationTokenSource();
         if(_route == null) { return false; }
         Carry().Forget();
         return true;
@@ -118,16 +121,14 @@ public class BallModel
         return false;
     }
 
-
-
     
     async UniTask Carry()
     {
         _isCarry = true;
         if (_mode == CarryMode.Time)
         {
-            _time = _route.MinTime;
-            while (_time <= _route.MaxTime)
+            _progressStatus = _route.MinTime;
+            while (_progressStatus <= _route.MaxTime)
             {
                 //yield return new WaitForFixedUpdate();
                 
@@ -136,16 +137,16 @@ public class BallModel
                 {
                     Debug.Log(5);
                 }
-                _time += Time.fixedDeltaTime * (_speed + _accele);
+                _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
-                if (_route.TryGetPointInCaseTime(_time, out Vector3 point))
+                if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
                 {
                     //transform.position = point;
                     _position.Value = point;
                 }
                 else
                 {
-                    if (Mathf.Abs(_route.MinTime - _time) > Mathf.Abs(_route.MaxTime - _time))
+                    if (Mathf.Abs(_route.MinTime - _progressStatus) > Mathf.Abs(_route.MaxTime - _progressStatus))
                     {
                         //transform.position = _route.Positons.Last();
                         _position.Value = _route.Positons.Last();
@@ -160,22 +161,22 @@ public class BallModel
         }
         else if (_mode == CarryMode.Distance)
         {
-            _time = 0;
-            while (_time <= _route.AllWay)
+            _progressStatus = 0;
+            while (_progressStatus <= _route.AllWay)
             {
                 //Debug.Log($"{_time}, {_ballRoute.MaxTime}");
 
                 await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
-                _time += Time.fixedDeltaTime * (_speed + _accele);
+                _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
-                if (_route.TryGetPointInCaseDistance(_time, out Vector3 point))
+                if (_route.TryGetPointInCaseDistance(_progressStatus, out Vector3 point))
                 {
                     //transform.position = point;
                     _position.Value = point;
                 }
                 else
                 {
-                    if (_time > _route.AllWay - _time)
+                    if (_progressStatus > _route.AllWay - _progressStatus)
                     {
                         //transform.position = _route.Positons.Last();
                         _position.Value = _route.Positons.Last();

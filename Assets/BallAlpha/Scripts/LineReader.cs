@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 public class LineReader : MonoBehaviour
 {
     [SerializeField] Transform _start;
+    [SerializeField] Transform _enemy;
     //[SerializeField] BallMove _ball;
     [SerializeField] BallPresenter _ballPresenter;
 
@@ -59,22 +60,20 @@ public class LineReader : MonoBehaviour
 
     private BallRoute RouteConvert(Vector3 position)
     {
-        BallRoute route = null;
-        Ray ray = Camera.main.ScreenPointToRay(position);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000))
+        Vector3 eNomal = _start.position - _enemy.position;
+        eNomal.y = 0;
+        float h = Vector3.Dot(eNomal, _enemy.position);
+        Vector3 dir = (_points.LastOrDefault().point - Camera.main.transform.position).normalized;
+        Vector3 point = Camera.main.transform.position + (h - Vector3.Dot(eNomal, Camera.main.transform.position)) / Vector3.Dot(eNomal, dir) * dir;
+        Vector3 normal = Vector3.Cross(point - _start.transform.position, Camera.main.transform.right);
+        BallRoute route = new BallRoute();
+        route.AddNode(_start.position, 0f);
+        float buf = (Vector3.Dot(normal, _start.position) - Vector3.Dot(normal, Camera.main.transform.position));
+        for (int i = 0; i < _points.Count; i++)
         {
-            float rotX = -Mathf.Atan2(_start.transform.position.y - hit.point.y, _start.transform.position.z - hit.point.z) / Mathf.PI * 180;
-            Vector3 normal = Vector3.Cross(hit.point - _start.transform.position, Camera.main.transform.right);
-            //Debug.DrawRay(_start.position, normal);
-            route = new BallRoute();
-            route.AddNode(_start.position, 0f);
-            for (int i = 0; i < _points.Count - 1; i++)
-            {
-                Vector3 dir = (_points[i].point - Camera.main.transform.position ).normalized;
-                Vector3 point = Camera.main.transform.position + (Vector3.Dot(normal, _start.position) - Vector3.Dot(normal, Camera.main.transform.position)) / Vector3.Dot(normal, dir) * dir;
-                route.AddNode(point, _points[i].time);
-                Debug.DrawRay(Camera.main.transform.position, dir, Color.yellow);
-            }
+            dir = (_points[i].point - Camera.main.transform.position).normalized;
+            point = Camera.main.transform.position + buf / Vector3.Dot(normal, dir) * dir;
+            route.AddNode(point, _points[i].time);
         }
         return route;
     }

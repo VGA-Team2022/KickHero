@@ -32,6 +32,12 @@ public class BallPresenter : MonoBehaviour
         Init();
     }
 
+    private void OnValidate()
+    {
+        BallModel.Mode = _mode;
+        BallModel.Acceleration = _acceleration;
+    }
+
     void Init()
     {
         _ballModel = new BallModel(
