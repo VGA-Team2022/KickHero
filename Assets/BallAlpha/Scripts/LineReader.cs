@@ -60,6 +60,7 @@ public class LineReader : MonoBehaviour
 
     private BallRoute RouteConvert(Vector3 position)
     {
+        if(!_start || !_enemy) { return null; }
         Vector3 eNomal = _start.position - _enemy.position;
         eNomal.y = 0;
         float h = Vector3.Dot(eNomal, _enemy.position);
