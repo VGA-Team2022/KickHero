@@ -29,6 +29,11 @@ public class LineReader : MonoBehaviour
         {
             _points.Clear();
             _lineRenderer.positionCount = 0;
+            if (_ballPresenter)
+            {
+                _ballPresenter.BallModel.Cancel();
+                _ballPresenter.BallModel.Collection();
+            }
         }
         if (Input.GetMouseButton(0))
         {
