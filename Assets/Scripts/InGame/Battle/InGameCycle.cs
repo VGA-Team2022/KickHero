@@ -181,7 +181,7 @@ public class InGameCycle : MonoBehaviour
         ｛
 	        Yse(敵は攻撃中か)
 
-            No(BallRespawn())
+            No(BallRespawn()を呼ぶ)
          ｝
         ：敵は攻撃中か
         ｛  
@@ -191,27 +191,27 @@ public class InGameCycle : MonoBehaviour
         ：敵の体力は０か？
         ｛
 	        Yse（敵を倒した演出＆ステージクリア演出後ResultStateに移動）
-	        No(BallRespawn())
+	        No(BallRespawn()を呼ぶ)
         ｝
         ：ターゲットマーカーに当たったか？
         ｛
 	        Yse（通常攻撃準備だったか？）
-	        No（BallRespawn()）
+	        No（BallRespawn()を呼ぶ）
         ｝
         ：通常攻撃準備だったか？
         ｛  
 	        Yse（攻撃を阻止できたのか？）
-	        No（BallRespawn()）
+	        No（BallRespawn()を呼ぶ）
         ｝
         ：攻撃を阻止できたのか？
         ｛
-	        Yse（ガード成功演出＆必殺技ゲージ増加処理後にBallRespawn()）
+	        Yse（ガード成功演出＆必殺技ゲージ増加処理後にBallRespawn()を呼ぶ）
 	        No（EnemyAttackStateに移動）
         ｝
         ：体力判定
         ｛
 	        Yse（敗北演出＆敗北画面表示後にResultStateに移動）
-	        No（BallRespawn()）
+	        No（BallRespawn()を呼ぶ）
         ｝*/
             Debug.Log("アタックステート実行中");
         }
