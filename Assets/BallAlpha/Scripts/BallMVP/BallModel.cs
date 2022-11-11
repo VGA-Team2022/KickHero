@@ -19,6 +19,8 @@ public class BallModel
     float _accele = default;
     /// <summary>実行中か否か</summary>
     bool _isCarry = default;
+    System.Action<Collider> _onHitAction;
+    System.Action _onCarryEndAction;
     float _speed = default;
     float _acceleration = default;
     CarryMode _mode = default;
@@ -81,6 +83,33 @@ public class BallModel
         _accele = 0;
     }
 
+    public void Hide()
+    {
+
+    }
+
+    public BallModel OnCarryEnd(System.Action action)
+    {
+        _onCarryEndAction += action;
+        return this;
+    }
+
+    public BallModel OnHit(System.Action<Collider> action)
+    {
+        _onHitAction += action;
+        return this;
+    }
+
+    void CallOnCarryEnd()
+    {
+        _onCarryEndAction?.Invoke();
+    }
+
+    void CallOnHit(Collider collider)
+    {
+        _onHitAction?.Invoke(collider);
+    }
+
     /// <summary>
     /// Positionをサブスクライブする
     /// </summary>
@@ -109,6 +138,7 @@ public class BallModel
         {
             _position.Value = _startTransform.position;
         }
+        Cancel();
     }
     /// <summary>
     /// ルートの設定を試みる
@@ -204,6 +234,7 @@ public class BallModel
                 }
             }
         }
+        CallOnCarryEnd();
         Debug.Log(2);
         while (velo.sqrMagnitude != 0)
         {
