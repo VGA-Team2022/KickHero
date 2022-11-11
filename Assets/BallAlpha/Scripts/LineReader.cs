@@ -31,8 +31,8 @@ public class LineReader : MonoBehaviour
             _lineRenderer.positionCount = 0;
             if (_ballPresenter)
             {
-                _ballPresenter.BallModel.Cancel();
-                _ballPresenter.BallModel.Collection();
+                _ballPresenter.Cancel();
+                _ballPresenter.Collection();
             }
         }
         if (Input.GetMouseButton(0))
@@ -53,10 +53,9 @@ public class LineReader : MonoBehaviour
                 _lineRenderer.SetPositions(route.Positons);
                 if (_ballPresenter)
                 {
-                    BallModel ballModel = _ballPresenter.BallModel;
-                    if (_ballPresenter.BallModel.TryRouteSet(route))
+                    if (_ballPresenter.TryRouteSet(route))
                     {
-                        _ballPresenter.BallModel.Shoot();
+                        _ballPresenter.Shoot();
                     }
                 }
             }

@@ -88,18 +88,4 @@ public class BallView : MonoBehaviour
             renderer.enabled = false;
         }
     }
-
-    private void OnTriggerStay(Collider other)
-    {
-        //Debug.Log(1);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //Debug.Log(2);
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        //Debug.Log(4);
-    }
 }
