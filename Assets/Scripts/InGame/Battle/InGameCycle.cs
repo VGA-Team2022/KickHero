@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using State = StateMachine<InGameCycle.EventEnum, InGameCycle>.State;
 using UnityEngine;
 using Unity.VisualScripting;
-using System.Runtime.CompilerServices;
+using Zenject;
 
 public class InGameCycle : MonoBehaviour
 {
+
+    ISceneData _abstructScene;
+
+    [Inject]
+        void Construct(ISceneData sceneData)
+    {
+        _abstructScene= sceneData;
+    }
+
     StateMachine<EventEnum, InGameCycle> _stateMachine;
     [SerializeField] int trun = default;
     public static InGameCycle Instance;

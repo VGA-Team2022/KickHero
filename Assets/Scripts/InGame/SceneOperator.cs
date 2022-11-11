@@ -8,16 +8,31 @@ public class SceneOperator
     /// <summary>
     /// シーン間で保持する文字列
     /// </summary>
-    string _message;
+    bool[] _isClearedStages;
 
-    public SceneOperator(string message)
+    public bool[] IsClearedStages => _isClearedStages;
+
+    public void ClearStage(int index)
     {
-        SetUp(message);
+        _isClearedStages[index] = true;
     }
 
-    public void SetUp(string message)
+    public void ResetClearedStage()
     {
-        _message = message;
+        for (int i = 0;i<_isClearedStages.Length;i++)
+        {
+            _isClearedStages[i] = false;
+        }
+    }
+
+    public SceneOperator(bool[] clearedStages)
+    {
+        SetUp(clearedStages);
+    }
+
+    public void SetUp(bool[] clearedStages)
+    {
+        _isClearedStages = clearedStages;
     }
 
     public async UniTask LoadScene(string sceneName)
@@ -33,7 +48,7 @@ public class SceneOperator
         absScene.SetOperator(this);
 
         //ロード時の処理を呼ぶ
-        await absScene.Load(_message);
+        await absScene.Load();
         absScene.Open();
     }
 

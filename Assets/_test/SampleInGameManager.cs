@@ -7,7 +7,7 @@ namespace alpha
     public class SampleInGameManager : AbstructScene
 {
     /// <summary>シーン内で使用する文字列</summary>
-    protected string _message = "";
+    protected bool[] _message ;
 
     [Header("コンポーネント")]
     [SerializeField, Tooltip("押下時にロードが呼ばれるボタン")]
@@ -29,23 +29,23 @@ namespace alpha
     protected override void OnAwake()
     {
         //押下時に指定のシーンにロードする。
-        _loadButton.onClick.AddListener(() => { LoadScene(_sceneName, _inputField.text); });
+        //_loadButton.onClick.AddListener(() => { LoadScene(_sceneName, _inputField.text); });
 
         //押下時に次のシーンに渡す文字列を変更する
         _inputButton.onClick.AddListener(() => {
             if (_sceneOperator == null)
             {
-                _sceneOperator = new SceneOperator(_inputField.text);
+                //_sceneOperator = new SceneOperator(_inputField.text);
             }
             else
             {
-                _sceneOperator.SetUp(_inputField.text);
+                //_sceneOperator.SetUp(_inputField.text);
             }
         });
     }
-    public override async UniTask Load(string message)
+    public override async UniTask Load()
     {
-        _message = message;
+        //_message = message;
         await UniTask.Yield();
     }
 
@@ -54,7 +54,7 @@ namespace alpha
     /// </summary>
     public override void Open()
     {
-        _text.text = _message;
+        //_text.text = _message;
     }
 
     public override async UniTask UnLoad()
