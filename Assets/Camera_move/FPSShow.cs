@@ -11,6 +11,16 @@ public class FPSShow : MonoBehaviour
     private int m_frames;
     private float m_timeleft;
     private float m_fps;
+    private GUIStyle style;
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
+    void Start()
+    {
+        style = new GUIStyle();
+        style.fontSize = 50;
+    }
 
     private void Update()
     {
@@ -28,6 +38,7 @@ public class FPSShow : MonoBehaviour
 
     private void OnGUI()
     {
-        GUILayout.Label("FPS: " + m_fps.ToString("f2"));
+        Rect rect = new Rect(10, 10, 400, 300);
+        GUILayout.Label("FPS: " + m_fps.ToString("f2"), style);
     }
 }
