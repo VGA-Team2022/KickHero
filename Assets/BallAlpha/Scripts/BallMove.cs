@@ -12,24 +12,37 @@ public class BallMove : MonoBehaviour
 
     float _time = 0;
     float _accele = 0;
+    bool _isCarry = false;
 
     BallRoute _route;
 
     public CarryMode Mode { get => _mode; set => _mode = value; }
     public float Speed { get => _speed; set => _speed = value; }
     public float Acceleration { get => _acceleration; set => _acceleration = value; }
+    public BallRoute Route { get => _route;}
+
 
     /// <summary>
     /// ƒ‹[ƒg‚ğw’è‚µ‚Â‚Â”­Ë‚·‚é
     /// </summary>
     /// <param name="route"></param>
     /// <returns></returns>
-    public bool Shoot(BallRoute route)
+    public bool Shoot()
     {
-        _route = route;
         StartCoroutine(Carry());
         return true;
     }
+
+    public bool TryRouteSet(BallRoute route)
+    {
+        if (!_isCarry)
+        {
+            _route = route;
+            return true;
+        }
+        return false;
+    }
+
     private void Start()
     {
     }
@@ -40,6 +53,7 @@ public class BallMove : MonoBehaviour
 
     IEnumerator Carry()
     {
+        _isCarry = true;
         if (_mode == CarryMode.Time)
         {
             _time = _route.MinTime;
@@ -48,9 +62,20 @@ public class BallMove : MonoBehaviour
                 yield return new WaitForFixedUpdate();
                 _time += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
-                if (_route.TryPointInCaseTime(_time, out Vector3 point))
+                if (_route.TryGetPointInCaseTime(_time, out Vector3 point))
                 {
                     transform.position = point;
+                }
+                else
+                {
+                    if(Mathf.Abs(_route.MinTime - _time) > Mathf.Abs(_route.MaxTime - _time))
+                    {
+                        transform.position = _route.Positons.Last();
+                    }
+                    else
+                    {
+                        transform.position = _route.Positons.First();
+                    }
                 }
             }
         }
@@ -63,13 +88,25 @@ public class BallMove : MonoBehaviour
                 yield return new WaitForFixedUpdate();
                 _time += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
-                if (_route.TryPointInCaseDistance(_time, out Vector3 point))
+                if (_route.TryGetPointInCaseDistance(_time, out Vector3 point))
                 {
                     transform.position = point;
+                }
+                else
+                {
+                    if(_time > _route.AllWay - _time)
+                    {
+                        transform.position = _route.Positons.Last();
+                    }
+                    else
+                    {
+                        transform.position = _route.Positons.First();
+                    }
                 }
             }
         }
         _accele = 0;
+        _isCarry = false;
     }
 
     public enum CarryMode
