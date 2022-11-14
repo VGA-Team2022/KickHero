@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public class BallRoute
 {
-    List<RouteNode> _nodrs = new List<RouteNode>();
+    List<Node> _nodrs = new List<Node>();
 
     /// <summary>éûä‘ÇÃçáåv</summary>
     public float AllTime { get => _nodrs.LastOrDefault().Time - _nodrs.FirstOrDefault().Time; }
@@ -41,7 +41,7 @@ public class BallRoute
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    public RouteNode this[int index]
+    public Node this[int index]
     {
         get
         {
@@ -74,7 +74,7 @@ public class BallRoute
     /// <param name="time"></param>
     public void AddNode(Vector3 point, float time)
     {
-        _nodrs.Add(new RouteNode(point, time));
+        _nodrs.Add(new Node(point, time));
         _nodrs.Sort();
     }
 
@@ -83,15 +83,15 @@ public class BallRoute
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    public Vector3? PointInCaseTime(float time)
+    public Vector3? GetPointInCaseTime(float time)
     {
         if(time < MinTime)
         {
-            return _nodrs.FirstOrDefault().Point;
+            return null;
         }
         else if(time > MaxTime)
         {
-            return _nodrs.LastOrDefault().Point;
+            return null;
         }
         Vector3? point = null;
         for(int i = 1; i < _nodrs.Count; i++)
@@ -111,9 +111,9 @@ public class BallRoute
     /// <param name="time"></param>
     /// <param name="point"></param>
     /// <returns></returns>
-    public bool TryPointInCaseTime(float time, out Vector3 point)
+    public bool TryGetPointInCaseTime(float time, out Vector3 point)
     {
-        Vector3? buf = PointInCaseTime(time);
+        Vector3? buf = GetPointInCaseTime(time);
         if (buf == null)
         {
             point = Vector3.zero;
@@ -131,15 +131,15 @@ public class BallRoute
     /// </summary>
     /// <param name="way"></param>
     /// <returns></returns>
-    public Vector3? PointInCaseDistance(float way)
+    public Vector3? GetPointInCaseDistance(float way)
     {
         if (way < 0)
         {
-            return _nodrs.FirstOrDefault().Point;
+            return null;
         }
         else if(way > AllWay)
         {
-            return _nodrs.LastOrDefault().Point;
+            return null;
         }
         Vector3? point = null;
         float distance = 0;
@@ -161,9 +161,9 @@ public class BallRoute
     /// <param name="way"></param>
     /// <param name="point"></param>
     /// <returns></returns>
-    public bool TryPointInCaseDistance(float way, out Vector3 point)
+    public bool TryGetPointInCaseDistance(float way, out Vector3 point)
     {
-        Vector3? buf = PointInCaseDistance(way);
+        Vector3? buf = GetPointInCaseDistance(way);
         if (buf == null)
         {
             point = Vector3.zero;
@@ -175,35 +175,34 @@ public class BallRoute
             return true;
         }
     }
-}
-
-/// <summary>
-/// ìπÇãLò^Ç∑ÇÈÉmÅ[Éh
-/// </summary>
-public struct RouteNode : IComparable<RouteNode>
-{
-
-    public RouteNode(Vector3 point, float time)
+    /// <summary>
+    /// ìπÇãLò^Ç∑ÇÈÉmÅ[Éh
+    /// </summary>
+    public struct Node : IComparable<Node>
     {
-        Point = point;
-        Time = time;
-    }
-    public Vector3 Point;
-    public float Time;
 
-    int IComparable<RouteNode>.CompareTo(RouteNode other)
-    {
-        if (Time > other.Time)
+        public Node(Vector3 point, float time)
         {
-            return 1;
+            Point = point;
+            Time = time;
         }
-        else if (Time < other.Time)
+        public Vector3 Point;
+        public float Time;
+
+        int IComparable<Node>.CompareTo(Node other)
         {
-            return -1;
-        }
-        else
-        {
-            return 0;
+            if (Time > other.Time)
+            {
+                return 1;
+            }
+            else if (Time < other.Time)
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
