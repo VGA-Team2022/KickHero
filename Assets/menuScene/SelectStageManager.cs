@@ -34,53 +34,51 @@ public class SelectStageManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        OnInformationPanel();
-        ReturnSelectStage();
-        LoadScene();
-    }
-
     /// <summary>
     /// ステージ情報スクリーンを開く
     /// </summary>
-    private void OnInformationPanel()
+    /// <param name="index">インデックス</param>
+    public void OnOpenScreen(int index)
     {
-        _stageButtons[0].onClick.AddListener(() => { _informationPanels[0].SetActive(true); });
-        _stageButtons[1].onClick.AddListener(() => { _informationPanels[1].SetActive(true); });
-        _stageButtons[2].onClick.AddListener(() => { _informationPanels[2].SetActive(true); });
-        _stageButtons[3].onClick.AddListener(() => { _informationPanels[3].SetActive(true); });
-        _stageButtons[4].onClick.AddListener(() => { _informationPanels[4].SetActive(true); });
-        _stageButtons[5].onClick.AddListener(() => { _informationPanels[5].SetActive(true); });
-        _stageButtons[6].onClick.AddListener(() => { _informationPanels[6].SetActive(true); });
+        for(int i = 0; i < _stageButtons.Length; i++)
+        {
+            if (_stageButtons[index] == _stageButtons[i])
+            {
+                _informationPanels[i].SetActive(true);
+                break;
+            }
+        }
     }
 
     /// <summary>
     /// ステージ情報スクリーンを閉じる
     /// </summary>
-    private void ReturnSelectStage()
+    /// <param name="index">インデックス</param>
+    public void OnReturnSelectStage(int index)
     {
-        _returnSelectStages[0].onClick.AddListener(() => { _informationPanels[0].SetActive(false); });
-        _returnSelectStages[1].onClick.AddListener(() => { _informationPanels[1].SetActive(false); });
-        _returnSelectStages[2].onClick.AddListener(() => { _informationPanels[2].SetActive(false); });
-        _returnSelectStages[3].onClick.AddListener(() => { _informationPanels[3].SetActive(false); });
-        _returnSelectStages[4].onClick.AddListener(() => { _informationPanels[4].SetActive(false); });
-        _returnSelectStages[5].onClick.AddListener(() => { _informationPanels[5].SetActive(false); });
-        _returnSelectStages[6].onClick.AddListener(() => { _informationPanels[6].SetActive(false); });
+        for(int i = 0; i < _returnSelectStages.Length; i++)
+        {
+            if (_returnSelectStages[index] == _returnSelectStages[i])
+            {
+                _informationPanels[i].SetActive(false);
+                break;
+            }
+        }
     }
 
     /// <summary>
     /// ステージシーンをロード
     /// </summary>
-    private void LoadScene()
+    /// <param name="index">インデックス</param>
+    public void OnLoadScene(int index)
     {
-        _loadScenes[0].onClick.AddListener(() => { SceneManager.LoadScene(_sceneNames[0]); });
-        _loadScenes[1].onClick.AddListener(() => { SceneManager.LoadScene(_sceneNames[1]); });
-        _loadScenes[2].onClick.AddListener(() => { SceneManager.LoadScene(_sceneNames[2]); });
-        _loadScenes[3].onClick.AddListener(() => { SceneManager.LoadScene(_sceneNames[3]); });
-        _loadScenes[4].onClick.AddListener(() => { SceneManager.LoadScene(_sceneNames[4]); });
-        _loadScenes[5].onClick.AddListener(() => { SceneManager.LoadScene(_sceneNames[5]); });
-        _loadScenes[6].onClick.AddListener(() => { SceneManager.LoadScene(_sceneNames[6]); });
+        for(int i = 0; i < _loadScenes.Length; i++)
+        {
+            if (_loadScenes[index] == _loadScenes[i])
+            {
+                SceneManager.LoadScene(_sceneNames[i]);
+                break;
+            }
+        }
     }
 }

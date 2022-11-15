@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a96217117be96684690a07dbb7d8bb11, type: 3}
   m_Name: KeepData
   m_EditorClassIdentifier: 
-  _countClear: 0
+  _countClear: 7
