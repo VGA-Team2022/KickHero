@@ -11,7 +11,11 @@ public class BallView : MonoBehaviour
     Action<Collider> _onHitAction;
 
     SphereCollider _collider;
+    Rigidbody _rb;
     List<Collider> _stayColliders = new List<Collider>();
+
+    public Vector3 Velocity { get => Rigidbody.velocity; set => Rigidbody.velocity = value; }
+
 
     private SphereCollider Collider
     {
@@ -24,6 +28,18 @@ public class BallView : MonoBehaviour
             return _collider;
         }
     }
+    private Rigidbody Rigidbody
+    {
+        get
+        {
+            if (_rb)
+            {
+                _rb = GetComponent<Rigidbody>();
+            }
+            return _rb;
+        }
+    }
+
     public Vector3 Position
     {
         get => transform.position;

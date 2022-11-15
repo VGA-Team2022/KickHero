@@ -1,15 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject.SpaceFighter;
 
 public class BallPresenter : MonoBehaviour
 {
+    [Tooltip("ボールのView")]
     [SerializeField] BallView _view;
+    [Tooltip("ボールの速さ")]
     [SerializeField] float _speed = 1;
+    [Tooltip("ボールの加速度")]
     [SerializeField] float _acceleration = 0;
+    [Tooltip("最後にボールを飛ばす速度の算出に使う長さ")]
     [SerializeField] float _calculationTime = 0;
+    [Tooltip("ボールの速度モード")]
     [SerializeField] BallModel.CarryMode _mode = BallModel.CarryMode.Time;
 
     BallModel _ballModel;
@@ -97,12 +103,14 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
+            GameObject go = Instantiate(_view.transform).gameObject;
+            go.name = "BallStartPosition";
             _ballModel = new BallModel(
             value =>
             {
                 _view.Position = value;
             },
-            _view.gameObject);
+            _view.gameObject, go.transform);
         }
         ValueSet();
     }
