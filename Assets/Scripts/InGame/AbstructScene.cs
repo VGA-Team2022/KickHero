@@ -7,11 +7,13 @@ public abstract class AbstructScene : MonoBehaviour
     /// <summary>
     /// 現在クリアしたステージの配列
     /// </summary>
-    public bool[] _isClearedStages => _sceneOperator.IsClearedStages;
-
-    public void ClearStage(int index)
+    public bool[] ClearedStages
     {
-        _sceneOperator.ClearStage(index);
+        get => _sceneOperator.IsClearedStages;
+        set
+        {
+            _sceneOperator.SetClearedStage(value);
+        }
     }
 
     public void ResetStage()

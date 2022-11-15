@@ -2,13 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 
-public class InGameScene : AbstructScene,ISceneData
+public class InGameScene : AbstructScene
 {
-    public bool[] ClearedStages { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
     protected override void OnAwake()
     {
-
     }
     public override async UniTask Load()
     {

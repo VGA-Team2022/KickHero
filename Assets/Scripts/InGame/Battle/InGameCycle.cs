@@ -7,17 +7,7 @@ using Zenject;
 
 public class InGameCycle : MonoBehaviour
 {
-
-    ISceneData _abstructScene;
-
-    [Inject]
-        void Construct(ISceneData sceneData)
-    {
-        _abstructScene= sceneData;
-    }
-
     StateMachine<EventEnum, InGameCycle> _stateMachine;
-    [SerializeField] int trun = default;
     public static InGameCycle Instance;
     public enum EventEnum
     {
@@ -39,18 +29,18 @@ public class InGameCycle : MonoBehaviour
 
         //遷移を定義
         _stateMachine.AddTransition<StartState, InGameState>(EventEnum.GameStart);
-        _stateMachine.AddTransition<InGameState,ThrowState>(EventEnum.Throw);
-        _stateMachine.AddTransition<ThrowState,AttackState>(EventEnum.Attack);
-        _stateMachine.AddTransition<AttackState,EnemyAttackState >(EventEnum.EnemyAttack);
+        _stateMachine.AddTransition<InGameState, ThrowState>(EventEnum.Throw);
+        _stateMachine.AddTransition<ThrowState, AttackState>(EventEnum.Attack);
+        _stateMachine.AddTransition<AttackState, EnemyAttackState>(EventEnum.EnemyAttack);
         _stateMachine.AddTransition<AttackState, ThrowState>(EventEnum.BallRespawn);
         _stateMachine.AddTransition<InGameState, ResultState>(EventEnum.GameOver);
         _stateMachine.AddTransition<InGameState, ResultState>(EventEnum.Pause);
-        _stateMachine.AddTransition<ResultState,StartState>(EventEnum.Retry);
+        _stateMachine.AddTransition<ResultState, StartState>(EventEnum.Retry);
 
         //最初のStateを設定
         _stateMachine.StartSetUp<StartState>();
 
-        if(Instance ==null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -69,7 +59,7 @@ public class InGameCycle : MonoBehaviour
         _stateMachine.Dispatch(EventEnum.Attack);
     }
 
-    public  void EnemyAttack()
+    public void EnemyAttack()
     {
         _stateMachine.Dispatch(EventEnum.EnemyAttack);
     }
@@ -144,7 +134,7 @@ public class InGameCycle : MonoBehaviour
         {
             //ボールの位置座標とベクトル、回転をリセット
             Vector3 tmp = GameObject.Find("Ball").transform.position;
-            GameObject.Find("Ball").transform.position = new Vector3(0,0,0);
+            GameObject.Find("Ball").transform.position = new Vector3(0, 0, 0);
             Rigidbody rigidbody = GameObject.Find("Ball").GetComponent<Rigidbody>();
             rigidbody.velocity = Vector3.zero;
             rigidbody.angularVelocity = Vector3.zero;
@@ -162,7 +152,7 @@ public class InGameCycle : MonoBehaviour
             //ボールを飛ばして当たらなかったらターンを+1してボールの位置座標とベクトル、回転をリセット
             void OnTriggerEnter(Collider other)
             {
-                Instance.trun++;
+                //Instance.trun++;
                 Vector3 tmp = GameObject.Find("Ball").transform.position;
                 GameObject.Find("Ball").transform.position = new Vector3(0, 0, 0);
                 Rigidbody rigidbody = GameObject.Find("Ball").GetComponent<Rigidbody>();
@@ -234,7 +224,7 @@ public class InGameCycle : MonoBehaviour
     {
         protected override void OnEnter(State prevState)
         {
-            
+
             Debug.Log("エネミーアタックステートに入った");
         }
         protected override void OnUpdate()

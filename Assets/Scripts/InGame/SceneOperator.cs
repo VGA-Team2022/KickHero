@@ -12,9 +12,9 @@ public class SceneOperator
 
     public bool[] IsClearedStages => _isClearedStages;
 
-    public void ClearStage(int index)
+    public void SetClearedStage(bool[] isCleared)
     {
-        _isClearedStages[index] = true;
+        _isClearedStages = isCleared;
     }
 
     public void ResetClearedStage()
