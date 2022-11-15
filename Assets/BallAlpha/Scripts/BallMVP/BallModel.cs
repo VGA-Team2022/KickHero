@@ -5,12 +5,14 @@ using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using Unity.VisualScripting;
 
 public class BallModel
 {
 
     /// <summary>ボールのPosition</summary>
-    ReactiveProperty<Vector3> _position = new ReactiveProperty<Vector3>();
+    ReactiveProperty<Vector3> _position;
+    ReactiveProperty<Vector3> _velocity = new ReactiveProperty<Vector3>();
     /// <summary>処理のトークン</summary>
     CancellationTokenSource _tokenSource = new CancellationTokenSource();
     /// <summary>進行状況</summary>
@@ -46,12 +48,18 @@ public class BallModel
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(System.Action<Vector3> action, GameObject gameObject)
+    public BallModel(System.Action<Vector3> action, GameObject gameObject, Transform startPosition)
     {
+        _startTransform = startPosition;
+        _position = new ReactiveProperty<Vector3>(_startTransform.position);
         _position.Subscribe(action).AddTo(gameObject);
     }
 
-    public BallModel() { }
+    public BallModel(Transform startPosition)
+    {
+        _startTransform = startPosition;
+        _position = new ReactiveProperty<Vector3>(_startTransform.position);
+    }
 
     ~BallModel()
     {
@@ -91,11 +99,6 @@ public class BallModel
     void CallOnCarryEnd()
     {
         _onCarryEndAction?.Invoke();
-    }
-
-    void CallOnHit(Collider collider)
-    {
-        _onHitAction?.Invoke(collider);
     }
 
     /// <summary>
@@ -224,12 +227,16 @@ public class BallModel
         }
         CallOnCarryEnd();
         Debug.Log(2);
-        while (velo.sqrMagnitude != 0)
+        if (velo.sqrMagnitude != 0)
         {
-            velo += Physics.gravity * Time.deltaTime;
-            _position.Value += velo * Time.deltaTime;
-            await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
+            _velocity.Value = velo;
         }
+        //while (velo.sqrMagnitude != 0)
+        //{
+        //    velo += Physics.gravity * Time.deltaTime;
+        //    _position.Value += velo * Time.deltaTime;
+        //    await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
+        //}
     }
 
 
