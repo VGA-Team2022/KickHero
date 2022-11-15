@@ -5,10 +5,12 @@ using UnityEngine;
 using Unity.VisualScripting;
 using Zenject;
 
-public class InGameCycle : MonoBehaviour
+public class InGameCycle : MonoBehaviour,IReceivableGameData
 {
     StateMachine<EventEnum, InGameCycle> _stateMachine;
     public static InGameCycle Instance;
+
+    bool[] _isClearedStage;
     public enum EventEnum
     {
         GameStart,
@@ -83,6 +85,11 @@ public class InGameCycle : MonoBehaviour
     private void Update()
     {
         //_stateMachine.Update();
+    }
+
+    public void SetClearedStage(bool[] clearedStage)
+    {
+        _isClearedStage = clearedStage;
     }
 
     private class StartState : State
