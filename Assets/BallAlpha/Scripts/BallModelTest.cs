@@ -17,8 +17,8 @@ public class BallModelTest : MonoBehaviour
             float time = 1f / _segment * i;
             route.AddNode(Vector3.Lerp(_start.position, _end.position, time), time);
         }
-        _presenter.BallModel.TryRouteSet(route);
-        _presenter.BallModel.Shoot();
+        _presenter.TryRouteSet(route);
+        _presenter.Shoot();
     }
 
     // Update is called once per frame
