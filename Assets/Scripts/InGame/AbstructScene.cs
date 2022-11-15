@@ -12,7 +12,7 @@ public abstract class AbstructScene : MonoBehaviour
         get => _sceneOperator.IsClearedStages;
         set
         {
-            _sceneOperator.SetClearedStage(value);
+            _sceneOperator.IsClearedStages = value;
         }
     }
 

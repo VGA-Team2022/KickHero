@@ -10,16 +10,11 @@ public class SceneOperator
     /// </summary>
     bool[] _isClearedStages;
 
-    public bool[] IsClearedStages => _isClearedStages;
-
-    public void SetClearedStage(bool[] isCleared)
-    {
-        _isClearedStages = isCleared;
-    }
+    public bool[] IsClearedStages { get => _isClearedStages; set { _isClearedStages = value; } }
 
     public void ResetClearedStage()
     {
-        for (int i = 0;i<_isClearedStages.Length;i++)
+        for (int i = 0; i < _isClearedStages.Length; i++)
         {
             _isClearedStages[i] = false;
         }
