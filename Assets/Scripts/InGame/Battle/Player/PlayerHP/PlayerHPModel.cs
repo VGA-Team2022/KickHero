@@ -14,6 +14,6 @@ public class PlayerHPModel
 
     public void AddPlayerHP(int value)
     {
-        _playerHPProperty.Value = value;
+        _playerHPProperty.Value += value;
     }
 }

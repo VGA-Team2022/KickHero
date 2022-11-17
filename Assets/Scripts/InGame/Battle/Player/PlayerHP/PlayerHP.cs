@@ -15,6 +15,7 @@ public class PlayerHP : MonoBehaviour
     private void Start()
     {
         _hpGauge = GetComponent<PlayerHPGauge>();
+        _hpGauge.Init();
         _hpModel = new PlayerHPModel
             (value =>
             {
@@ -29,7 +30,6 @@ public class PlayerHP : MonoBehaviour
     /// <param name="value">‘«‚³‚ê‚é’l</param>
     public void AddHPValue(int value)
     {
-        int clampHP = Mathf.Clamp(value,0,_maxHP);
-        _hpModel.AddPlayerHP(clampHP);
+        _hpModel.AddPlayerHP(value);
     }
 }
