@@ -87,19 +87,12 @@ public class BallPresenter : MonoBehaviour
         View?.Display();
     }
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init();
-    }
-
     private void OnValidate()
     {
         ValueSet();
     }
 
-    void Init()
+    public void Init()
     {
         if (View)
         {

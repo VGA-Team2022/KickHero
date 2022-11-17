@@ -12,7 +12,7 @@ public class PlayerHP : MonoBehaviour
     PlayerHPGauge _hpGauge;
     PlayerHPModel _hpModel;
 
-    private void Start()
+    public void Init()
     {
         _hpGauge = GetComponent<PlayerHPGauge>();
         _hpGauge.Init();
