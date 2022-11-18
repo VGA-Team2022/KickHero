@@ -26,7 +26,7 @@ public class BallPresenter : MonoBehaviour
         {
             if (_ballModel == null)
             {
-                Init();
+                Debug.LogError("_ballModelが初期化されていません。");
             }
             return _ballModel;
         }
@@ -37,9 +37,10 @@ public class BallPresenter : MonoBehaviour
     {
         get
         {
+            _view = FindObjectOfType<BallView>();
             if (!_view)
             {
-                Debug.LogWarning($"{nameof(_view)}がアサインされていません");
+                Debug.LogError("BallViewが見つかりませんでした。");
             }
             return _view;
         }
@@ -92,7 +93,7 @@ public class BallPresenter : MonoBehaviour
         ValueSet();
     }
 
-    public void Init()
+    public void Init(System.Action<InGameCycle.EventEnum> action)
     {
         if (View)
         {
@@ -103,7 +104,8 @@ public class BallPresenter : MonoBehaviour
             {
                 _view.Position = value;
             },
-            _view.gameObject, go.transform);
+            _view.gameObject, go.transform
+            ,action);
         }
         ValueSet();
     }

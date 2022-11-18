@@ -11,7 +11,7 @@ public class LineReader : MonoBehaviour
     [SerializeField] Transform _start;
     [SerializeField] Transform _enemy;
     //[SerializeField] BallMove _ball;
-   // [SerializeField] BallPresenter _ballPresenter;
+    //[SerializeField] BallPresenter _ballPresenter;
 
     LineRenderer _lineRenderer;
     List<(float time, Vector3 point)> _points = new List<(float, Vector3)>();

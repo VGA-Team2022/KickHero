@@ -13,6 +13,7 @@ public class BallModel
     /// <summary>ボールのPosition</summary>
     ReactiveProperty<Vector3> _position;
     ReactiveProperty<Vector3> _velocity = new ReactiveProperty<Vector3>();
+    ReactiveProperty<InGameCycle.EventEnum> _eventProperty;
     /// <summary>処理のトークン</summary>
     CancellationTokenSource _tokenSource = new CancellationTokenSource();
     /// <summary>進行状況</summary>
@@ -48,11 +49,15 @@ public class BallModel
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(System.Action<Vector3> action, GameObject gameObject, Transform startPosition)
+    public BallModel(System.Action<Vector3> action, GameObject gameObject, Transform startPosition, System.Action<InGameCycle.EventEnum> eventAction)
     {
         _startTransform = startPosition;
         _position = new ReactiveProperty<Vector3>(_startTransform.position);
         _position.Subscribe(action).AddTo(gameObject);
+
+        //シーケンスの遷移を指定。
+        _eventProperty = new ReactiveProperty<InGameCycle.EventEnum>(InGameCycle.EventEnum.None);
+        _eventProperty.Subscribe(eventAction).AddTo(gameObject);
     }
 
     public BallModel(Transform startPosition)
@@ -73,6 +78,7 @@ public class BallModel
     /// <returns></returns>
     public bool Shoot()
     {
+        _eventProperty.Value = InGameCycle.EventEnum.Throw;
         _tokenSource?.Cancel();
         _tokenSource = new CancellationTokenSource();
         if(_route == null) { return false; }
@@ -227,6 +233,7 @@ public class BallModel
         }
         CallOnCarryEnd();
         Debug.Log(2);
+        _eventProperty.Value = InGameCycle.EventEnum.BallRespawn;
         if (velo.sqrMagnitude != 0)
         {
             _velocity.Value = velo;
