@@ -1,3 +1,4 @@
+using ModestTree.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +27,8 @@ public class BallPresenter : MonoBehaviour
         {
             if (_ballModel == null)
             {
-                Debug.LogError("_ballModel‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+                //Debug.LogError("_ballModel‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+                _ballModel = new BallModel(_view.transform.position);
             }
             return _ballModel;
         }
@@ -96,6 +98,11 @@ public class BallPresenter : MonoBehaviour
         View?.Display();
     }
 
+    private void Start()
+    {
+        Init();
+    }
+
     private void OnValidate()
     {
         ValueSet();
@@ -105,15 +112,28 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            GameObject go = Instantiate(_view.transform).gameObject;
-            go.name = "BallStartPosition";
             _ballModel = new BallModel(
             value =>
             {
                 _view.Position = value;
             },
-            _view.gameObject, go.transform
-            ,action);
+            _view.gameObject, _view.transform.position
+            , action); ;
+        }
+        ValueSet();
+    }
+
+    public void Init()
+    {
+        if (View)
+        {
+            _ballModel = new BallModel(
+            value =>
+            {
+                _view.Position = value;
+            },
+            _view.gameObject, _view.transform.position
+            );
         }
         ValueSet();
     }

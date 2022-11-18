@@ -27,43 +27,45 @@ public class BallModel
     float _acceleration = default;
     CarryMode _mode = default;
     BallRoute _route = default;
-    Transform _startTransform = default;
+    //Transform _startTransform = default;
+    /// <summary>初期位置</summary>
+    Vector3 _startPosition = default;
     float _calculationTime = default;
+
+    bool _isDebug = false;
 
     public CarryMode Mode { get => _mode; set => _mode = value; }
     public float Speed { get => _speed; set => _speed = value; }
     public float Acceleration { get => _acceleration; set => _acceleration = value; }
     public BallRoute Route { get => _route; }
-    public Transform StartTransform { get => _startTransform;
-        set
-        {
-            _startTransform = value;
-            if (!_isCarry)
-            {
-                _position.Value = _startTransform.position;
-            }
-        }
-    }
     public float CalculationTime { get => _calculationTime; set => _calculationTime = value; }
 
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(System.Action<Vector3> action, GameObject gameObject, Transform startPosition, System.Action<InGameCycle.EventEnum> eventAction)
+    public BallModel(System.Action<Vector3> action, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
     {
-        _startTransform = startPosition;
-        _position = new ReactiveProperty<Vector3>(_startTransform.position);
+        _startPosition = startPosition;
+        _position = new ReactiveProperty<Vector3>(_startPosition);
         _position.Subscribe(action).AddTo(gameObject);
 
         //シーケンスの遷移を指定。
         _eventProperty = new ReactiveProperty<InGameCycle.EventEnum>(InGameCycle.EventEnum.None);
         _eventProperty.Subscribe(eventAction).AddTo(gameObject);
     }
-
-    public BallModel(Transform startPosition)
+    public BallModel(System.Action<Vector3> action, GameObject gameObject, Vector3 startPosition)
     {
-        _startTransform = startPosition;
-        _position = new ReactiveProperty<Vector3>(_startTransform.position);
+        _startPosition = startPosition;
+        _position = new ReactiveProperty<Vector3>(_startPosition);
+        _position.Subscribe(action).AddTo(gameObject);
+        _isDebug = true;
+    }
+
+    public BallModel(Vector3 startPosition)
+    {
+        _startPosition = startPosition;
+        _position = new ReactiveProperty<Vector3>(_startPosition);
+        _isDebug = true;
     }
 
     ~BallModel()
@@ -78,10 +80,13 @@ public class BallModel
     /// <returns></returns>
     public bool Shoot()
     {
-        _eventProperty.Value = InGameCycle.EventEnum.Throw;
+        if (!_isDebug)
+        {
+            _eventProperty.Value = InGameCycle.EventEnum.Throw;
+        }
         _tokenSource?.Cancel();
         _tokenSource = new CancellationTokenSource();
-        if(_route == null) { return false; }
+        if (_route == null) { return false; }
         Carry().Forget();
         return true;
     }
@@ -131,10 +136,7 @@ public class BallModel
     /// </summary>
     public void Collection()
     {
-        if (_startTransform)
-        {
-            _position.Value = _startTransform.position;
-        }
+        _position.Value = _startPosition;
         Cancel();
     }
     /// <summary>
@@ -153,7 +155,7 @@ public class BallModel
         return false;
     }
 
-    
+
     async UniTask Carry()
     {
         _isCarry = true;
@@ -164,14 +166,15 @@ public class BallModel
             while (_progressStatus <= _route.MaxTime)
             {
                 //yield return new WaitForFixedUpdate();
-                
-                 await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
-                if(this == null)
+
+                await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
+                if (this == null)
                 {
                     Debug.Log(5);
                 }
                 _progressStatus += Time.deltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.deltaTime;
+                Debug.Log($"{_accele + _speed}");
                 if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
                 {
                     //transform.position = point;
@@ -233,7 +236,10 @@ public class BallModel
         }
         CallOnCarryEnd();
         Debug.Log(2);
-        _eventProperty.Value = InGameCycle.EventEnum.BallRespawn;
+        if (!_isDebug)
+        {
+            _eventProperty.Value = InGameCycle.EventEnum.BallRespawn;
+        }
         if (velo.sqrMagnitude != 0)
         {
             _velocity.Value = velo;

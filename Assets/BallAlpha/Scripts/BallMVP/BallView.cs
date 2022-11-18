@@ -13,8 +13,6 @@ public class BallView : MonoBehaviour
     SphereCollider _collider;
     List<Collider> _stayColliders = new List<Collider>();
 
-
-
     private SphereCollider Collider
     {
         get
@@ -32,7 +30,8 @@ public class BallView : MonoBehaviour
         get => transform.position;
         set
         {
-            HitDetermine(Position, value);
+            Vector3 scale = transform.lossyScale;
+            HitDetermine(Position, value, Collider.radius * Mathf.Max(Mathf.Max(scale.x, scale.y), scale.z));
             transform.position = value;
         }
     }
@@ -42,9 +41,9 @@ public class BallView : MonoBehaviour
         _onHitAction += action;
     }
 
-    void HitDetermine(Vector3 start, Vector3 end)
+    void HitDetermine(Vector3 start, Vector3 end, float radius)
     {
-        var hits = Physics.OverlapCapsule(start, end, Collider.radius, Physics.AllLayers, QueryTriggerInteraction.Collide);
+        var hits = Physics.OverlapCapsule(start, end, radius, Physics.AllLayers, QueryTriggerInteraction.Collide);
         if (hits.Length > 0)
         {
             foreach (Collider c in hits)
