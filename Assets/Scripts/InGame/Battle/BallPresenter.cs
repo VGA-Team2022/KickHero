@@ -1,3 +1,4 @@
+using ModestTree.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +27,8 @@ public class BallPresenter : MonoBehaviour
         {
             if (_ballModel == null)
             {
-                Debug.LogError("_ballModelが初期化されていません。");
+                //Debug.LogError("_ballModelが初期化されていません。");
+                _ballModel = new BallModel(_view.transform.position);
             }
             return _ballModel;
         }
@@ -45,47 +47,60 @@ public class BallPresenter : MonoBehaviour
             return _view;
         }
     }
-
+    /// <summary>現在実行中の動作をキャンセルする</summary>
     public void Cancel()
     {
         BallModel.Cancel();
     }
 
+    /// <summary>初期位置に戻る</summary>
     public void Collection()
     {
         BallModel.Collection();
     }
 
+    /// <summary>ルートの設定を試みる
+    /// ボールの状況によっては設定できない</summary>
     public bool TryRouteSet(BallRoute route)
     {
         return BallModel.TryRouteSet(route);
     }
 
+    /// <summary>ボールを発射する</summary>
     public void Shoot()
     {
         BallModel.Shoot();
     }
 
+    /// <summary>ルートを辿り終えた時に呼ぶアクションを設定する</summary>
     public BallPresenter OnCarryEnd(Action action)
     {
         BallModel.OnCarryEnd(action);
         return this;
     }
 
+    /// <summary>ボールがヒットした時に呼ばれるアクションを設定する</summary>
     public BallPresenter OnHit(Action<Collider> action)
     {
         View?.OnHit(action);
         return this;
     }
 
+    /// <summary>ボールを隠す</summary>
     public void Hide()
     {
         View?.Hide();
     }
 
+    /// <summary>ボールを出す</summary>
     public void Display()
     {
         View?.Display();
+    }
+
+    private void Start()
+    {
+        Init();
     }
 
     private void OnValidate()
@@ -97,15 +112,28 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            GameObject go = Instantiate(_view.transform).gameObject;
-            go.name = "BallStartPosition";
             _ballModel = new BallModel(
             value =>
             {
                 _view.Position = value;
             },
-            _view.gameObject, go.transform
-            ,action);
+            _view.gameObject, _view.transform.position
+            , action); ;
+        }
+        ValueSet();
+    }
+
+    public void Init()
+    {
+        if (View)
+        {
+            _ballModel = new BallModel(
+            value =>
+            {
+                _view.Position = value;
+            },
+            _view.gameObject, _view.transform.position
+            );
         }
         ValueSet();
     }

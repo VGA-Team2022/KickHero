@@ -5,17 +5,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
+[RequireComponent(typeof(SphereCollider))]
 public class BallView : MonoBehaviour
 {
     Action<Collider> _onHitAction;
 
     SphereCollider _collider;
-    Rigidbody _rb;
     List<Collider> _stayColliders = new List<Collider>();
-
-    public Vector3 Velocity { get => Rigidbody.velocity; set => Rigidbody.velocity = value; }
-
 
     private SphereCollider Collider
     {
@@ -28,24 +24,14 @@ public class BallView : MonoBehaviour
             return _collider;
         }
     }
-    private Rigidbody Rigidbody
-    {
-        get
-        {
-            if (_rb)
-            {
-                _rb = GetComponent<Rigidbody>();
-            }
-            return _rb;
-        }
-    }
 
     public Vector3 Position
     {
         get => transform.position;
         set
         {
-            HitDetermine(Position, value);
+            Vector3 scale = transform.lossyScale;
+            HitDetermine(Position, value, Collider.radius * Mathf.Max(Mathf.Max(scale.x, scale.y), scale.z));
             transform.position = value;
         }
     }
@@ -55,9 +41,9 @@ public class BallView : MonoBehaviour
         _onHitAction += action;
     }
 
-    void HitDetermine(Vector3 start, Vector3 end)
+    void HitDetermine(Vector3 start, Vector3 end, float radius)
     {
-        var hits = Physics.OverlapCapsule(start, end, Collider.radius, Physics.AllLayers, QueryTriggerInteraction.Collide);
+        var hits = Physics.OverlapCapsule(start, end, radius, Physics.AllLayers, QueryTriggerInteraction.Collide);
         if (hits.Length > 0)
         {
             foreach (Collider c in hits)
