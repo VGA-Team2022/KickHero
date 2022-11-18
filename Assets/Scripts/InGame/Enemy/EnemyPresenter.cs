@@ -20,6 +20,16 @@ public class EnemyPresenter : MonoBehaviour,IAttack,IDamage
     /// <summary>通常攻撃かどうか判定するフラグ</summary>
     bool _normalAttack = true;
 
+    /// <summary>攻撃の感覚</summary>
+    [SerializeField] float _attackTime = 3;
+
+    float _time = 0;
+
+    int _count = 0;
+
+    /// <summary>大技攻撃を繰り出す感覚</summary>
+    [SerializeField] int _specialAttackNum = 4;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +55,25 @@ public class EnemyPresenter : MonoBehaviour,IAttack,IDamage
             _enemyView.gameObject);
     }
 
+    private void Update()
+    {
+        _time += Time.deltaTime;
+
+        if(_time > _attackTime)
+        {
+            if(_count == _specialAttackNum)
+            {
+                _normalAttack = false;
+                Attack();
+            }
+            else
+            {
+                _count++;
+                Attack();
+            }
+        }
+    }
+
 
     /// <summary>
     ///     攻撃するときによばれる関数
@@ -56,12 +85,16 @@ public class EnemyPresenter : MonoBehaviour,IAttack,IDamage
             //プレイヤーのダメージ関数を呼ぶ
             //Damage(_enemyModel._enemyPower);
             _enemyView.NormalAttackMove();
+            _time = 0;
         }
         else
         {
             //プレイヤーのダメージ関数を呼ぶ
             //Damage(_enemyModel._specialEnemyPower);
             _enemyView.SpecialAttackMove();
+            _normalAttack = true;
+            _count = 0;
+            _time = 0;
         }
 
     }
