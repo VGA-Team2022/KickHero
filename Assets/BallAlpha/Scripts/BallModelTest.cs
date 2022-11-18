@@ -19,6 +19,11 @@ public class BallModelTest : MonoBehaviour
         }
         _presenter.TryRouteSet(route);
         _presenter.Shoot();
+        _presenter.OnCarryEnd(() =>
+        {
+            Debug.Log(1);
+        });
+        Destroy(this);
     }
 
     // Update is called once per frame

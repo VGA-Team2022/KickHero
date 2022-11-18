@@ -5,16 +5,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
+[RequireComponent(typeof(SphereCollider))]
 public class BallView : MonoBehaviour
 {
     Action<Collider> _onHitAction;
 
     SphereCollider _collider;
-    Rigidbody _rb;
     List<Collider> _stayColliders = new List<Collider>();
 
-    public Vector3 Velocity { get => Rigidbody.velocity; set => Rigidbody.velocity = value; }
 
 
     private SphereCollider Collider
@@ -26,17 +24,6 @@ public class BallView : MonoBehaviour
                 _collider = GetComponent<SphereCollider>();
             }
             return _collider;
-        }
-    }
-    private Rigidbody Rigidbody
-    {
-        get
-        {
-            if (_rb)
-            {
-                _rb = GetComponent<Rigidbody>();
-            }
-            return _rb;
         }
     }
 

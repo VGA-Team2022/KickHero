@@ -231,12 +231,12 @@ public class BallModel
         {
             _velocity.Value = velo;
         }
-        //while (velo.sqrMagnitude != 0)
-        //{
-        //    velo += Physics.gravity * Time.deltaTime;
-        //    _position.Value += velo * Time.deltaTime;
-        //    await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
-        //}
+        while (velo.sqrMagnitude != 0)
+        {
+            velo += Physics.gravity * Time.deltaTime;
+            _position.Value += velo * Time.deltaTime;
+            await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
+        }
     }
 
 
