@@ -4,6 +4,22 @@ using Cysharp.Threading.Tasks;
 public abstract class AbstructScene : MonoBehaviour
 {
     protected SceneOperator _sceneOperator;
+    /// <summary>
+    /// 現在クリアしたステージの配列
+    /// </summary>
+    public bool[] ClearedStages
+    {
+        get => _sceneOperator.IsClearedStages;
+        set
+        {
+            _sceneOperator.IsClearedStages = value;
+        }
+    }
+
+    public void ResetStage()
+    {
+        _sceneOperator.ResetClearedStage();
+    }
 
     private void Awake()
     {
@@ -14,12 +30,12 @@ public abstract class AbstructScene : MonoBehaviour
     /// <summary>
     /// SceneOperatorのLoadSceneを非同期で呼ぶ
     /// </summary>
-    public async void LoadScene(string sceneName,string message)
+    public async void LoadScene(string sceneName,bool[] clearedStage)
     {
         //最初に一度インスタンスを初期化
         if (_sceneOperator == null)
         {
-            _sceneOperator = new SceneOperator(message);
+            _sceneOperator = new SceneOperator(clearedStage);
         }
         await _sceneOperator.LoadScene(sceneName);
     }
@@ -35,7 +51,7 @@ public abstract class AbstructScene : MonoBehaviour
     /// <summary>
     /// ロード時に呼ばれる
     /// </summary>
-    public abstract UniTask Load(string message);
+    public abstract UniTask Load();
     /// <summary>
     /// ロードされた後に呼ばれる
     /// </summary>

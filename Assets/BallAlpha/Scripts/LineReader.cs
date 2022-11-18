@@ -10,29 +10,43 @@ public class LineReader : MonoBehaviour
 {
     [SerializeField] Transform _start;
     [SerializeField] Transform _enemy;
-    //[SerializeField] BallMove _ball;
+
+    [Header("デバッグ")]
     [SerializeField] BallPresenter _ballPresenter;
+    [SerializeField] bool _isDebug = false;
 
     LineRenderer _lineRenderer;
     List<(float time, Vector3 point)> _points = new List<(float, Vector3)>();
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
+    {
+        if (_isDebug)
+        {
+            Init();
+        }
+    }
+    private void Update()
+    {
+        if (_isDebug)
+        {
+            OnUpdate(_ballPresenter);
+        }
+    }
+    public void Init()
     {
         _lineRenderer = GetComponent<LineRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnUpdate(BallPresenter ballPresenter)
     {
         if (Input.GetMouseButtonDown(0))
         {
             _points.Clear();
             _lineRenderer.positionCount = 0;
-            if (_ballPresenter)
+            if (ballPresenter)
             {
-                _ballPresenter.Cancel();
-                _ballPresenter.Collection();
+                ballPresenter.Cancel();
+                ballPresenter.Collection();
             }
         }
         if (Input.GetMouseButton(0))
@@ -51,11 +65,11 @@ public class LineReader : MonoBehaviour
             {
                 _lineRenderer.positionCount = route.Count;
                 _lineRenderer.SetPositions(route.Positons);
-                if (_ballPresenter)
+                if (ballPresenter)
                 {
-                    if (_ballPresenter.TryRouteSet(route))
+                    if (ballPresenter.TryRouteSet(route))
                     {
-                        _ballPresenter.Shoot();
+                        ballPresenter.Shoot();
                     }
                 }
             }
