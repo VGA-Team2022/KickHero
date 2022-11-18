@@ -5,6 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+
   - enabled: 1
     path: Assets/Scenes/MockUp/SampleInGame.unity
     guid: 99c9720ab356a0642a771bea13969a05
@@ -17,6 +18,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MockUp/SampleMenu.unity
     guid: c2446dfcc999a9b488af6e1ab3a2bfde
+
   - enabled: 1
     path: Assets/Scenes/MockUp/SampleTitle.unity
     guid: ed0d1746e28a2ff4c8883da05324af87
@@ -44,4 +46,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/menuScene/DebugScene/DebugInGameScene 6.unity
     guid: 3dd6220f820e3944e97dd838436a5e3c
+
   m_configObjects: {}
