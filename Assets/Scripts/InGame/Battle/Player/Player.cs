@@ -12,7 +12,12 @@ public class Player : ISequence
     [SerializeField]
     LineReader _lineReader;
 
-    public void Initialize()
+    public Player(System.Action<InGameCycle.EventEnum> action)
+    {
+        Initialize(action);
+    }
+
+    public void Initialize(System.Action<InGameCycle.EventEnum> action)
     {
         if (!_playerHP)
         {
@@ -32,7 +37,7 @@ public class Player : ISequence
         }
         _playerHP.Init();
         _ultimatePresenter.Init();
-        _ballPresenter.Init();
+        _ballPresenter.Init(action);
         _lineReader.Init();
     }
 
