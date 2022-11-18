@@ -10,13 +10,28 @@ public class LineReader : MonoBehaviour
 {
     [SerializeField] Transform _start;
     [SerializeField] Transform _enemy;
-    //[SerializeField] BallMove _ball;
-    //[SerializeField] BallPresenter _ballPresenter;
+
+    [Header("デバッグ")]
+    [SerializeField] BallPresenter _ballPresenter;
+    [SerializeField] bool _isDebug = false;
 
     LineRenderer _lineRenderer;
     List<(float time, Vector3 point)> _points = new List<(float, Vector3)>();
 
-    // Start is called before the first frame update
+    private void Start()
+    {
+        if (_isDebug)
+        {
+            Init();
+        }
+    }
+    private void Update()
+    {
+        if (_isDebug)
+        {
+            OnUpdate(_ballPresenter);
+        }
+    }
     public void Init()
     {
         _lineRenderer = GetComponent<LineRenderer>();
