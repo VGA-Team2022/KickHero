@@ -47,6 +47,10 @@ public class BallPresenter : MonoBehaviour
             return _view;
         }
     }
+
+    /// <summary>当たり判定を取るか否か</summary>
+    public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; Debug.Log(value); } }
+
     /// <summary>現在実行中の動作をキャンセルする</summary>
     public void Cancel()
     {
@@ -75,7 +79,12 @@ public class BallPresenter : MonoBehaviour
     /// <summary>ルートを辿り終えた時に呼ぶアクションを設定する</summary>
     public BallPresenter OnCarryEnd(Action action)
     {
-        BallModel.OnCarryEnd(action);
+        return OnCarryEnd(action, true);
+    }
+    /// <summary>ルートを辿り終えた時に呼ぶアクションを設定する</summary>
+    public BallPresenter OnCarryEnd(Action action, bool reusable)
+    {
+        BallModel.OnCarryEnd(action, reusable);
         return this;
     }
 
@@ -116,6 +125,9 @@ public class BallPresenter : MonoBehaviour
             value =>
             {
                 _view.Position = value;
+            }, value =>
+            {
+                _view.Rigidbody.velocity = value;
             },
             _view.gameObject, _view.transform.position
             , action); ;
@@ -131,6 +143,9 @@ public class BallPresenter : MonoBehaviour
             value =>
             {
                 _view.Position = value;
+            }, value =>
+            {
+                _view.Rigidbody.velocity = value;
             },
             _view.gameObject, _view.transform.position
             );

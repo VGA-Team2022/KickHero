@@ -5,6 +5,9 @@ using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// 
+/// </summary>
 [RequireComponent(typeof(LineRenderer))]
 public class LineReader : MonoBehaviour
 {
@@ -69,7 +72,12 @@ public class LineReader : MonoBehaviour
                 {
                     if (ballPresenter.TryRouteSet(route))
                     {
+                        ballPresenter.IsCollision = true;
                         ballPresenter.Shoot();
+                        ballPresenter.OnCarryEnd(() =>
+                        {
+                            ballPresenter.IsCollision = false;
+                        }, false);
                     }
                 }
             }
