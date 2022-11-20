@@ -55,6 +55,11 @@ public class BallPresenter : MonoBehaviour
     public void Cancel()
     {
         BallModel.Cancel();
+        if (View)
+        {
+            View.Rigidbody.useGravity = false;
+            View.Rigidbody.velocity= Vector3.zero;
+        }
     }
 
     /// <summary>èâä˙à íuÇ…ñﬂÇÈ</summary>
@@ -148,7 +153,7 @@ public class BallPresenter : MonoBehaviour
                 _view.Rigidbody.velocity = value;
             },
             _view.gameObject, _view.transform.position
-            );
+            ).OnCarryEnd(() => { _view.Rigidbody.useGravity = true; }) ;
         }
         ValueSet();
     }

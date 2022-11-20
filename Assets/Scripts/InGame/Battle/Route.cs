@@ -127,6 +127,40 @@ public class BallRoute
     }
 
     /// <summary>
+    /// 二つの時間に対応した座標間の速度を返す
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public Vector3? GetVelocityInCaseTime(float start, float end)
+    {
+        Vector3? startPoint = GetPointInCaseTime(start);
+        Vector3? endPoint = GetPointInCaseTime(end);
+        
+        return (endPoint - startPoint) / Mathf.Abs(end - start);
+    }
+    /// <summary>
+    /// 二つの時間に対応した座標間の速度を返す
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public bool TryGetVelocityInCaseTime(float start, float end, out Vector3 point)
+    {
+        Vector3? buf = GetVelocityInCaseTime(start, end);
+        if (buf == null)
+        {
+            point = Vector3.zero;
+            return false;
+        }
+        else
+        {
+            point = buf.Value;
+            return true;
+        }
+    }
+
+    /// <summary>
     /// 距離に対応した座標を返す
     /// </summary>
     /// <param name="way"></param>

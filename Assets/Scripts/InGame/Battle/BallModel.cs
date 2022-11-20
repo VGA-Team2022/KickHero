@@ -225,14 +225,16 @@ public class BallModel
             while (_progressStatus <= _route.MaxTime)
             {
                 //yield return new WaitForFixedUpdate();
-
                 await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
+
+                float buf = _progressStatus;
                 _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
                 if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
                 {
                     //transform.position = point;
-                    _velocity.Value = point;
+                    _position.Value = point;
+                    _velocity.Value = _route.GetVelocityInCaseTime(buf, _progressStatus).Value;
                 }
                 else
                 {
@@ -269,7 +271,7 @@ public class BallModel
                 if (_route.TryGetPointInCaseDistance(_progressStatus, out Vector3 point))
                 {
                     //transform.position = point;
-                    _velocity.Value = point;
+                    _position.Value = point;
                 }
                 else
                 {
@@ -297,12 +299,12 @@ public class BallModel
         {
             _velocity.Value = velo;
         }
-        while (velo.sqrMagnitude != 0)
-        {
-            velo += Physics.gravity * Time.deltaTime;
-            _position.Value += velo * Time.deltaTime;
-            await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
-        }
+        //while (velo.sqrMagnitude != 0)
+        //{
+        //    velo += Physics.gravity * Time.deltaTime;
+        //    _position.Value += velo * Time.deltaTime;
+        //    await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
+        //}
     }
 
 
