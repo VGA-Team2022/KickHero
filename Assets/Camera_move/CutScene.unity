@@ -790,6 +790,7 @@ GameObject:
   - component: {fileID: 92621344}
   - component: {fileID: 92621346}
   - component: {fileID: 92621343}
+  - component: {fileID: 92621347}
   m_Layer: 5
   m_Name: FadeCanvas
   m_TagString: Untagged
@@ -864,6 +865,66 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 92621342}
   m_CullTransparentMesh: 1
+--- !u!114 &92621347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92621342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: d0fe59d6d7b5e5243a79f5afcf2437d2, type: 2}
+    - {fileID: 11400000, guid: 333582e57a67a96478672b0c964f07e7, type: 2}
+    - {fileID: 11400000, guid: 945b68deb13532a41887956b846925f5, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 92621343}
+          m_TargetAssemblyTypeName: TransitionFade, Assembly-CSharp
+          m_MethodName: FadeIn
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0.5
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 92621343}
+          m_TargetAssemblyTypeName: TransitionFade, Assembly-CSharp
+          m_MethodName: FadeOut
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0.5
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 92621343}
+          m_TargetAssemblyTypeName: TransitionFade, Assembly-CSharp
+          m_MethodName: FadeOut
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &99284327
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,6 +1371,71 @@ Transform:
   m_Father: {fileID: 1170887511}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &270558173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 270558175}
+  - component: {fileID: 270558174}
+  m_Layer: 0
+  m_Name: SE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &270558174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270558173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1e631c3b9947b54c823c6853a05529c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playOnStart: 0
+  _regionOnStart: {fileID: 0}
+  _listenerOnStart: {fileID: 0}
+  _use3dPositioning: 1
+  _freezeOrientation: 0
+  _loop: 0
+  _volume: 1
+  _pitch: 0
+  _androidUseLowLatencyVoicePool: 0
+  need_to_player_update_all: 1
+  _use3dRandomization: 0
+  _randomPositionListMaxLength: 0
+  randomize3dConfig:
+    followsOriginalSource: 0
+    calculationType: 0
+    calculationParameters:
+    - 0
+    - 0
+    - 0
+  _cueName: SE_Run_Left
+  _cueSheet: SE
+--- !u!4 &270558175
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270558173}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 31.262993, y: -20.15291, z: -18.035488}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1178982992}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &281376512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,7 +1545,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &304216935
 MonoBehaviour:
@@ -1858,6 +1984,71 @@ Transform:
   m_Father: {fileID: 564546769}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -1.1170797, y: -1.0459719, z: -52.8173}
+--- !u!1 &458926978
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 458926979}
+  - component: {fileID: 458926980}
+  m_Layer: 0
+  m_Name: BGM
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &458926979
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458926978}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 31.262993, y: -20.15291, z: -18.035488}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1178982992}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &458926980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458926978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1e631c3b9947b54c823c6853a05529c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playOnStart: 0
+  _regionOnStart: {fileID: 0}
+  _listenerOnStart: {fileID: 0}
+  _use3dPositioning: 1
+  _freezeOrientation: 0
+  _loop: 0
+  _volume: 1
+  _pitch: 0
+  _androidUseLowLatencyVoicePool: 0
+  need_to_player_update_all: 1
+  _use3dRandomization: 0
+  _randomPositionListMaxLength: 0
+  randomize3dConfig:
+    followsOriginalSource: 0
+    calculationType: 0
+    calculationParameters:
+    - 0
+    - 0
+    - 0
+  _cueName: BGM_Battle
+  _cueSheet: CueSheet_0
 --- !u!1 &459886737
 GameObject:
   m_ObjectHideFlags: 0
@@ -2814,7 +3005,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &694956501
 MonoBehaviour:
@@ -3164,7 +3355,7 @@ Transform:
   m_Children:
   - {fileID: 1397239755}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
 --- !u!114 &805117066
 MonoBehaviour:
@@ -4237,7 +4428,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1089278094
 GameObject:
@@ -4702,6 +4893,112 @@ Transform:
   m_Father: {fileID: 1333207819}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1178982991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1178982992}
+  - component: {fileID: 1178982993}
+  - component: {fileID: 1178982994}
+  - component: {fileID: 1178982995}
+  m_Layer: 0
+  m_Name: Cri
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1178982992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178982991}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -31.262993, y: 20.15291, z: 18.035488}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 270558175}
+  - {fileID: 458926979}
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1178982993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178982991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91f529aa944b914449d62b8c40f188fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acfFile: 1.acf
+  cueSheets:
+  - name: SE
+    acbFile: SE.acb
+    awbFile: 
+    loaderStatus: 0
+  - name: CueSheet_0
+    acbFile: CueSheet_0.acb
+    awbFile: CueSheet_0.awb
+    loaderStatus: 0
+  dspBusSetting: 
+  dontDestroyOnLoad: 0
+  dontRemoveExistsCueSheet: 0
+--- !u!114 &1178982994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178982991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da9176e6614400245b2582260ea7217a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _atomSESource: {fileID: 270558174}
+  _atomBGMSource: {fileID: 458926980}
+  _changeSpeed: 0.5
+--- !u!114 &1178982995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178982991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: ebb09a3822e00fd40949b7df73aed1cf, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1178982994}
+          m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+          m_MethodName: CriAtomBGMPlay
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: BGM_Battle
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1215385763
 GameObject:
   m_ObjectHideFlags: 0
@@ -4734,6 +5031,61 @@ Transform:
   m_Father: {fileID: 1091707319}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -6.8371334, y: -4.5829754, z: 39.90291}
+--- !u!1 &1236089700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1236089702}
+  - component: {fileID: 1236089701}
+  m_Layer: 0
+  m_Name: StartTimeLine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!320 &1236089701
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236089700}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: af57134e016a6594d9c5fd6fc011ef42, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -6816087201136765803, guid: af57134e016a6594d9c5fd6fc011ef42, type: 2}
+    value: {fileID: 270558174}
+  - key: {fileID: -1867373479183460215, guid: af57134e016a6594d9c5fd6fc011ef42, type: 2}
+    value: {fileID: 92621347}
+  - key: {fileID: -1406136357931389121, guid: af57134e016a6594d9c5fd6fc011ef42, type: 2}
+    value: {fileID: 1178982995}
+  m_ExposedReferences:
+    m_References: []
+--- !u!4 &1236089702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236089700}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 73.52143, y: 64.48275, z: -122.30022}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1236515051
 GameObject:
   m_ObjectHideFlags: 0
@@ -5913,7 +6265,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1517246536
 GameObject:
@@ -29178,7 +29530,7 @@ Transform:
   - {fileID: 7012115156296304783}
   - {fileID: 3629147109977047203}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &8372483640471788781
 Transform:
