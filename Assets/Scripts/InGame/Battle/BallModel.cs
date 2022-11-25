@@ -13,8 +13,6 @@ public class BallModel
 
     /// <summary>ボールのPosition</summary>
     ReactiveProperty<Vector3> _position;
-    /// <summary>ボールの速度</summary>
-    ReactiveProperty<Vector3> _velocity = new ReactiveProperty<Vector3>();
     ReactiveProperty<InGameCycle.EventEnum> _eventProperty;
     /// <summary>処理のトークン</summary>
     CancellationTokenSource _tokenSource = new CancellationTokenSource();
@@ -48,18 +46,6 @@ public class BallModel
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(System.Action<Vector3> position, System.Action<Vector3> velocity, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
-    {
-        _startPosition = startPosition;
-        _position = new ReactiveProperty<Vector3>(_startPosition);
-        PositionSubscribe(position, gameObject);
-        VelocitySubscribe(velocity, gameObject);
-
-        //シーケンスの遷移を指定。
-        _eventProperty = new ReactiveProperty<InGameCycle.EventEnum>(InGameCycle.EventEnum.None);
-        _eventProperty.Subscribe(eventAction).AddTo(gameObject);
-    }
-    [Obsolete]
     public BallModel(System.Action<Vector3> position, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
     {
         _startPosition = startPosition;
@@ -70,20 +56,12 @@ public class BallModel
         _eventProperty = new ReactiveProperty<InGameCycle.EventEnum>(InGameCycle.EventEnum.None);
         _eventProperty.Subscribe(eventAction).AddTo(gameObject);
     }
-    [Obsolete]
+
     public BallModel(System.Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
     {
         _startPosition = startPosition;
         _position = new ReactiveProperty<Vector3>(_startPosition);
         _position.Subscribe(position).AddTo(gameObject);
-        _isDebug = true;
-    }
-    public BallModel(System.Action<Vector3> position, System.Action<Vector3> velocity, GameObject gameObject, Vector3 startPosition)
-    {
-        _startPosition = startPosition;
-        _position = new ReactiveProperty<Vector3>(_startPosition);
-        PositionSubscribe(position, gameObject);
-        VelocitySubscribe(velocity, gameObject);
         _isDebug = true;
     }
 
@@ -170,25 +148,6 @@ public class BallModel
     {
         _position.Subscribe(action).AddTo(component);
     }
-    
-    /// <summary>
-    /// Velocityをサブスクライブする
-    /// </summary>
-    /// <param name="action"></param>
-    /// <param name="gameObject"></param>
-    public void VelocitySubscribe(System.Action<Vector3> action, GameObject gameObject)
-    {
-        _velocity.Subscribe(action).AddTo(gameObject);
-    }
-    /// <summary>
-    /// Velocityをサブスクライブする
-    /// </summary>
-    /// <param name="action"></param>
-    /// <param name="component"></param>
-    public void VelocitySubscribe(System.Action<Vector3> action, Component component)
-    {
-        _velocity.Subscribe(action).AddTo(component);
-    }
 
     /// <summary>
     /// 初期位置に戻る
@@ -224,35 +183,25 @@ public class BallModel
             _progressStatus = _route.MinTime;
             while (_progressStatus <= _route.MaxTime)
             {
-                //yield return new WaitForFixedUpdate();
-                await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
+                await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
 
                 float buf = _progressStatus;
-                _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
-                _accele += _acceleration * Time.fixedDeltaTime;
-                if (_route.TryGetVelocityInCaseTime(buf, _progressStatus, out Vector3 velocity))
+                _progressStatus += Time.deltaTime * (_speed + _accele);
+                _accele += _acceleration * Time.deltaTime;
+                if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
                 {
-                    //transform.position = point;
-                    _velocity.Value = velocity;
-                    _position.Value = _route.GetPointInCaseTime(buf).Value;
+                    _position.Value = point;
                 }
                 else
                 {
                     if (Mathf.Abs(_route.MinTime - _progressStatus) > Mathf.Abs(_route.MaxTime - _progressStatus))
                     {
-                        //transform.position = _route.Positons.Last();
-                        Vector3 pos = _route.Positons.Last();
+                        _position.Value = _route.Positons.Last();
                         float time = _calculationTime < _route.AllTime ? _route.MaxTime - _calculationTime : _route[0].Time;
-                        velo = (pos - _route.GetPointInCaseTime(time).Value) / (_route[_route.Count - 1].Time - time);
-                        Debug.DrawRay(_position.Value, velo, Color.green);
-                        //Debug.DrawLine(pos, _route[_route.Count - 2].Point, Color.blue);
-                        //Debug.DrawLine(_position.Value, pos, Color.red);
-                        //UnityEditor.EditorApplication.isPaused = true;
-                        _position.Value = pos;
+                        velo = _route.GetVelocityInCaseTime(time, _route.MaxTime).Value;
                     }
                     else
                     {
-                        //transform.position = _route.Positons.First();
                         _position.Value = _route.Positons.First();
                     }
                 }
@@ -263,28 +212,24 @@ public class BallModel
             _progressStatus = 0;
             while (_progressStatus <= _route.AllWay)
             {
-                //Debug.Log($"{_time}, {_ballRoute.MaxTime}");
 
                 await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
                 _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
                 if (_route.TryGetPointInCaseDistance(_progressStatus, out Vector3 point))
                 {
-                    //transform.position = point;
                     _position.Value = point;
                 }
                 else
                 {
                     if (_progressStatus > _route.AllWay - _progressStatus)
                     {
-                        //transform.position = _route.Positons.Last();
                         Vector3 pos = _route.Positons.Last();
                         velo = pos - _position.Value;
                         _position.Value = pos;
                     }
                     else
                     {
-                        //transform.position = _route.Positons.First();
                         _position.Value = _route.Positons.First();
                     }
                 }
@@ -295,16 +240,12 @@ public class BallModel
         {
             _eventProperty.Value = InGameCycle.EventEnum.BallRespawn;
         }
-        if (velo.sqrMagnitude != 0)
+        while (velo.sqrMagnitude != 0)
         {
-            _velocity.Value = velo;
+            velo += Physics.gravity * Time.deltaTime;
+            _position.Value += velo * Time.deltaTime;
+            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
         }
-        //while (velo.sqrMagnitude != 0)
-        //{
-        //    velo += Physics.gravity * Time.deltaTime;
-        //    _position.Value += velo * Time.deltaTime;
-        //    await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
-        //}
     }
 
 

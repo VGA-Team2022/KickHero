@@ -96,7 +96,7 @@ public class BallRoute
         Vector3? point = null;
         for(int i = 1; i < _nodrs.Count; i++)
         {
-            if(_nodrs[i].Time > time)
+            if(_nodrs[i].Time >= time)
             {
                 point = Vector3.Lerp(_nodrs[i - 1].Point, _nodrs[i].Point, (time - _nodrs[i - 1].Time) / (_nodrs[i].Time - _nodrs[i - 1].Time));
                 break;
@@ -180,7 +180,7 @@ public class BallRoute
         for (int i = 1; i < _nodrs.Count; i++)
         {
             distance += Vector3.Distance(_nodrs[i - 1].Point, _nodrs[i].Point);
-            if (distance > way)
+            if (distance >= way)
             {
                 point = Vector3.Lerp(_nodrs[i].Point, _nodrs[i - 1].Point, (distance - way) / (Vector3.Distance(_nodrs[i].Point ,_nodrs[i - 1].Point)));
                 break;

@@ -49,17 +49,12 @@ public class BallPresenter : MonoBehaviour
     }
 
     /// <summary>当たり判定を取るか否か</summary>
-    public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; Debug.Log(value); } }
+    public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; } }
 
     /// <summary>現在実行中の動作をキャンセルする</summary>
     public void Cancel()
     {
         BallModel.Cancel();
-        if (View)
-        {
-            View.Rigidbody.useGravity = false;
-            View.Rigidbody.velocity= Vector3.zero;
-        }
     }
 
     /// <summary>初期位置に戻る</summary>
@@ -76,9 +71,10 @@ public class BallPresenter : MonoBehaviour
     }
 
     /// <summary>ボールを発射する</summary>
-    public void Shoot()
+    public BallPresenter Shoot()
     {
         BallModel.Shoot();
+        return this;
     }
 
     /// <summary>ルートを辿り終えた時に呼ぶアクションを設定する</summary>
@@ -126,16 +122,7 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            _ballModel = new BallModel(
-            value =>
-            {
-                _view.Position = value;
-            }, value =>
-            {
-                _view.Rigidbody.velocity = value;
-            },
-            _view.gameObject, _view.transform.position
-            , action); ;
+            _ballModel = new BallModel(value => _view.Position = value, _view.gameObject, _view.transform.position, action); ;
         }
         ValueSet();
     }
@@ -144,16 +131,7 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            _ballModel = new BallModel(
-            value =>
-            {
-                _view.Position = value;
-            }, value =>
-            {
-                _view.Rigidbody.velocity = value;
-            },
-            _view.gameObject, _view.transform.position
-            ).OnCarryEnd(() => { _view.Rigidbody.useGravity = true; }) ;
+            _ballModel = new BallModel(value => _view.Position = value, _view.gameObject, _view.transform.position);
         }
         ValueSet();
     }

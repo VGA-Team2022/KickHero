@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
+[RequireComponent(typeof(SphereCollider))]
 public class BallView : MonoBehaviour
 {
     Action<Collider> _onHitAction;
@@ -14,9 +14,7 @@ public class BallView : MonoBehaviour
     SphereCollider _collider;
     List<Collider> _stayColliders = new List<Collider>();
     bool _isCollision = false;
-    Rigidbody _rb;
 
-    List<Vector3> points = new List<Vector3>();
 
     private SphereCollider Collider
     {
@@ -30,18 +28,6 @@ public class BallView : MonoBehaviour
         }
     }
 
-    public Rigidbody Rigidbody
-    {
-        get
-        {
-            if (!_rb)
-            {
-                _rb = GetComponent<Rigidbody>();
-            }
-            return _rb;
-        }
-    }
-
     public Vector3 Position
     {
         get => transform.position;
@@ -51,22 +37,14 @@ public class BallView : MonoBehaviour
             {
                 Vector3 scale = transform.lossyScale;
                 HitDetermine(Position, value, Collider.radius * Mathf.Max(Mathf.Max(scale.x, scale.y), scale.z));
-                points.Add(value);
             }
             transform.position = value;
         }
     }
 
-    private void Update()
-    {
-        for (int i = 1; i < points.Count; i++)
-        {
-            Debug.DrawLine(points[i - 1], points[i]);
-        }
-    }
 
     /// <summary>“–‚½‚è”»’è‚ðŽæ‚é‚©”Û‚©</summary>
-    public bool IsCollision { get => _isCollision; set { _isCollision = value; if (value == true) points.Clear(); } }
+    public bool IsCollision { get => _isCollision; set { _isCollision = value;} }
 
     public void OnHit(Action<Collider> action)
     {
@@ -75,56 +53,30 @@ public class BallView : MonoBehaviour
 
     void HitDetermine(Vector3 start, Vector3 end, float radius)
     {
-        //var hits = Physics.OverlapCapsule(start, end, radius, Physics.AllLayers, QueryTriggerInteraction.Collide);
-        Ray ray = new Ray(start, (start - end).normalized);
-        var pHits = Physics.SphereCastAll(ray, radius, Vector3.Distance(start, end), Physics.AllLayers);
-        //if (hits.Length > 0)
-        //{
-        //    foreach (Collider c in hits)
-        //    {
-        //        if (!Physics.GetIgnoreLayerCollision(Collider.gameObject.layer, c.gameObject.layer))
-        //        {
-        //            if (!_stayColliders.Contains(c))
-        //            {
-        //                CallOnHit(c);
-        //                Debug.Log(c.name);
-        //                _stayColliders.Add(c);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            _stayColliders.Remove(c);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    _stayColliders.Clear();
-        //}
-        if (pHits.Length > 0)
+        var hits = Physics.OverlapCapsule(start, end, radius, Physics.AllLayers, QueryTriggerInteraction.Collide);
+        if (hits.Length > 0)
         {
-            foreach (RaycastHit h in pHits)
+            foreach (Collider c in hits)
             {
-                if (!Physics.GetIgnoreLayerCollision(Collider.gameObject.layer, h.collider.gameObject.layer))
+                if (!Physics.GetIgnoreLayerCollision(Collider.gameObject.layer, c.gameObject.layer))
                 {
-                    if (!_stayColliders.Contains(h.collider))
+                    if (!_stayColliders.Contains(c))
                     {
-                        CallOnHit(h.collider);
-                        Debug.Log($"{h.collider.name}, {Time.frameCount}");
-                        _stayColliders.Add(h.collider);
+                        CallOnHit(c);
+                        _stayColliders.Add(c);
+                    }
+                    for (int i = 0; i < _stayColliders.Count; i++)
+                    {
+                        if ((hits.Where(p => p == _stayColliders[i]).Count() == 0))
+                        {
+                            _stayColliders.RemoveAt(i);
+                            i--;
+                        }
                     }
                 }
                 else
                 {
-                    _stayColliders.Remove(h.collider);
-                }
-            }
-            for (int i = 0; i < _stayColliders.Count; i++)
-            {
-                if ((pHits.Where(p => p.collider == _stayColliders[i]).Count() == 0))
-                {
-                    _stayColliders.RemoveAt(i);
-                    i--;
+                    _stayColliders.Remove(c);
                 }
             }
         }

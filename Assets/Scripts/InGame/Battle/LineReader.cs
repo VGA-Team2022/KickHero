@@ -74,10 +74,7 @@ public class LineReader : MonoBehaviour
                     {
                         ballPresenter.IsCollision = true;
                         ballPresenter.Shoot();
-                        ballPresenter.OnCarryEnd(() =>
-                        {
-                            ballPresenter.IsCollision = false;
-                        }, false);
+                        ballPresenter.OnCarryEnd(() => ballPresenter.IsCollision = false, false);
                     }
                 }
             }
@@ -86,7 +83,7 @@ public class LineReader : MonoBehaviour
 
     private BallRoute RouteConvert(Vector3 position)
     {
-        if(!_start || !_enemy) { return null; }
+        if (!_start || !_enemy) { return null; }
         Vector3 eNomal = _start.position - _enemy.position;
         eNomal.y = 0;
         float h = Vector3.Dot(eNomal, _enemy.position);
