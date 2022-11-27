@@ -42,6 +42,7 @@ public class BallModel
     public float Acceleration { get => _acceleration; set => _acceleration = value; }
     public BallRoute Route { get => _route; }
     public float CalculationTime { get => _calculationTime; set => _calculationTime = value; }
+    public Vector3 StartPosition { get => _startPosition; set => _startPosition = value; }
 
 
     //public ReactiveProperty<Vector3> Position { get => _position;}

@@ -51,6 +51,9 @@ public class BallPresenter : MonoBehaviour
     /// <summary>当たり判定を取るか否か</summary>
     public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; } }
 
+    /// <summary>ボールの初期位置</summary>
+    public Vector3 StartPosition { get => BallModel.StartPosition; }
+
     /// <summary>現在実行中の動作をキャンセルする</summary>
     public void Cancel()
     {

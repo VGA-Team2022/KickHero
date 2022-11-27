@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
@@ -9,6 +10,7 @@ using static UnityEngine.Rendering.DebugUI;
 [RequireComponent(typeof(SphereCollider))]
 public class BallView : MonoBehaviour
 {
+
     Action<Collider> _onHitAction;
 
     SphereCollider _collider;
@@ -106,6 +108,14 @@ public class BallView : MonoBehaviour
         if (renderer)
         {
             renderer.enabled = false;
+        }
+    }
+
+    private void Update()
+    {
+        if (!Application.isPlaying)
+        {
+
         }
     }
 }
