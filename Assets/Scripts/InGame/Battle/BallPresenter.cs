@@ -20,11 +20,16 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] BallModel.CarryMode _mode = BallModel.CarryMode.Time;
 
     BallModel _ballModel;
+    bool _isPositionSubscribe = false;
 
     private BallModel BallModel
     {
         get
         {
+            if (!_isPositionSubscribe)
+            {
+                ViewSubscribe();
+            }
             if (_ballModel == null)
             {
                 //Debug.LogError("_ballModelÇ™èâä˙âªÇ≥ÇÍÇƒÇ¢Ç‹ÇπÇÒÅB");
@@ -39,10 +44,18 @@ public class BallPresenter : MonoBehaviour
     {
         get
         {
-            _view = FindObjectOfType<BallView>();
             if (!_view)
             {
-                Debug.LogError("BallViewÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩÅB");
+                _view = FindObjectOfType<BallView>();
+                if (!_view)
+                {
+                    Debug.LogError("BallViewÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩÅB");
+                    return null;
+                }
+            }
+            if (!_isPositionSubscribe)
+            {
+                ViewSubscribe();
             }
             return _view;
         }
@@ -125,7 +138,7 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            _ballModel = new BallModel(value => _view.Position = value, _view.gameObject, _view.transform.position, action); ;
+            BallModel = new BallModel(value => View.Position = value, View.gameObject, View.transform.position, action); ;
         }
         ValueSet();
     }
@@ -134,17 +147,34 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            _ballModel = new BallModel(value => _view.Position = value, _view.gameObject, _view.transform.position);
+            BallModel = new BallModel(value => View.Position = value, View.gameObject, View.transform.position);
         }
         ValueSet();
     }
 
     void ValueSet()
     {
-        if (_ballModel == null) { return; }
-        _ballModel.Mode = _mode;
-        _ballModel.Acceleration = _acceleration;
-        _ballModel.Speed = _speed;
-        _ballModel.CalculationTime = _calculationTime;
+        if (BallModel == null) { return; }
+        BallModel.Mode = _mode;
+        BallModel.Acceleration = _acceleration;
+        BallModel.Speed = _speed;
+        BallModel.CalculationTime = _calculationTime;
+    }
+
+    bool ViewSubscribe()
+    {
+        if (_view) 
+        {
+            _isPositionSubscribe = true;
+            _view.PositionSubscribe(value =>
+                    {
+                        if (!Application.isPlaying)
+                        {
+                            BallModel.StartPosition = value;
+                        }
+                    }, this);
+            return true;
+        }
+        return false;
     }
 }

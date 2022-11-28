@@ -10,7 +10,7 @@ using static UnityEngine.Rendering.DebugUI;
 [RequireComponent(typeof(SphereCollider))]
 public class BallView : MonoBehaviour
 {
-
+    ReactiveProperty<Vector3> _position = new ReactiveProperty<Vector3>();
     Action<Collider> _onHitAction;
 
     SphereCollider _collider;
@@ -44,9 +44,18 @@ public class BallView : MonoBehaviour
         }
     }
 
+    public void PositionSubscribe(System.Action<Vector3> action, GameObject gameObject)
+    {
+        _position.Subscribe(action).AddTo(gameObject);
+    }
+
+    public void PositionSubscribe(System.Action<Vector3> action, Component component)
+    {
+        _position.Subscribe(action).AddTo(component);
+    }
 
     /// <summary>“–‚½‚è”»’è‚ðŽæ‚é‚©”Û‚©</summary>
-    public bool IsCollision { get => _isCollision; set { _isCollision = value;} }
+    public bool IsCollision { get => _isCollision; set { _isCollision = value; } }
 
     public void OnHit(Action<Collider> action)
     {
@@ -111,11 +120,19 @@ public class BallView : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!Application.isPlaying)
-        {
 
+#if UNITY_EDITOR
+
+    private void OnDrawGizmos()
+    {
+        if (_position.Value != transform.position)
+        {
+            if (!Application.isPlaying)
+            {
+                _position.Value = transform.position;
+            }
         }
     }
+
+#endif
 }

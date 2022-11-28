@@ -949,6 +949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 894128431}
   - component: {fileID: 894128432}
+  - component: {fileID: 894128433}
   m_Layer: 0
   m_Name: BallPresenter
   m_TagString: Untagged
@@ -988,6 +989,18 @@ MonoBehaviour:
   _acceleration: 0
   _calculationTime: 0.1
   _mode: 0
+--- !u!114 &894128433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894128430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb219b23cdf4b314f94a27bca3cc8012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &919855558
 GameObject:
   m_ObjectHideFlags: 0
@@ -2063,7 +2076,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemy: {fileID: 458268606}
-  _startErea: {x: 500.94, y: 315.5}
+  _startErea: {x: 300, y: 200}
+  _drawTime: 1
   _isDebug: 1
   _ballPresenter: {fileID: 894128432}
 --- !u!120 &1621830623
@@ -2288,7 +2302,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1697624444}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.43, y: 1.6399999, z: -20.300001}
+  m_LocalPosition: {x: -0.86, y: 1.51, z: -17.74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
