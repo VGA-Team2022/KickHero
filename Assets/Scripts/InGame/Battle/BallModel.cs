@@ -6,13 +6,13 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Unity.VisualScripting;
+using System;
 
 public class BallModel
 {
 
     /// <summary>ボールのPosition</summary>
     ReactiveProperty<Vector3> _position;
-    ReactiveProperty<Vector3> _velocity = new ReactiveProperty<Vector3>();
     ReactiveProperty<InGameCycle.EventEnum> _eventProperty;
     /// <summary>処理のトークン</summary>
     CancellationTokenSource _tokenSource = new CancellationTokenSource();
@@ -22,7 +22,10 @@ public class BallModel
     float _accele = default;
     /// <summary>実行中か否か</summary>
     bool _isCarry = default;
+    /// <summary>ルートを辿り終えたときに呼ぶアクション</summary>
     System.Action _onCarryEndAction;
+    /// <summary>ルートを辿り終えたときに呼ぶアクション（つかいすて）</summary>
+    System.Action _singleUseOnCarryEndAction;
     float _speed = default;
     float _acceleration = default;
     CarryMode _mode = default;
@@ -39,25 +42,27 @@ public class BallModel
     public float Acceleration { get => _acceleration; set => _acceleration = value; }
     public BallRoute Route { get => _route; }
     public float CalculationTime { get => _calculationTime; set => _calculationTime = value; }
+    public Vector3 StartPosition { get => _startPosition; set => _startPosition = value; }
 
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(System.Action<Vector3> action, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
+    public BallModel(System.Action<Vector3> position, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
     {
         _startPosition = startPosition;
         _position = new ReactiveProperty<Vector3>(_startPosition);
-        _position.Subscribe(action).AddTo(gameObject);
+        _position.Subscribe(position).AddTo(gameObject);
 
         //シーケンスの遷移を指定。
         _eventProperty = new ReactiveProperty<InGameCycle.EventEnum>(InGameCycle.EventEnum.None);
         _eventProperty.Subscribe(eventAction).AddTo(gameObject);
     }
-    public BallModel(System.Action<Vector3> action, GameObject gameObject, Vector3 startPosition)
+
+    public BallModel(System.Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
     {
         _startPosition = startPosition;
         _position = new ReactiveProperty<Vector3>(_startPosition);
-        _position.Subscribe(action).AddTo(gameObject);
+        _position.Subscribe(position).AddTo(gameObject);
         _isDebug = true;
     }
 
@@ -103,13 +108,27 @@ public class BallModel
 
     public BallModel OnCarryEnd(System.Action action)
     {
-        _onCarryEndAction += action;
+        return OnCarryEnd(action, true);
+    }
+
+    public BallModel OnCarryEnd(System.Action action, bool reusable)
+    {
+        if (reusable)
+        {
+            _onCarryEndAction += action;
+        }
+        else
+        {
+            _singleUseOnCarryEndAction += action;
+        }
         return this;
     }
 
     void CallOnCarryEnd()
     {
         _onCarryEndAction?.Invoke();
+        _singleUseOnCarryEndAction?.Invoke();
+        _singleUseOnCarryEndAction = null;
     }
 
     /// <summary>
@@ -117,7 +136,7 @@ public class BallModel
     /// </summary>
     /// <param name="action"></param>
     /// <param name="gameObject"></param>
-    public void Subscribe(System.Action<Vector3> action, GameObject gameObject)
+    public void PositionSubscribe(System.Action<Vector3> action, GameObject gameObject)
     {
         _position.Subscribe(action).AddTo(gameObject);
     }
@@ -126,7 +145,7 @@ public class BallModel
     /// </summary>
     /// <param name="action"></param>
     /// <param name="component"></param>
-    public void Subscribe(System.Action<Vector3> action, Component component)
+    public void PositionSubscribe(System.Action<Vector3> action, Component component)
     {
         _position.Subscribe(action).AddTo(component);
     }
@@ -165,38 +184,25 @@ public class BallModel
             _progressStatus = _route.MinTime;
             while (_progressStatus <= _route.MaxTime)
             {
-                //yield return new WaitForFixedUpdate();
-
                 await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
-                if (this == null)
-                {
-                    Debug.Log(5);
-                }
+
+                float buf = _progressStatus;
                 _progressStatus += Time.deltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.deltaTime;
-                Debug.Log($"{_accele + _speed}");
                 if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
                 {
-                    //transform.position = point;
                     _position.Value = point;
                 }
                 else
                 {
                     if (Mathf.Abs(_route.MinTime - _progressStatus) > Mathf.Abs(_route.MaxTime - _progressStatus))
                     {
-                        //transform.position = _route.Positons.Last();
-                        Vector3 pos = _route.Positons.Last();
+                        _position.Value = _route.Positons.Last();
                         float time = _calculationTime < _route.AllTime ? _route.MaxTime - _calculationTime : _route[0].Time;
-                        velo = (pos - _route.GetPointInCaseTime(time).Value) / (_route[_route.Count - 1].Time - time);
-                        Debug.DrawRay(_position.Value, velo, Color.green);
-                        //Debug.DrawLine(pos, _route[_route.Count - 2].Point, Color.blue);
-                        //Debug.DrawLine(_position.Value, pos, Color.red);
-                        //UnityEditor.EditorApplication.isPaused = true;
-                        _position.Value = pos;
+                        velo = _route.GetVelocityInCaseTime(time, _route.MaxTime).Value;
                     }
                     else
                     {
-                        //transform.position = _route.Positons.First();
                         _position.Value = _route.Positons.First();
                     }
                 }
@@ -207,48 +213,39 @@ public class BallModel
             _progressStatus = 0;
             while (_progressStatus <= _route.AllWay)
             {
-                //Debug.Log($"{_time}, {_ballRoute.MaxTime}");
 
-                await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
-                _progressStatus += Time.deltaTime * (_speed + _accele);
-                _accele += _acceleration * Time.deltaTime;
+                await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
+                _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
+                _accele += _acceleration * Time.fixedDeltaTime;
                 if (_route.TryGetPointInCaseDistance(_progressStatus, out Vector3 point))
                 {
-                    //transform.position = point;
                     _position.Value = point;
                 }
                 else
                 {
                     if (_progressStatus > _route.AllWay - _progressStatus)
                     {
-                        //transform.position = _route.Positons.Last();
                         Vector3 pos = _route.Positons.Last();
                         velo = pos - _position.Value;
                         _position.Value = pos;
                     }
                     else
                     {
-                        //transform.position = _route.Positons.First();
                         _position.Value = _route.Positons.First();
                     }
                 }
             }
         }
         CallOnCarryEnd();
-        Debug.Log(2);
         if (!_isDebug)
         {
             _eventProperty.Value = InGameCycle.EventEnum.BallRespawn;
-        }
-        if (velo.sqrMagnitude != 0)
-        {
-            _velocity.Value = velo;
         }
         while (velo.sqrMagnitude != 0)
         {
             velo += Physics.gravity * Time.deltaTime;
             _position.Value += velo * Time.deltaTime;
-            await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
+            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
         }
     }
 

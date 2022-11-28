@@ -96,7 +96,7 @@ public class BallRoute
         Vector3? point = null;
         for(int i = 1; i < _nodrs.Count; i++)
         {
-            if(_nodrs[i].Time > time)
+            if(_nodrs[i].Time >= time)
             {
                 point = Vector3.Lerp(_nodrs[i - 1].Point, _nodrs[i].Point, (time - _nodrs[i - 1].Time) / (_nodrs[i].Time - _nodrs[i - 1].Time));
                 break;
@@ -114,6 +114,40 @@ public class BallRoute
     public bool TryGetPointInCaseTime(float time, out Vector3 point)
     {
         Vector3? buf = GetPointInCaseTime(time);
+        if (buf == null)
+        {
+            point = Vector3.zero;
+            return false;
+        }
+        else
+        {
+            point = buf.Value;
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// 二つの時間に対応した座標間の速度を返す
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public Vector3? GetVelocityInCaseTime(float start, float end)
+    {
+        Vector3? startPoint = GetPointInCaseTime(start);
+        Vector3? endPoint = GetPointInCaseTime(end);
+        
+        return (endPoint - startPoint) / Mathf.Abs(end - start);
+    }
+    /// <summary>
+    /// 二つの時間に対応した座標間の速度を返す
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public bool TryGetVelocityInCaseTime(float start, float end, out Vector3 point)
+    {
+        Vector3? buf = GetVelocityInCaseTime(start, end);
         if (buf == null)
         {
             point = Vector3.zero;
@@ -146,7 +180,7 @@ public class BallRoute
         for (int i = 1; i < _nodrs.Count; i++)
         {
             distance += Vector3.Distance(_nodrs[i - 1].Point, _nodrs[i].Point);
-            if (distance > way)
+            if (distance >= way)
             {
                 point = Vector3.Lerp(_nodrs[i].Point, _nodrs[i - 1].Point, (distance - way) / (Vector3.Distance(_nodrs[i].Point ,_nodrs[i - 1].Point)));
                 break;

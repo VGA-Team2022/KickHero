@@ -47,6 +47,13 @@ public class BallPresenter : MonoBehaviour
             return _view;
         }
     }
+
+    /// <summary>当たり判定を取るか否か</summary>
+    public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; } }
+
+    /// <summary>ボールの初期位置</summary>
+    public Vector3 StartPosition { get => BallModel.StartPosition; }
+
     /// <summary>現在実行中の動作をキャンセルする</summary>
     public void Cancel()
     {
@@ -67,15 +74,21 @@ public class BallPresenter : MonoBehaviour
     }
 
     /// <summary>ボールを発射する</summary>
-    public void Shoot()
+    public BallPresenter Shoot()
     {
         BallModel.Shoot();
+        return this;
     }
 
     /// <summary>ルートを辿り終えた時に呼ぶアクションを設定する</summary>
     public BallPresenter OnCarryEnd(Action action)
     {
-        BallModel.OnCarryEnd(action);
+        return OnCarryEnd(action, true);
+    }
+    /// <summary>ルートを辿り終えた時に呼ぶアクションを設定する</summary>
+    public BallPresenter OnCarryEnd(Action action, bool reusable)
+    {
+        BallModel.OnCarryEnd(action, reusable);
         return this;
     }
 
@@ -112,13 +125,7 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            _ballModel = new BallModel(
-            value =>
-            {
-                _view.Position = value;
-            },
-            _view.gameObject, _view.transform.position
-            , action); ;
+            _ballModel = new BallModel(value => _view.Position = value, _view.gameObject, _view.transform.position, action); ;
         }
         ValueSet();
     }
@@ -127,13 +134,7 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            _ballModel = new BallModel(
-            value =>
-            {
-                _view.Position = value;
-            },
-            _view.gameObject, _view.transform.position
-            );
+            _ballModel = new BallModel(value => _view.Position = value, _view.gameObject, _view.transform.position);
         }
         ValueSet();
     }
