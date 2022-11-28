@@ -31,6 +31,7 @@ public class LineReader : MonoBehaviour
     bool _isDrawing = false;
     float _front = 2.0f;
     Color _gizmosColor = Color.red;
+    float _time = 0;
 
     public BallPresenter BallPresenter { get => _ballPresenter; set => _ballPresenter = value; }
 
@@ -66,6 +67,7 @@ public class LineReader : MonoBehaviour
         {
             if (StartEreaCheck())
             {
+                _time = 0;
                 _isDrawing = true;
                 _points.Clear();
                 _lineRenderer.positionCount = 0;
@@ -74,37 +76,27 @@ public class LineReader : MonoBehaviour
                     _ballPresenter.Cancel();
                     _ballPresenter.Collection();
                 }
+                RecordPoint();
             }
         }
         if (Input.GetMouseButton(0))
         {
             if (_isDrawing)
             {
-                Vector3 position = Input.mousePosition;
-                float time = _points.Count > 0 ? _points.LastOrDefault().time + Time.deltaTime : 0;
-                position.z = 10;
-                _points.Add((time, Camera.main.ScreenToWorldPoint(position)));
-                _lineRenderer.positionCount = _points.Count;
-                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, Camera.main.ScreenToWorldPoint(position));
+                _time += Time.deltaTime;
+                if(_time < _drawTime)
+                {
+                    RecordPoint();
+                }
+                else
+                {
+                    DrawFinish();
+                }
             }
         }
         if (Input.GetMouseButtonUp(0))
         {
-            BallRoute route = RouteConvert(ballPresenter);
-            if (route != null)
-            {
-                _lineRenderer.positionCount = route.Count;
-                _lineRenderer.SetPositions(route.Positons);
-                if (ballPresenter)
-                {
-                    if (ballPresenter.TryRouteSet(route))
-                    {
-                        ballPresenter.IsCollision = true;
-                        ballPresenter.Shoot();
-                        ballPresenter.OnCarryEnd(() => ballPresenter.IsCollision = false, false);
-                    }
-                }
-            }
+            DrawFinish();
         }
     }
 
@@ -130,7 +122,35 @@ public class LineReader : MonoBehaviour
         }
     }
 
+    void RecordPoint()
     {
+        Vector3 position = Input.mousePosition;
+        float time = _points.Count > 0 ? _points.LastOrDefault().time + Time.deltaTime : 0;
+        position.z = 10;
+        _points.Add((time, Camera.main.ScreenToWorldPoint(position)));
+        _lineRenderer.positionCount = _points.Count;
+        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, Camera.main.ScreenToWorldPoint(position));
+    }
+
+    void DrawFinish()
+    {
+        _isDrawing = false;
+        BallRoute route = RouteConvert();
+        if (route != null)
+        {
+            _lineRenderer.positionCount = route.Count;
+            _lineRenderer.SetPositions(route.Positons);
+            if (_ballPresenter)
+            {
+                if (_ballPresenter.TryRouteSet(route))
+                {
+                    _ballPresenter.IsCollision = true;
+                    _ballPresenter.Shoot();
+                    _ballPresenter.OnCarryEnd(() => _ballPresenter.IsCollision = false, false);
+                }
+            }
+        }
+    }
 
     private BallRoute RouteConvert()
     {
