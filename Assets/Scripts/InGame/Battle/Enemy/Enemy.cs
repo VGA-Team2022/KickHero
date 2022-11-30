@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : ISequence
 {
-    EnemyPresenter _presenter;
+    EnemyHPPresenter _presenter;
 
     public Enemy(System.Action<InGameCycle.EventEnum> action)
     {
@@ -14,7 +14,7 @@ public class Enemy : ISequence
     {
         if (!_presenter)
         {
-            _presenter = GetMonoBehaviorInstansInScene<EnemyPresenter>();
+            _presenter = GetMonoBehaviorInstansInScene<EnemyHPPresenter>();
         }
         _presenter.Init(action);
     }
