@@ -18,15 +18,31 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] float _calculationTime = 0;
     [Tooltip("ボールの速度モード")]
     [SerializeField] BallModel.CarryMode _mode = BallModel.CarryMode.Time;
+    [Header("デバッグ用項目")]
+    [Tooltip("リセット")]
+    [SerializeField] bool _reset = false;
 
     BallModel _ballModel;
     bool _isPositionSubscribe = false;
+    bool IsPositionSubscribe
+    {
+        get
+        {
+            Debug.Log($"get{_isPositionSubscribe}");
+            return _isPositionSubscribe;
+        }
+        set
+        {
+            Debug.Log($"set{_isPositionSubscribe}");
+            _isPositionSubscribe = value;
+        }
+    }
 
     private BallModel BallModel
     {
         get
         {
-            if (!_isPositionSubscribe)
+            if (!IsPositionSubscribe)
             {
                 ViewSubscribe();
             }
@@ -53,7 +69,7 @@ public class BallPresenter : MonoBehaviour
                     return null;
                 }
             }
-            if (!_isPositionSubscribe)
+            if (!IsPositionSubscribe)
             {
                 ViewSubscribe();
             }
@@ -129,11 +145,6 @@ public class BallPresenter : MonoBehaviour
         Init();
     }
 
-    private void OnValidate()
-    {
-        ValueSet();
-    }
-
     public void Init(System.Action<InGameCycle.EventEnum> action)
     {
         if (View)
@@ -163,11 +174,12 @@ public class BallPresenter : MonoBehaviour
 
     bool ViewSubscribe()
     {
-        if (_view) 
+        if (_view)
         {
-            _isPositionSubscribe = true;
+            IsPositionSubscribe = true;
             _view.PositionSubscribe(value =>
                     {
+                        Debug.Log(1);
                         if (!Application.isPlaying)
                         {
                             BallModel.StartPosition = value;
@@ -177,4 +189,22 @@ public class BallPresenter : MonoBehaviour
         }
         return false;
     }
+
+
+#if UNITY_EDITOR
+
+    private void OnValidate()
+    {
+        ValueSet();
+        if (_reset)
+        {
+            Reset();
+        }
+    }
+    private void Reset()
+    {
+        //_view.
+    }
+
+#endif
 }
