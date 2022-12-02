@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player : ISequence
+public class Player : ISequence,IDamage
 {
     [Header("コンポーネント")]
     [SerializeField]
@@ -15,6 +15,11 @@ public class Player : ISequence
     public Player(System.Action<InGameCycle.EventEnum> action)
     {
         Initialize(action);
+    }
+
+    public void Damage(int value)
+    {
+        _playerHP.AddHPValue(value);
     }
 
     public void Initialize(System.Action<InGameCycle.EventEnum> action)
@@ -35,7 +40,7 @@ public class Player : ISequence
         {
             _lineReader = GetMonoBehaviorInstansInScene<LineReader>();
         }
-        _playerHP.Init();
+        _playerHP.Init(action);
         _ultimatePresenter.Init();
         _ballPresenter.Init(action);
         _lineReader.Init();

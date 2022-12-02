@@ -1315,7 +1315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &811669701
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1717,7 +1717,7 @@ PrefabInstance:
     - target: {fileID: 1246124052381611989, guid: 5d316641f46e2354581e55ca5dd7cfa5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -20.63
+      value: -7.51
       objectReference: {fileID: 0}
     - target: {fileID: 1246124052381611989, guid: 5d316641f46e2354581e55ca5dd7cfa5,
         type: 3}
@@ -2608,6 +2608,21 @@ PrefabInstance:
       propertyPath: _start
       value: 
       objectReference: {fileID: 2008706649}
+    - target: {fileID: 3358160994064228806, guid: 06470789ed502f54a9318a3df6c44d11,
+        type: 3}
+      propertyPath: _startErea.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358160994064228806, guid: 06470789ed502f54a9318a3df6c44d11,
+        type: 3}
+      propertyPath: _startErea.y
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358160994064228806, guid: 06470789ed502f54a9318a3df6c44d11,
+        type: 3}
+      propertyPath: _ballPresenter
+      value: 
+      objectReference: {fileID: 815900982}
     - target: {fileID: 3358160994064228856, guid: 06470789ed502f54a9318a3df6c44d11,
         type: 3}
       propertyPath: m_RootOrder
@@ -3548,6 +3563,8 @@ GameObject:
   - component: {fileID: 3235404486600539136}
   - component: {fileID: 3235404486600539135}
   - component: {fileID: 3235404486600539138}
+  - component: {fileID: 3235404486600539140}
+  - component: {fileID: 3235404486600539139}
   m_Layer: 0
   m_Name: ChMD_nurikabe
   m_TagString: Untagged
@@ -3615,6 +3632,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3235404486600539139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3235404486600539134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0265a293577ef114f9b9702d00a249d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _deathPrefab: {fileID: 0}
+--- !u!114 &3235404486600539140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3235404486600539134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e73f89c4d7674408014e872ae30896, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _behaviorView: {fileID: 3235404486600539139}
+  _attack: 1
+  _stanTime: 3
+  _enemyHp: 20
+  _attackTimeLimit: 5
 --- !u!4 &3285132027034228916
 Transform:
   m_ObjectHideFlags: 0

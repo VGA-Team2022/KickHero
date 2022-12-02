@@ -4,24 +4,37 @@ using UnityEngine;
 
 public class Enemy : ISequence
 {
-    EnemyHPPresenter _presenter;
+    EnemyHPPresenter _hpPresenter;
+    EnemyBehaviorPresenter _behaviorPresenter;
 
-    public Enemy(System.Action<InGameCycle.EventEnum> action)
+    IDamage _playerDamage;
+    public Enemy(System.Action<InGameCycle.EventEnum> action, IDamage playerDamage)
     {
         Initialize(action);
+        _playerDamage = playerDamage;
     }
     public void Initialize(System.Action<InGameCycle.EventEnum> action)
     {
-        if (!_presenter)
+        if (!_hpPresenter)
         {
-            _presenter = GetMonoBehaviorInstansInScene<EnemyHPPresenter>();
+            _hpPresenter = GetMonoBehaviorInstansInScene<EnemyHPPresenter>();
         }
-        _presenter.Init(action);
+        if (!_behaviorPresenter)
+        {
+            _behaviorPresenter = GetMonoBehaviorInstansInScene<EnemyBehaviorPresenter>();
+        }
+        _hpPresenter.Init(action);
+        _behaviorPresenter.Init();
     }
 
     public void OnUpdate()
     {
-        
+        _behaviorPresenter.Attack(_playerDamage);
+    }
+
+    public void Down()
+    {
+        _behaviorPresenter?.Down();
     }
     private T GetMonoBehaviorInstansInScene<T>() where T : MonoBehaviour
     {
