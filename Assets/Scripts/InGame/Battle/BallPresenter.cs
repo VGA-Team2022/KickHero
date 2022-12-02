@@ -21,8 +21,6 @@ public class BallPresenter : MonoBehaviour
     [Tooltip("初期位置を定めるTransform")]
     [SerializeField] Transform _startTransform;
     [Header("デバッグ用項目")]
-    [Tooltip("リセット")]
-    [SerializeField] bool _reset = false;
 
     BallModel _ballModel;
 
@@ -60,6 +58,8 @@ public class BallPresenter : MonoBehaviour
 
     /// <summary>当たり判定を取るか否か</summary>
     public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; } }
+
+    public Vector3 Position { get => BallModel.Position; }
 
     /// <summary>ボールの初期位置</summary>
     public Vector3 StartPosition
@@ -176,21 +176,4 @@ public class BallPresenter : MonoBehaviour
         BallModel.Speed = _speed;
         BallModel.CalculationTime = _calculationTime;
     }
-
-#if UNITY_EDITOR
-
-    private void OnValidate()
-    {
-        ValueSet();
-        if (_reset)
-        {
-            Reset();
-        }
-    }
-    private void Reset()
-    {
-        //_view.
-    }
-
-#endif
 }

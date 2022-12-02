@@ -32,8 +32,16 @@ public class LineReader : MonoBehaviour
     float _front = 2.0f;
     Color _gizmosColor = Color.red;
     float _time = 0;
+    Action _onDrawStartAction;
+    Action _onDrawEndAction;
 
     public BallPresenter BallPresenter { get => _ballPresenter; set => _ballPresenter = value; }
+
+    /// <summary>écÇËéûä‘ÇÃäÑçá</summary>
+    public float TimeGage { get => (_drawTime - _time) / _drawTime; }
+
+    /// <summary>ç°ê¸Çà¯Ç¢ÇƒÇ¢ÇÈÇ©</summary>
+    public bool IsDrawing { get => _isDrawing; }
 
     private void Start()
     {
@@ -77,6 +85,7 @@ public class LineReader : MonoBehaviour
                     _ballPresenter.Collection();
                 }
                 RecordPoint();
+                CallOnDrawStart();
             }
         }
         if (Input.GetMouseButton(0))
@@ -100,11 +109,36 @@ public class LineReader : MonoBehaviour
         }
     }
 
-    [Obsolete]
     public void OnUpdate(BallPresenter ballPresenter)
     {
         _ballPresenter = ballPresenter;
         OnUpdate();
+    }
+
+    public void OnDrawStart(Action action)
+    {
+        _onDrawStartAction += action;
+    }
+
+    public void OnDrawEnd(Action action)
+    {
+        _onDrawEndAction += action;
+    }
+
+    void CallOnDrawStart()
+    {
+        if(_onDrawStartAction != null)
+        {
+            _onDrawStartAction.Invoke();
+        }
+    }
+
+    void CallOnDrawEnd()
+    {
+        if(_onDrawEndAction != null)
+        {
+            _onDrawEndAction.Invoke();
+        }
     }
 
     bool StartEreaCheck()
@@ -150,6 +184,7 @@ public class LineReader : MonoBehaviour
                 }
             }
         }
+        CallOnDrawEnd();
     }
 
     private BallRoute RouteConvert()

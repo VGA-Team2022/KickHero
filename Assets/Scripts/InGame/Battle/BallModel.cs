@@ -43,11 +43,12 @@ public class BallModel
     public BallRoute Route { get => _route; }
     public float CalculationTime { get => _calculationTime; set => _calculationTime = value; }
     public Vector3 StartPosition { get => _startPosition; set => _startPosition = value; }
+    public Vector3 Position { get => _position.Value; set => _position.Value = value; }
 
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(System.Action<Vector3> position, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
+    public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
     {
         _startPosition = startPosition;
         _position = new ReactiveProperty<Vector3>(_startPosition);
@@ -58,7 +59,7 @@ public class BallModel
         _eventProperty.Subscribe(eventAction).AddTo(gameObject);
     }
 
-    public BallModel(System.Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
+    public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
     {
         _startPosition = startPosition;
         _position = new ReactiveProperty<Vector3>(_startPosition);
@@ -136,7 +137,7 @@ public class BallModel
     /// </summary>
     /// <param name="action"></param>
     /// <param name="gameObject"></param>
-    public void PositionSubscribe(System.Action<Vector3> action, GameObject gameObject)
+    public void PositionSubscribe(Action<Vector3> action, GameObject gameObject)
     {
         _position.Subscribe(action).AddTo(gameObject);
     }
@@ -145,7 +146,7 @@ public class BallModel
     /// </summary>
     /// <param name="action"></param>
     /// <param name="component"></param>
-    public void PositionSubscribe(System.Action<Vector3> action, Component component)
+    public void PositionSubscribe(Action<Vector3> action, Component component)
     {
         _position.Subscribe(action).AddTo(component);
     }
