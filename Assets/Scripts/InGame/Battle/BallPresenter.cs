@@ -18,37 +18,22 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] float _calculationTime = 0;
     [Tooltip("ボールの速度モード")]
     [SerializeField] BallModel.CarryMode _mode = BallModel.CarryMode.Time;
+    [Tooltip("初期位置を定めるTransform")]
+    [SerializeField] Transform _startTransform;
     [Header("デバッグ用項目")]
     [Tooltip("リセット")]
     [SerializeField] bool _reset = false;
 
     BallModel _ballModel;
-    bool _isPositionSubscribe = false;
-    bool IsPositionSubscribe
-    {
-        get
-        {
-            Debug.Log($"get{_isPositionSubscribe}");
-            return _isPositionSubscribe;
-        }
-        set
-        {
-            Debug.Log($"set{_isPositionSubscribe}");
-            _isPositionSubscribe = value;
-        }
-    }
 
     private BallModel BallModel
     {
         get
         {
-            if (!IsPositionSubscribe)
-            {
-                ViewSubscribe();
-            }
             if (_ballModel == null)
             {
-                //Debug.LogError("_ballModelが初期化されていません。");
+                //Debug.LogError("_ballModelが初期化されていません。 ");
+                Vector3 position = _startTransform ? _startTransform.position : View.Position;
                 _ballModel = new BallModel(_view.transform.position);
             }
             return _ballModel;
@@ -69,10 +54,6 @@ public class BallPresenter : MonoBehaviour
                     return null;
                 }
             }
-            if (!IsPositionSubscribe)
-            {
-                ViewSubscribe();
-            }
             return _view;
         }
     }
@@ -81,7 +62,31 @@ public class BallPresenter : MonoBehaviour
     public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; } }
 
     /// <summary>ボールの初期位置</summary>
-    public Vector3 StartPosition { get => BallModel.StartPosition; }
+    public Vector3 StartPosition
+    {
+        get
+        {
+            if (Application.isPlaying)
+            {
+                return BallModel.StartPosition;
+            }
+            else
+            {
+                return _startTransform.position;
+            }
+        }
+        set
+        {
+            if (Application.isPlaying)
+            {
+                BallModel.StartPosition = value;
+            }
+            else
+            {
+                _startTransform.position =  value;
+            }
+        }
+    }
 
     /// <summary>現在実行中の動作をキャンセルする</summary>
     public void Cancel()
@@ -171,25 +176,6 @@ public class BallPresenter : MonoBehaviour
         BallModel.Speed = _speed;
         BallModel.CalculationTime = _calculationTime;
     }
-
-    bool ViewSubscribe()
-    {
-        if (_view)
-        {
-            IsPositionSubscribe = true;
-            _view.PositionSubscribe(value =>
-                    {
-                        Debug.Log(1);
-                        if (!Application.isPlaying)
-                        {
-                            BallModel.StartPosition = value;
-                        }
-                    }, this);
-            return true;
-        }
-        return false;
-    }
-
 
 #if UNITY_EDITOR
 
