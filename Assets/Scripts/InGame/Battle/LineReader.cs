@@ -180,7 +180,7 @@ public class LineReader : MonoBehaviour
                 {
                     _ballPresenter.IsCollision = true;
                     _ballPresenter.Shoot();
-                    _ballPresenter.OnCarryEnd(() => _ballPresenter.IsCollision = false, false);
+                    //_ballPresenter.OnCarryEnd(() => _ballPresenter.IsCollision = false, false);
                 }
             }
         }

@@ -20,6 +20,9 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] BallModel.CarryMode _mode = BallModel.CarryMode.Time;
     [Tooltip("初期位置を定めるTransform")]
     [SerializeField] Transform _startTransform;
+    [Tooltip("地面のタグの名前")]
+    [SerializeField] string _groundTag = "";
+    [SerializeField] PhysicMaterial _physicMaterial;
     [Header("デバッグ用項目")]
 
     BallModel _ballModel;
@@ -57,7 +60,7 @@ public class BallPresenter : MonoBehaviour
     }
 
     /// <summary>当たり判定を取るか否か</summary>
-    public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; } }
+    public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; Debug.Log(View.IsCollision); } }
 
     public Vector3 Position { get => BallModel.Position; }
 
@@ -83,7 +86,7 @@ public class BallPresenter : MonoBehaviour
             }
             else
             {
-                _startTransform.position =  value;
+                _startTransform.position = value;
             }
         }
     }
@@ -164,6 +167,9 @@ public class BallPresenter : MonoBehaviour
         if (View)
         {
             BallModel = new BallModel(value => View.Position = value, View.gameObject, View.transform.position);
+            _ballModel.GroundTag = _groundTag;
+            _ballModel.Radius = View.Collider.radius;
+            View.OnHit(_ballModel.OnRaycastHit);
         }
         ValueSet();
     }
@@ -175,5 +181,6 @@ public class BallPresenter : MonoBehaviour
         BallModel.Acceleration = _acceleration;
         BallModel.Speed = _speed;
         BallModel.CalculationTime = _calculationTime;
+        BallModel.PhysicMaterial = _physicMaterial;
     }
 }
