@@ -7072,9 +7072,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 304216935}
-        m_TargetAssemblyTypeName: TestCutScene, Assembly-CSharp
-        m_MethodName: CutScene
+      - m_Target: {fileID: 304216937}
+        m_TargetAssemblyTypeName: EffectManager, Assembly-CSharp
+        m_MethodName: InstancetiateEff
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
