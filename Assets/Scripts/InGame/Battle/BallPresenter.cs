@@ -64,7 +64,7 @@ public class BallPresenter : MonoBehaviour
     }
 
     /// <summary>“–‚½‚è”»’è‚ðŽæ‚é‚©”Û‚©</summary>
-    public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; Debug.Log(View.IsCollision); } }
+    public bool IsCollide { get => View.IsCollide; set { View.IsCollide = value; Debug.Log(View.IsCollide); } }
 
     public Vector3 Position { get => BallModel.Position; }
 

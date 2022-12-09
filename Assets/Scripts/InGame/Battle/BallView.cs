@@ -20,8 +20,9 @@ public class BallView : MonoBehaviour
     Action<RaycastHit> _onHitActionRaycastHit;
 
     SphereCollider _collider;
+    /// <summary>接触中のコライダーのリスト</summary>
     List<Collider> _stayColliders = new List<Collider>();
-    bool _isCollision = false;
+    bool _isCollide = false;
 
 
     public SphereCollider Collider
@@ -43,7 +44,7 @@ public class BallView : MonoBehaviour
         {
             Vector3 pos = transform.position;
             transform.position = value;
-            if (_isCollision)
+            if (_isCollide)
             {
                 HitDetermine(pos, value, Collider.radius);
             }
@@ -52,12 +53,12 @@ public class BallView : MonoBehaviour
 
 
     /// <summary>当たり判定を取るか否か</summary>
-    public bool IsCollision
+    public bool IsCollide
     {
-        get => _isCollision;
+        get => _isCollide;
         set
         {
-            _isCollision = value;
+            _isCollide = value;
             _stayColliders.Clear();
         }
     }

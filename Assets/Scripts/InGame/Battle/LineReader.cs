@@ -179,7 +179,7 @@ public class LineReader : MonoBehaviour
             {
                 if (_ballPresenter.TryRouteSet(route))
                 {
-                    _ballPresenter.IsCollision = true;
+                    _ballPresenter.IsCollide = true;
                     _ballPresenter.Shoot();
                     //_ballPresenter.OnCarryEnd(() => _ballPresenter.IsCollision = false, false);
                 }
