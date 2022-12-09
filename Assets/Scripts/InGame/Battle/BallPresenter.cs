@@ -26,6 +26,8 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] Transform _startTransform;
     [Tooltip("地面のタグの名前")]
     [SerializeField] string _groundTag = "";
+    [Tooltip("地面にぶつかった時の跳ねる速さ")]
+    [SerializeField] float _missBoundSpeed;
     [Header("デバッグ用項目")]
 
     BallModel _ballModel;
@@ -186,6 +188,7 @@ public class BallPresenter : MonoBehaviour
         BallModel.Acceleration = _acceleration;
         BallModel.Speed = _speed;
         BallModel.CalculationTime = _calculationTime;
+        BallModel.MissBoundSpeed = _missBoundSpeed;
         if (View)
         {
             BallModel.Rigidbody = View.Rigidbody;

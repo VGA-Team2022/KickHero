@@ -52,6 +52,7 @@ public class BallModel
     float _radius;
     Collider _collider;
     Rigidbody _rb;
+    float _missBoundSpeed = 0f;
 
     public CarryMode Mode { get => _mode; set => _mode = value; }
     public float Speed { get => _speed; set => _speed = value; }
@@ -59,7 +60,11 @@ public class BallModel
     public BallRoute Route { get => _route; }
     public float CalculationTime { get => _calculationTime; set => _calculationTime = value; }
     public Vector3 StartPosition { get => _startPosition; set => _startPosition = value; }
-    public Vector3 Position { get => _position.Value; set => _position.Value = value; }
+    public Vector3 Position
+    {
+        get => _position.Value;
+        set => _position.Value = value;
+    }
     public string GroundTag { get => _groundTag; set => _groundTag = value; }
     public float Radius { get => _radius; set => _radius = value; }
     public Vector3 Velocity
@@ -81,7 +86,6 @@ public class BallModel
             _velocity = value;
             if (_rb)
             {
-                Debug.Log(1);
                 _rb.velocity = value;
             }
         }
@@ -89,6 +93,7 @@ public class BallModel
 
     public Rigidbody Rigidbody { get => _rb; set => _rb = value; }
     public Collider Collider { get => _collider; set => _collider = value; }
+    public float MissBoundSpeed { get => _missBoundSpeed; set => _missBoundSpeed = value; }
 
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
@@ -233,12 +238,19 @@ public class BallModel
     {
         if (hit.collider.tag == _groundTag)
         {
+            Debug.Log(1);
             _isCarryEnd = true;
             float bounciness = GetBounciness(_collider.material, hit.collider.material);
-            Vector3 vec = Velocity - Vector3.Dot(hit.normal, Velocity) * hit.normal * (1 + bounciness);
-            Velocity = vec;
-            CallOnCarryEnd();
+            float x = UnityEngine.Random.Range(0f, 1);
+            float y = UnityEngine.Random.Range(-1f, 1);
+            float z = UnityEngine.Random.Range(-1f, 1);
+            Vector3 up = hit.normal * y;
+            Vector3 f = Vector3.Cross(hit.normal, Vector3.right).normalized;
+            Vector3 right = f * x;
+            Vector3 forward = Vector3.Cross(hit.normal, f).normalized * z;
+            Velocity = (right + up + forward).normalized * _missBoundSpeed;
             _position.Value = hit.point + hit.normal * _radius;
+            CallOnCarryEnd();
         }
     }
 
