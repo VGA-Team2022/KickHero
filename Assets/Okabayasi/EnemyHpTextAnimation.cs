@@ -7,10 +7,14 @@ using UnityEngine.UI;
 public class EnemyHpTextAnimation : MonoBehaviour
 {
     [SerializeField] private Text Text= default;
-
+    [SerializeField] private int _Hp;
+    private void Awake()
+    {
+        
+    }
     private void Start()
     {
-        Text.DOCounter(0, 1000, 3f)
+        Text.DOCounter(0, _Hp, 3f)
         .SetEase(Ease.InOutCubic)
         //.SetLink(gameObject)
         .Play();
