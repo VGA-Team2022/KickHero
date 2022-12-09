@@ -11,7 +11,7 @@ using static UnityEngine.Rendering.DebugUI;
 /// <summary>
 /// ボールの表面的な処理を行うクラス
 /// </summary>
-[RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
 public class BallView : MonoBehaviour
 {
     /// <summary>何かに当たった時に発行するイベント</summary>
@@ -20,9 +20,27 @@ public class BallView : MonoBehaviour
     Action<RaycastHit> _onHitActionRaycastHit;
 
     SphereCollider _collider;
+    Rigidbody _rb;
     /// <summary>接触中のコライダーのリスト</summary>
     List<Collider> _stayColliders = new List<Collider>();
     bool _isCollide = false;
+
+    public Rigidbody Rigidbody
+    {
+        get
+        {
+            if (!_rb)
+            {
+                _rb = GetComponent<Rigidbody>();
+                if (!_rb)
+                {
+                    Debug.LogError($"{nameof(Rigidbody)}が見つかりません");
+                }
+            }
+
+            return _rb;
+        }
+    }
 
 
     public SphereCollider Collider
@@ -61,6 +79,12 @@ public class BallView : MonoBehaviour
             _isCollide = value;
             _stayColliders.Clear();
         }
+    }
+
+    private void Start()
+    {
+        Rigidbody.isKinematic = true;
+        _collider = GetComponent<SphereCollider>();
     }
 
     public void OnHit(Action<Collider> action)

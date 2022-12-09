@@ -94,7 +94,7 @@ public class LineReader : MonoBehaviour
             if (_isDrawing)
             {
                 _time += Time.deltaTime;
-                if(_time < _drawTime)
+                if (_time < _drawTime)
                 {
                     RecordPoint();
                 }
@@ -128,7 +128,7 @@ public class LineReader : MonoBehaviour
 
     void CallOnDrawStart()
     {
-        if(_onDrawStartAction != null)
+        if (_onDrawStartAction != null)
         {
             _onDrawStartAction.Invoke();
         }
@@ -136,7 +136,7 @@ public class LineReader : MonoBehaviour
 
     void CallOnDrawEnd()
     {
-        if(_onDrawEndAction != null)
+        if (_onDrawEndAction != null)
         {
             _onDrawEndAction.Invoke();
         }
@@ -180,8 +180,12 @@ public class LineReader : MonoBehaviour
                 if (_ballPresenter.TryRouteSet(route))
                 {
                     _ballPresenter.IsCollide = true;
-                    _ballPresenter.Shoot();
-                    //_ballPresenter.OnCarryEnd(() => _ballPresenter.IsCollision = false, false);
+                    _ballPresenter.Shoot()
+                    .OnCarryEnd(() =>
+                    {
+                        _ballPresenter.IsCollide = false;
+                    }, false);
+
                 }
             }
         }

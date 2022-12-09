@@ -17,6 +17,7 @@ public class BallModel
 
     /// <summary>ボールのPosition</summary>
     ReactiveProperty<Vector3> _position;
+    ReactiveProperty<bool> _isKinematic;
     ReactiveProperty<InGameCycle.EventEnum> _eventProperty;
     /// <summary>処理のトークン</summary>
     CancellationTokenSource _tokenSource = new CancellationTokenSource();
@@ -50,6 +51,7 @@ public class BallModel
     bool _isCarryEnd = false;
     float _radius;
     PhysicMaterial _physicMaterial;
+    Rigidbody _rb;
 
     public CarryMode Mode { get => _mode; set => _mode = value; }
     public float Speed { get => _speed; set => _speed = value; }
@@ -60,9 +62,33 @@ public class BallModel
     public Vector3 Position { get => _position.Value; set => _position.Value = value; }
     public string GroundTag { get => _groundTag; set => _groundTag = value; }
     public float Radius { get => _radius; set => _radius = value; }
-    public Vector3 Velocity { get => _velocity; set { _velocity = value; } }
+    public Vector3 Velocity
+    {
+        get
+        {
+            if (_rb)
+            {
+                return _rb.velocity;
+
+            }
+            else
+            {
+                return _velocity;
+            }
+        }
+        set
+        {
+            _velocity = value;
+            if (_rb)
+            {
+                Debug.Log(1);
+                _rb.velocity = value;
+            }
+        }
+    }
 
     public PhysicMaterial PhysicMaterial { get => _physicMaterial; set => _physicMaterial = value; }
+    public Rigidbody Rigidbody { get => _rb; set => _rb = value; }
 
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
@@ -108,6 +134,10 @@ public class BallModel
         if (!_isDebug)
         {
             _eventProperty.Value = InGameCycle.EventEnum.Throw;
+        }
+        if (_rb)
+        {
+            _rb.isKinematic = false;
         }
         Cancel();
         _tokenSource = new CancellationTokenSource();
@@ -176,6 +206,10 @@ public class BallModel
     /// </summary>
     public void Collection()
     {
+        if (_rb)
+        {
+            _rb.isKinematic = true;
+        }
         _position.Value = _startPosition;
         Cancel();
     }
@@ -200,16 +234,11 @@ public class BallModel
         if (hit.collider.tag == _groundTag)
         {
             _isCarryEnd = true;
-            Debug.DrawRay(Position, Velocity, Color.red);
-            Debug.Log(Velocity);
             float bounciness = GetBounciness(PhysicMaterial, hit.collider.material);
-            Velocity = Velocity - Vector3.Dot(hit.normal, Velocity) * hit.normal * (1 + bounciness);
-            Debug.Log(Velocity);
-            Debug.DrawRay(hit.point, Velocity, Color.blue);
-            Debug.DrawRay(hit.point, hit.normal, Color.green);
+            Vector3 vec = Velocity - Vector3.Dot(hit.normal, Velocity) * hit.normal * (1 + bounciness);
+            Velocity = vec;
             CallOnCarryEnd();
             _position.Value = hit.point + hit.normal * _radius;
-            //UnityEditor.EditorApplication.isPaused = true;
         }
     }
 
@@ -277,17 +306,11 @@ public class BallModel
                 }
             }
         }
+        if (_rb)
+        {
+            _rb.isKinematic = false;
+        }
         CallOnCarryEnd();
-        if (!_isDebug)
-        {
-            _eventProperty.Value = InGameCycle.EventEnum.BallRespawn;
-        }
-        while (Velocity.sqrMagnitude != 0)
-        {
-            Velocity += Physics.gravity * Time.fixedDeltaTime;
-            _position.Value += Velocity * Time.fixedDeltaTime;
-            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
-        }
     }
 
     float GetBounciness(PhysicMaterial a, PhysicMaterial b)

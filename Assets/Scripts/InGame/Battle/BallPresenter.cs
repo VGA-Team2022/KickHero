@@ -68,6 +68,8 @@ public class BallPresenter : MonoBehaviour
 
     public Vector3 Position { get => BallModel.Position; }
 
+    public Rigidbody Rigidbody { get => View.Rigidbody; }
+
     /// <summary>É{Å[ÉãÇÃèâä˙à íu</summary>
     public Vector3 StartPosition
     {
@@ -186,5 +188,6 @@ public class BallPresenter : MonoBehaviour
         BallModel.Speed = _speed;
         BallModel.CalculationTime = _calculationTime;
         BallModel.PhysicMaterial = _physicMaterial;
+        BallModel.Rigidbody = View.Rigidbody;
     }
 }
