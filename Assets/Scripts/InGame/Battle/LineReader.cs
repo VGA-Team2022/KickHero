@@ -7,7 +7,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// 
+/// 画面上に線を引き、その線を別の平面上に投影して、BallRouteに変換し、
+/// ボールにルートを渡して射出するクラス
 /// </summary>
 [RequireComponent(typeof(LineRenderer))]
 public class LineReader : MonoBehaviour

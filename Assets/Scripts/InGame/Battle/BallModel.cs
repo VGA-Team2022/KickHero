@@ -8,6 +8,10 @@ using System.Threading;
 using Unity.VisualScripting;
 using System;
 
+
+/// <summary>
+/// �{�[���̃f�[�^�I�ȏ����ƁA�f�[�^��ێ�����N���X
+/// </summary>
 public class BallModel
 {
 

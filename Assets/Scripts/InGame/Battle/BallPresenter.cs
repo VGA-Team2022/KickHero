@@ -6,6 +6,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Zenject.SpaceFighter;
 
+
+/// <summary>
+/// ボールのViewとModelを仲介するクラス
+/// </summary>
 public class BallPresenter : MonoBehaviour
 {
     [Tooltip("ボールのView")]

@@ -6,7 +6,8 @@ using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 /// <summary>
-/// 道のり、時間を含む配列
+/// 道のり、時間を含む配列を持ち、
+/// それらを扱うための関数を持つクラス
 /// </summary>
 public class BallRoute
 {

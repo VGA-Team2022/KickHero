@@ -8,9 +8,15 @@ using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(SphereCollider))]
+
+/// <summary>
+/// �{�[���̕\�ʓI�ȏ�����s���N���X
+/// </summary>
 public class BallView : MonoBehaviour
 {
+    /// <summary>�����ɓ����������ɔ��s����C�x���g</summary>
     Action<Collider> _onHitActionCollider;
+    /// <summary>�����ɓ����������ɂ���RaycastHit��n���C�x���g</summary>
     Action<RaycastHit> _onHitActionRaycastHit;
 
     SphereCollider _collider;
@@ -65,6 +71,14 @@ public class BallView : MonoBehaviour
         _onHitActionRaycastHit += action;
     }
 
+    /// <summary>
+    /// ��_�Ԃ�ړ��������̓����蔻�����
+    /// �����ɐڐG�������ACollider��n���C�x���g�ƁA
+    /// Collision�����RaycastHit��n���C�x���g�𔭍s����
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <param name="radius"></param>
     void HitDetermine(Vector3 start, Vector3 end, float radius)
     {
         //var hits = Physics.OverlapCapsule(start, end, radius, Physics.AllLayers, QueryTriggerInteraction.Collide);

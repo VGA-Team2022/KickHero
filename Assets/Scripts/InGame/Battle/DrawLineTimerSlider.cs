@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+/// <summary>
+/// ボールの操作可能時間を表示するスライダーを操作するクラス
+/// </summary>
 [RequireComponent(typeof(Slider))]
 public class DrawLineTimerSlider : MonoBehaviour
 {
