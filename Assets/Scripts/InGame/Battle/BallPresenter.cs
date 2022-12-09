@@ -26,7 +26,6 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] Transform _startTransform;
     [Tooltip("地面のタグの名前")]
     [SerializeField] string _groundTag = "";
-    [SerializeField] PhysicMaterial _physicMaterial;
     [Header("デバッグ用項目")]
 
     BallModel _ballModel;
@@ -187,7 +186,10 @@ public class BallPresenter : MonoBehaviour
         BallModel.Acceleration = _acceleration;
         BallModel.Speed = _speed;
         BallModel.CalculationTime = _calculationTime;
-        BallModel.PhysicMaterial = _physicMaterial;
-        BallModel.Rigidbody = View.Rigidbody;
+        if (View)
+        {
+            BallModel.Rigidbody = View.Rigidbody;
+            BallModel.Collider = View.Collider;
+        }
     }
 }

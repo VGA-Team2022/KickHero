@@ -50,7 +50,7 @@ public class BallModel
     Vector3 _velocity = default;
     bool _isCarryEnd = false;
     float _radius;
-    PhysicMaterial _physicMaterial;
+    Collider _collider;
     Rigidbody _rb;
 
     public CarryMode Mode { get => _mode; set => _mode = value; }
@@ -87,8 +87,8 @@ public class BallModel
         }
     }
 
-    public PhysicMaterial PhysicMaterial { get => _physicMaterial; set => _physicMaterial = value; }
     public Rigidbody Rigidbody { get => _rb; set => _rb = value; }
+    public Collider Collider { get => _collider; set => _collider = value; }
 
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
@@ -234,7 +234,7 @@ public class BallModel
         if (hit.collider.tag == _groundTag)
         {
             _isCarryEnd = true;
-            float bounciness = GetBounciness(PhysicMaterial, hit.collider.material);
+            float bounciness = GetBounciness(_collider.material, hit.collider.material);
             Vector3 vec = Velocity - Vector3.Dot(hit.normal, Velocity) * hit.normal * (1 + bounciness);
             Velocity = vec;
             CallOnCarryEnd();
