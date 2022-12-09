@@ -142,6 +142,7 @@ public class BallModel
         }
         if (_rb)
         {
+            Debug.Log(1);
             _rb.isKinematic = false;
         }
         Cancel();
@@ -238,7 +239,6 @@ public class BallModel
     {
         if (hit.collider.tag == _groundTag)
         {
-            Debug.Log(1);
             _isCarryEnd = true;
             float bounciness = GetBounciness(_collider.material, hit.collider.material);
             float x = UnityEngine.Random.Range(0f, 1);

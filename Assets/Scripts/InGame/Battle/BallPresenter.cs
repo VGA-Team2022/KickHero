@@ -69,7 +69,7 @@ public class BallPresenter : MonoBehaviour
 
     public Vector3 Position { get => BallModel.Position; }
 
-    public Rigidbody Rigidbody { get => View.Rigidbody; }
+    //public Rigidbody Rigidbody { get => View.Rigidbody; }
 
     /// <summary>ƒ{[ƒ‹‚Ì‰ŠúˆÊ’u</summary>
     public Vector3 StartPosition
