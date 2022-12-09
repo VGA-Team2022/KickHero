@@ -8,11 +8,16 @@ using System.Threading;
 using Unity.VisualScripting;
 using System;
 
+
+/// <summary>
+/// ボールのデータ的な処理と、データを保持するクラス
+/// </summary>
 public class BallModel
 {
 
     /// <summary>ボールのPosition</summary>
     ReactiveProperty<Vector3> _position;
+    ReactiveProperty<bool> _isKinematic;
     ReactiveProperty<InGameCycle.EventEnum> _eventProperty;
     /// <summary>処理のトークン</summary>
     CancellationTokenSource _tokenSource = new CancellationTokenSource();
@@ -26,16 +31,27 @@ public class BallModel
     System.Action _onCarryEndAction;
     /// <summary>ルートを辿り終えたときに呼ぶアクション（つかいすて）</summary>
     System.Action _singleUseOnCarryEndAction;
+    /// <summary>ボールの速さ</summary>
     float _speed = default;
+    /// <summary>ボールの加速度(スカラー)</summary>
     float _acceleration = default;
+    /// <summary>ボールの速度のモード</summary>
     CarryMode _mode = default;
+    /// <summary>ボールが辿るルート</summary>
     BallRoute _route = default;
-    //Transform _startTransform = default;
     /// <summary>初期位置</summary>
     Vector3 _startPosition = default;
+    /// <summary>最後にボールを飛ばす速度の計算に含める時間</summary>
     float _calculationTime = default;
-
+    /// <summary>デバッグモードかどうか</summary>
     bool _isDebug = false;
+    /// <summary>地面のタグの名前</summary>
+    string _groundTag;
+    Vector3 _velocity = default;
+    bool _isCarryEnd = false;
+    float _radius;
+    PhysicMaterial _physicMaterial;
+    Rigidbody _rb;
 
     public CarryMode Mode { get => _mode; set => _mode = value; }
     public float Speed { get => _speed; set => _speed = value; }
@@ -43,11 +59,41 @@ public class BallModel
     public BallRoute Route { get => _route; }
     public float CalculationTime { get => _calculationTime; set => _calculationTime = value; }
     public Vector3 StartPosition { get => _startPosition; set => _startPosition = value; }
+    public Vector3 Position { get => _position.Value; set => _position.Value = value; }
+    public string GroundTag { get => _groundTag; set => _groundTag = value; }
+    public float Radius { get => _radius; set => _radius = value; }
+    public Vector3 Velocity
+    {
+        get
+        {
+            if (_rb)
+            {
+                return _rb.velocity;
+
+            }
+            else
+            {
+                return _velocity;
+            }
+        }
+        set
+        {
+            _velocity = value;
+            if (_rb)
+            {
+                Debug.Log(1);
+                _rb.velocity = value;
+            }
+        }
+    }
+
+    public PhysicMaterial PhysicMaterial { get => _physicMaterial; set => _physicMaterial = value; }
+    public Rigidbody Rigidbody { get => _rb; set => _rb = value; }
 
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(System.Action<Vector3> position, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
+    public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
     {
         _startPosition = startPosition;
         _position = new ReactiveProperty<Vector3>(_startPosition);
@@ -58,7 +104,7 @@ public class BallModel
         _eventProperty.Subscribe(eventAction).AddTo(gameObject);
     }
 
-    public BallModel(System.Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
+    public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
     {
         _startPosition = startPosition;
         _position = new ReactiveProperty<Vector3>(_startPosition);
@@ -75,7 +121,7 @@ public class BallModel
 
     ~BallModel()
     {
-        _tokenSource?.Cancel();
+        Cancel();
     }
 
     /// <summary>
@@ -89,7 +135,11 @@ public class BallModel
         {
             _eventProperty.Value = InGameCycle.EventEnum.Throw;
         }
-        _tokenSource?.Cancel();
+        if (_rb)
+        {
+            _rb.isKinematic = false;
+        }
+        Cancel();
         _tokenSource = new CancellationTokenSource();
         if (_route == null) { return false; }
         Carry().Forget();
@@ -104,6 +154,7 @@ public class BallModel
         _tokenSource?.Cancel();
         _isCarry = false;
         _accele = 0;
+        Velocity = Vector3.zero;
     }
 
     public BallModel OnCarryEnd(System.Action action)
@@ -136,7 +187,7 @@ public class BallModel
     /// </summary>
     /// <param name="action"></param>
     /// <param name="gameObject"></param>
-    public void PositionSubscribe(System.Action<Vector3> action, GameObject gameObject)
+    public void PositionSubscribe(Action<Vector3> action, GameObject gameObject)
     {
         _position.Subscribe(action).AddTo(gameObject);
     }
@@ -145,7 +196,7 @@ public class BallModel
     /// </summary>
     /// <param name="action"></param>
     /// <param name="component"></param>
-    public void PositionSubscribe(System.Action<Vector3> action, Component component)
+    public void PositionSubscribe(Action<Vector3> action, Component component)
     {
         _position.Subscribe(action).AddTo(component);
     }
@@ -155,6 +206,10 @@ public class BallModel
     /// </summary>
     public void Collection()
     {
+        if (_rb)
+        {
+            _rb.isKinematic = true;
+        }
         _position.Value = _startPosition;
         Cancel();
     }
@@ -174,23 +229,37 @@ public class BallModel
         return false;
     }
 
+    public void OnRaycastHit(RaycastHit hit)
+    {
+        if (hit.collider.tag == _groundTag)
+        {
+            _isCarryEnd = true;
+            float bounciness = GetBounciness(PhysicMaterial, hit.collider.material);
+            Vector3 vec = Velocity - Vector3.Dot(hit.normal, Velocity) * hit.normal * (1 + bounciness);
+            Velocity = vec;
+            CallOnCarryEnd();
+            _position.Value = hit.point + hit.normal * _radius;
+        }
+    }
+
 
     async UniTask Carry()
     {
         _isCarry = true;
-        Vector3 velo = Vector3.zero;
+        _isCarryEnd = false;
         if (_mode == CarryMode.Time)
         {
             _progressStatus = _route.MinTime;
             while (_progressStatus <= _route.MaxTime)
             {
                 await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
-
+                if (_isCarryEnd) { break; }
                 float buf = _progressStatus;
                 _progressStatus += Time.deltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.deltaTime;
                 if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
                 {
+                    Velocity = _route.GetVelocityInCaseTime(buf, _progressStatus).Value;
                     _position.Value = point;
                 }
                 else
@@ -199,7 +268,7 @@ public class BallModel
                     {
                         _position.Value = _route.Positons.Last();
                         float time = _calculationTime < _route.AllTime ? _route.MaxTime - _calculationTime : _route[0].Time;
-                        velo = _route.GetVelocityInCaseTime(time, _route.MaxTime).Value;
+                        Velocity = _route.GetVelocityInCaseTime(time, _route.MaxTime).Value;
                     }
                     else
                     {
@@ -215,6 +284,7 @@ public class BallModel
             {
 
                 await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
+                if (_isCarryEnd) { break; }
                 _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
                 if (_route.TryGetPointInCaseDistance(_progressStatus, out Vector3 point))
@@ -226,7 +296,7 @@ public class BallModel
                     if (_progressStatus > _route.AllWay - _progressStatus)
                     {
                         Vector3 pos = _route.Positons.Last();
-                        velo = pos - _position.Value;
+                        Velocity = pos - _position.Value;
                         _position.Value = pos;
                     }
                     else
@@ -236,17 +306,37 @@ public class BallModel
                 }
             }
         }
+        if (_rb)
+        {
+            _rb.isKinematic = false;
+        }
         CallOnCarryEnd();
-        if (!_isDebug)
+    }
+
+    float GetBounciness(PhysicMaterial a, PhysicMaterial b)
+    {
+        if (!a) { a = new PhysicMaterial(); }
+        if (!b) { b = new PhysicMaterial(); }
+        float bounciness = 1;
+        int combineIndx = Mathf.Max((int)a.bounceCombine, (int)b.bounceCombine);
+
+        switch ((PhysicMaterialCombine)combineIndx)
         {
-            _eventProperty.Value = InGameCycle.EventEnum.BallRespawn;
+            case PhysicMaterialCombine.Average:
+                bounciness = (a.bounciness + b.bounciness) / 2;
+                break;
+            case PhysicMaterialCombine.Minimum:
+                bounciness = Mathf.Min(a.bounciness, b.bounciness);
+                break;
+            case PhysicMaterialCombine.Maximum:
+                bounciness = Mathf.Max(a.bounciness, b.bounciness);
+                break;
+            case PhysicMaterialCombine.Multiply:
+                bounciness = a.bounciness * b.bounciness;
+                break;
         }
-        while (velo.sqrMagnitude != 0)
-        {
-            velo += Physics.gravity * Time.deltaTime;
-            _position.Value += velo * Time.deltaTime;
-            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
-        }
+
+        return bounciness;
     }
 
 
