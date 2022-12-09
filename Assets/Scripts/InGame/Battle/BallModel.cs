@@ -10,7 +10,7 @@ using System;
 
 
 /// <summary>
-/// ï¿½{ï¿½[ï¿½ï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½Iï¿½Èï¿½ï¿½ï¿½ï¿½ÆAï¿½fï¿½[ï¿½^ï¿½ï¿½Ûï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
+/// ƒ{[ƒ‹‚Ìƒf[ƒ^“I‚Èˆ—‚ÆAƒf[ƒ^‚ğ•Û‚·‚éƒNƒ‰ƒX
 /// </summary>
 public class BallModel
 {
@@ -202,7 +202,8 @@ public class BallModel
             _isCarryEnd = true;
             Debug.DrawRay(Position, Velocity, Color.red);
             Debug.Log(Velocity);
-            Velocity = Velocity + 2 * -Vector3.Dot(hit.normal, Velocity) * hit.normal;
+            float bounciness = GetBounciness(PhysicMaterial, hit.collider.material);
+            Velocity = Velocity - Vector3.Dot(hit.normal, Velocity) * hit.normal * (1 + bounciness);
             Debug.Log(Velocity);
             Debug.DrawRay(hit.point, Velocity, Color.blue);
             Debug.DrawRay(hit.point, hit.normal, Color.green);
@@ -291,13 +292,28 @@ public class BallModel
 
     float GetBounciness(PhysicMaterial a, PhysicMaterial b)
     {
+        if (!a) { a = new PhysicMaterial(); }
+        if (!b) { b = new PhysicMaterial(); }
         float bounciness = 1;
-        if (a)
+        int combineIndx = Mathf.Max((int)a.bounceCombine, (int)b.bounceCombine);
+
+        switch ((PhysicMaterialCombine)combineIndx)
         {
-            bounciness = a.bounciness;
+            case PhysicMaterialCombine.Average:
+                bounciness = (a.bounciness + b.bounciness) / 2;
+                break;
+            case PhysicMaterialCombine.Minimum:
+                bounciness = Mathf.Min(a.bounciness, b.bounciness);
+                break;
+            case PhysicMaterialCombine.Maximum:
+                bounciness = Mathf.Max(a.bounciness, b.bounciness);
+                break;
+            case PhysicMaterialCombine.Multiply:
+                bounciness = a.bounciness * b.bounciness;
+                break;
         }
 
-        return 0;
+        return bounciness;
     }
 
 

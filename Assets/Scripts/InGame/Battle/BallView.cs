@@ -7,16 +7,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-[RequireComponent(typeof(SphereCollider))]
 
 /// <summary>
-/// ï¿½{ï¿½[ï¿½ï¿½ï¿½Ì•\ï¿½Ê“Iï¿½Èï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
+/// ƒ{[ƒ‹‚Ì•\–Ê“I‚Èˆ—‚ğs‚¤ƒNƒ‰ƒX
 /// </summary>
+[RequireComponent(typeof(SphereCollider))]
 public class BallView : MonoBehaviour
 {
-    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É”ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Cï¿½xï¿½ï¿½ï¿½g</summary>
+    /// <summary>‰½‚©‚É“–‚½‚Á‚½‚É”­s‚·‚éƒCƒxƒ“ƒg</summary>
     Action<Collider> _onHitActionCollider;
-    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½RaycastHitï¿½ï¿½nï¿½ï¿½ï¿½Cï¿½xï¿½ï¿½ï¿½g</summary>
+    /// <summary>‰½‚©‚É“–‚½‚Á‚½‚É‚»‚ÌRaycastHit‚ğ“n‚·ƒCƒxƒ“ƒg</summary>
     Action<RaycastHit> _onHitActionRaycastHit;
 
     SphereCollider _collider;
@@ -72,47 +72,15 @@ public class BallView : MonoBehaviour
     }
 
     /// <summary>
-    /// ï¿½ï¿½_ï¿½Ô‚ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½ï¿½ï¿½ï¿½
-    /// ï¿½ï¿½ï¿½ï¿½ï¿½ÉÚGï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½AColliderï¿½ï¿½nï¿½ï¿½ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½ÆA
-    /// Collisionï¿½ï¿½ï¿½ï¿½ï¿½RaycastHitï¿½ï¿½nï¿½ï¿½ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½ğ”­sï¿½ï¿½ï¿½ï¿½
+    /// “ñ“_ŠÔ‚ğˆÚ“®‚µ‚½‚Ì“–‚½‚è”»’è‚ğæ‚é
+    /// ‰½‚©‚ÉÚG‚µ‚½ACollider‚ğ“n‚·ƒCƒxƒ“ƒg‚ÆA
+    /// Collision‘ã‚í‚è‚ÌRaycastHit‚ğ“n‚·ƒCƒxƒ“ƒg‚ğ”­s‚·‚é
     /// </summary>
     /// <param name="start"></param>
     /// <param name="end"></param>
     /// <param name="radius"></param>
     void HitDetermine(Vector3 start, Vector3 end, float radius)
     {
-        //var hits = Physics.OverlapCapsule(start, end, radius, Physics.AllLayers, QueryTriggerInteraction.Collide);
-        //if (hits.Length > 0)
-        //{
-        //    foreach (Collider c in hits)
-        //    {
-        //        if (!Physics.GetIgnoreLayerCollision(Collider.gameObject.layer, c.gameObject.layer))
-        //        {
-        //            if (!_stayColliders.Contains(c))
-        //            {
-        //                CallOnHit(c);
-        //                _stayColliders.Add(c);
-        //            }
-        //            for (int i = 0; i < _stayColliders.Count; i++)
-        //            {
-        //                if ((hits.Where(p => p == _stayColliders[i]).Count() == 0))
-        //                {
-        //                    _stayColliders.RemoveAt(i);
-        //                    i--;
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            _stayColliders.Remove(c);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    _stayColliders.Clear();
-        //}
-
         Ray ray = new Ray(start, (end - start).normalized);
         var pHits = Physics.SphereCastAll(ray, radius, Vector3.Distance(end, start), Physics.AllLayers, QueryTriggerInteraction.Collide);
         if (pHits.Length != 0)
@@ -130,7 +98,7 @@ public class BallView : MonoBehaviour
                     }
                     for (int i = 0; i < _stayColliders.Count; i++)
                     {
-                        if ((pHits.Where(p => p.collider == _stayColliders[i]).Count() == 0))
+                        if (pHits.Where(p => p.collider == _stayColliders[i]).Count() == 0)
                         {
                             _stayColliders.RemoveAt(i);
                             i--;
