@@ -152,15 +152,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f529aa944b914449d62b8c40f188fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acfFile: 1.acf
+  acfFile: Category_VoiceLimitGroup.acf
   cueSheets:
   - name: SE
     acbFile: SE.acb
     awbFile: 
     loaderStatus: 0
-  - name: CueSheet_0
-    acbFile: CueSheet_0.acb
-    awbFile: CueSheet_0.awb
+  - name: BGM
+    acbFile: BGM.acb
+    awbFile: BGM.awb
+    loaderStatus: 0
+  - name: ME
+    acbFile: ME.acb
+    awbFile: 
     loaderStatus: 0
   dspBusSetting: 
   dontDestroyOnLoad: 0
@@ -650,5 +654,5 @@ MonoBehaviour:
     - 0
     - 0
     - 0
-  _cueName: SE_Pressed_2
-  _cueSheet: SE2022_1117
+  _cueName: ME_Battle
+  _cueSheet: ME
