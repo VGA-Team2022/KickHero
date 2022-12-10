@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// 
+/// 画面上に線を引き、その線を別の平面上に投影して、BallRouteに変換し、
+/// ボールにルートを渡して射出するクラス
 /// </summary>
 [RequireComponent(typeof(LineRenderer))]
 public class LineReader : MonoBehaviour
@@ -15,6 +17,8 @@ public class LineReader : MonoBehaviour
     [SerializeField] Transform _enemy;
     [Tooltip("入力開始可能領域")]
     [SerializeField] Vector2 _startErea;
+    [Tooltip("線を引ける時間")]
+    [SerializeField] float _drawTime = 1f;
 
     [Header("デバッグ時設定項目")]
     [Tooltip("単体テスト時true")]
@@ -22,9 +26,23 @@ public class LineReader : MonoBehaviour
     [Tooltip("プレゼンター")]
     [SerializeField] BallPresenter _ballPresenter;
 
+
     LineRenderer _lineRenderer;
     List<(float time, Vector3 point)> _points = new List<(float, Vector3)>();
     bool _isDrawing = false;
+    float _front = 2.0f;
+    Color _gizmosColor = Color.red;
+    float _time = 0;
+    Action _onDrawStartAction;
+    Action _onDrawEndAction;
+
+    public BallPresenter BallPresenter { get => _ballPresenter; set => _ballPresenter = value; }
+
+    /// <summary>残り時間の割合</summary>
+    public float TimeGage { get => (_drawTime - _time) / _drawTime; }
+
+    /// <summary>今線を引いているか</summary>
+    public bool IsDrawing { get => _isDrawing; }
 
     private void Start()
     {
@@ -35,9 +53,9 @@ public class LineReader : MonoBehaviour
     }
     private void Update()
     {
-        if (_isDebug)
+        if (_ballPresenter && _isDebug)
         {
-            OnUpdate(_ballPresenter);
+            OnUpdate();
         }
     }
     public void Init()
@@ -45,57 +63,90 @@ public class LineReader : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
     }
 
-    public void OnUpdate(BallPresenter ballPresenter)
+    public void Init(BallPresenter ballPresenter)
     {
+        _ballPresenter = ballPresenter;
+        Init();
+    }
+
+    public void OnUpdate()
+    {
+        if (!_ballPresenter) { return; }
         if (Input.GetMouseButtonDown(0))
         {
-            if (StartEreaCheck(ballPresenter))
+            if (StartEreaCheck())
             {
+                _time = 0;
+                _isDrawing = true;
                 _points.Clear();
                 _lineRenderer.positionCount = 0;
-                if (ballPresenter)
+                if (_ballPresenter)
                 {
-                    ballPresenter.Cancel();
-                    ballPresenter.Collection();
+                    _ballPresenter.Cancel();
+                    _ballPresenter.Collection();
                 }
+                RecordPoint();
+                CallOnDrawStart();
             }
         }
         if (Input.GetMouseButton(0))
         {
             if (_isDrawing)
             {
-                Vector3 position = Input.mousePosition;
-                float time = _points.Count > 0 ? _points.LastOrDefault().time + Time.deltaTime : 0;
-                position.z = 10;
-                _points.Add((time, Camera.main.ScreenToWorldPoint(position)));
-                _lineRenderer.positionCount = _points.Count;
-                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, Camera.main.ScreenToWorldPoint(position));
+                _time += Time.deltaTime;
+                if (_time < _drawTime)
+                {
+                    RecordPoint();
+                }
+                else
+                {
+                    DrawFinish();
+                }
             }
         }
         if (Input.GetMouseButtonUp(0))
         {
-            BallRoute route = RouteConvert(ballPresenter);
-            if (route != null)
-            {
-                _lineRenderer.positionCount = route.Count;
-                _lineRenderer.SetPositions(route.Positons);
-                if (ballPresenter)
-                {
-                    if (ballPresenter.TryRouteSet(route))
-                    {
-                        ballPresenter.IsCollision = true;
-                        ballPresenter.Shoot();
-                        ballPresenter.OnCarryEnd(() => ballPresenter.IsCollision = false, false);
-                    }
-                }
-            }
+            DrawFinish();
         }
     }
 
-    bool StartEreaCheck(BallPresenter ballPresenter)
+    public void OnUpdate(BallPresenter ballPresenter)
     {
-        float x = Mathf.Abs(Input.mousePosition.x - Camera.main.WorldToScreenPoint(ballPresenter.StartPosition).x);
-        float y = Mathf.Abs(Input.mousePosition.y - Camera.main.WorldToScreenPoint(ballPresenter.StartPosition).y);
+        _ballPresenter = ballPresenter;
+        OnUpdate();
+    }
+
+    public void OnDrawStart(Action action)
+    {
+        _onDrawStartAction += action;
+    }
+
+    public void OnDrawEnd(Action action)
+    {
+        _onDrawEndAction += action;
+    }
+
+    void CallOnDrawStart()
+    {
+        if (_onDrawStartAction != null)
+        {
+            _onDrawStartAction.Invoke();
+        }
+    }
+
+    void CallOnDrawEnd()
+    {
+        if (_onDrawEndAction != null)
+        {
+            _onDrawEndAction.Invoke();
+        }
+    }
+
+    bool StartEreaCheck()
+    {
+        if (!_ballPresenter) { return false; }
+        float x = Mathf.Abs(Input.mousePosition.x - Camera.main.WorldToScreenPoint(_ballPresenter.StartPosition).x);
+        float y = Mathf.Abs(Input.mousePosition.y - Camera.main.WorldToScreenPoint(_ballPresenter.StartPosition).y);
         if (x <= _startErea.x / 2 && y <= _startErea.y / 2)
         {
             return true;
@@ -106,18 +157,53 @@ public class LineReader : MonoBehaviour
         }
     }
 
-    private BallRoute RouteConvert(BallPresenter ballPresenter)
+    void RecordPoint()
     {
-        if (!_enemy) { return null; }
-        Vector3 eNomal = ballPresenter.StartPosition - _enemy.position;
+        Vector3 position = Input.mousePosition;
+        float time = _points.Count > 0 ? _points.LastOrDefault().time + Time.deltaTime : 0;
+        position.z = 10;
+        _points.Add((time, Camera.main.ScreenToWorldPoint(position)));
+        _lineRenderer.positionCount = _points.Count;
+        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, Camera.main.ScreenToWorldPoint(position));
+    }
+
+    void DrawFinish()
+    {
+        _isDrawing = false;
+        BallRoute route = RouteConvert();
+        if (route != null)
+        {
+            _lineRenderer.positionCount = route.Count;
+            _lineRenderer.SetPositions(route.Positons);
+            if (_ballPresenter)
+            {
+                if (_ballPresenter.TryRouteSet(route))
+                {
+                    _ballPresenter.IsCollide = true;
+                    _ballPresenter.Shoot()
+                    .OnCarryEnd(() =>
+                    {
+                        _ballPresenter.IsCollide = false;
+                    }, false);
+
+                }
+            }
+        }
+        CallOnDrawEnd();
+    }
+
+    private BallRoute RouteConvert()
+    {
+        if (!_ballPresenter && !_enemy) { return null; }
+        Vector3 eNomal = _ballPresenter.StartPosition - _enemy.position;
         eNomal.y = 0;
         float h = Vector3.Dot(eNomal, _enemy.position);
         Vector3 dir = (_points.LastOrDefault().point - Camera.main.transform.position).normalized;
         Vector3 point = Camera.main.transform.position + (h - Vector3.Dot(eNomal, Camera.main.transform.position)) / Vector3.Dot(eNomal, dir) * dir;
         Vector3 normal = Vector3.Cross(point - _ballPresenter.StartPosition, Camera.main.transform.right);
         BallRoute route = new BallRoute();
-        route.AddNode(ballPresenter.StartPosition, 0f);
-        float buf = (Vector3.Dot(normal, ballPresenter.StartPosition) - Vector3.Dot(normal, Camera.main.transform.position));
+        route.AddNode(_ballPresenter.StartPosition, 0f);
+        float buf = (Vector3.Dot(normal, _ballPresenter.StartPosition) - Vector3.Dot(normal, Camera.main.transform.position));
         for (int i = 0; i < _points.Count; i++)
         {
             dir = (_points[i].point - Camera.main.transform.position).normalized;
@@ -128,15 +214,16 @@ public class LineReader : MonoBehaviour
     }
 
 
+
 #if UNITY_EDITOR
 
     private void OnValidate()
     {
-        if(_startErea.x < 0)
+        if (_startErea.x < 0)
         {
             _startErea.x = 0;
         }
-        if(_startErea.y < 0)
+        if (_startErea.y < 0)
         {
             _startErea.y = 0;
         }
@@ -145,12 +232,20 @@ public class LineReader : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        if (!_ballPresenter) { return; }
         Vector2 center = Camera.main.WorldToScreenPoint(_ballPresenter.StartPosition); ;
         Vector2 erea = _startErea / 2;
-        Vector3 rightTop = Camera.main.ScreenToWorldPoint(new(center.x + erea.x / 2, center.y + erea.y, 1));
-        Vector3 rightBottom = Camera.main.ScreenToWorldPoint(new(center.x + erea.x / 2, center.y - erea.y, 1));
-        //Debug.Log($"{Camera.main.ScreenToWorldPoint(_startErea / 2)}, {-Camera.main.ScreenToWorldPoint(_startErea / 2)}");
-        Gizmos.DrawLine(rightTop, rightBottom);
+        Vector3 rightTop = Camera.main.ScreenToWorldPoint(new(center.x + erea.x, center.y + erea.y, _front));
+        Vector3 rightBottom = Camera.main.ScreenToWorldPoint(new(center.x + erea.x, center.y - erea.y, _front));
+        Vector3 leftTop = Camera.main.ScreenToWorldPoint(new(center.x - erea.x, center.y + erea.y, _front));
+        Vector3 leftBottom = Camera.main.ScreenToWorldPoint(new(center.x - erea.x, center.y - erea.y, _front));
+
+        Gizmos.color = _gizmosColor;
+
+        Gizmos.DrawLine(rightTop, rightBottom);     //右
+        Gizmos.DrawLine(leftTop, leftBottom);       //左
+        Gizmos.DrawLine(leftTop, rightTop);         //上
+        Gizmos.DrawLine(rightBottom, leftBottom);   //下
     }
 
 #endif

@@ -6,7 +6,8 @@ using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 /// <summary>
-/// 道のり、時間を含む配列
+/// 道のり、時間を含む配列を持ち、
+/// それらを扱うための関数を持つクラス
 /// </summary>
 public class BallRoute
 {
@@ -15,9 +16,9 @@ public class BallRoute
     /// <summary>時間の合計</summary>
     public float AllTime { get => _nodrs.LastOrDefault().Time - _nodrs.FirstOrDefault().Time; }
     /// <summary>時間の最大値</summary>
-    public float MaxTime { get => _nodrs.Max(n => n.Time); }
+    public float MaxTime { get => _nodrs.LastOrDefault().Time; }
     /// <summary>時間の最低値</summary>
-    public float MinTime { get => _nodrs.Min(n => n.Time); }
+    public float MinTime { get => _nodrs.FirstOrDefault().Time; }
     /// <summary>道のりの合計</summary>
     public float AllWay
     {
@@ -94,12 +95,19 @@ public class BallRoute
             return null;
         }
         Vector3? point = null;
-        for(int i = 1; i < _nodrs.Count; i++)
+        if (time == MinTime)
         {
-            if(_nodrs[i].Time >= time)
+            point = _nodrs.FirstOrDefault().Point;
+        }
+        else
+        {
+            for (int i = 1; i < _nodrs.Count; i++)
             {
-                point = Vector3.Lerp(_nodrs[i - 1].Point, _nodrs[i].Point, (time - _nodrs[i - 1].Time) / (_nodrs[i].Time - _nodrs[i - 1].Time));
-                break;
+                if (_nodrs[i].Time >= time)
+                {
+                    point = Vector3.Lerp(_nodrs[i - 1].Point, _nodrs[i].Point, (time - _nodrs[i - 1].Time) / (_nodrs[i].Time - _nodrs[i - 1].Time));
+                    break;
+                }
             }
         }
         return point;

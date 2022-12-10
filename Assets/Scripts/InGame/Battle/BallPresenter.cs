@@ -6,6 +6,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Zenject.SpaceFighter;
 
+
+/// <summary>
+/// ボールのViewとModelを仲介するクラス
+/// </summary>
 public class BallPresenter : MonoBehaviour
 {
     [Tooltip("ボールのView")]
@@ -18,6 +22,12 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] float _calculationTime = 0;
     [Tooltip("ボールの速度モード")]
     [SerializeField] BallModel.CarryMode _mode = BallModel.CarryMode.Time;
+    [Tooltip("初期位置を定めるTransform")]
+    [SerializeField] Transform _startTransform;
+    [Tooltip("地面のタグの名前")]
+    [SerializeField] string _groundTag = "";
+    [SerializeField] PhysicMaterial _physicMaterial;
+    [Header("デバッグ用項目")]
 
     BallModel _ballModel;
 
@@ -27,7 +37,8 @@ public class BallPresenter : MonoBehaviour
         {
             if (_ballModel == null)
             {
-                //Debug.LogError("_ballModelが初期化されていません。");
+                //Debug.LogError("_ballModelが初期化されていません。 ");
+                Vector3 position = _startTransform ? _startTransform.position : View.Position;
                 _ballModel = new BallModel(_view.transform.position);
             }
             return _ballModel;
@@ -39,20 +50,52 @@ public class BallPresenter : MonoBehaviour
     {
         get
         {
-            _view = FindObjectOfType<BallView>();
             if (!_view)
             {
-                Debug.LogError("BallViewが見つかりませんでした。");
+                _view = FindObjectOfType<BallView>();
+                if (!_view)
+                {
+                    Debug.LogError("BallViewが見つかりませんでした。");
+                    return null;
+                }
             }
             return _view;
         }
     }
 
     /// <summary>当たり判定を取るか否か</summary>
-    public bool IsCollision { get => View.IsCollision; set { View.IsCollision = value; } }
+    public bool IsCollide { get => View.IsCollide; set { View.IsCollide = value; Debug.Log(View.IsCollide); } }
+
+    public Vector3 Position { get => BallModel.Position; }
+
+    public Rigidbody Rigidbody { get => View.Rigidbody; }
 
     /// <summary>ボールの初期位置</summary>
-    public Vector3 StartPosition { get => BallModel.StartPosition; }
+    public Vector3 StartPosition
+    {
+        get
+        {
+            if (Application.isPlaying)
+            {
+                return BallModel.StartPosition;
+            }
+            else
+            {
+                return _startTransform.position;
+            }
+        }
+        set
+        {
+            if (Application.isPlaying)
+            {
+                BallModel.StartPosition = value;
+            }
+            else
+            {
+                _startTransform.position = value;
+            }
+        }
+    }
 
     /// <summary>現在実行中の動作をキャンセルする</summary>
     public void Cancel()
@@ -116,16 +159,11 @@ public class BallPresenter : MonoBehaviour
         Init();
     }
 
-    private void OnValidate()
-    {
-        ValueSet();
-    }
-
     public void Init(System.Action<InGameCycle.EventEnum> action)
     {
         if (View)
         {
-            _ballModel = new BallModel(value => _view.Position = value, _view.gameObject, _view.transform.position, action); ;
+            BallModel = new BallModel(value => View.Position = value, View.gameObject, View.transform.position, action); ;
         }
         ValueSet();
     }
@@ -134,17 +172,22 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            _ballModel = new BallModel(value => _view.Position = value, _view.gameObject, _view.transform.position);
+            BallModel = new BallModel(value => View.Position = value, View.gameObject, View.transform.position);
+            _ballModel.GroundTag = _groundTag;
+            _ballModel.Radius = View.Collider.radius;
+            View.OnHit(_ballModel.OnRaycastHit);
         }
         ValueSet();
     }
 
     void ValueSet()
     {
-        if (_ballModel == null) { return; }
-        _ballModel.Mode = _mode;
-        _ballModel.Acceleration = _acceleration;
-        _ballModel.Speed = _speed;
-        _ballModel.CalculationTime = _calculationTime;
+        if (BallModel == null) { return; }
+        BallModel.Mode = _mode;
+        BallModel.Acceleration = _acceleration;
+        BallModel.Speed = _speed;
+        BallModel.CalculationTime = _calculationTime;
+        BallModel.PhysicMaterial = _physicMaterial;
+        BallModel.Rigidbody = View.Rigidbody;
     }
 }
