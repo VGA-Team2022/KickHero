@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerHPGauge))]
-public class PlayerHP : MonoBehaviour
+public class PlayerHP : MonoBehaviour,IDamage
 {
     [SerializeField]
     int _initHP = 10;
@@ -24,12 +24,8 @@ public class PlayerHP : MonoBehaviour
             this.gameObject, _initHP);
     }
 
-    /// <summary>
-    /// HP‚Ì’l‚ğ•ÏX‚·‚éŠÖ”
-    /// </summary>
-    /// <param name="value">‘«‚³‚ê‚é’l</param>
-    public void AddHPValue(int value)
+    public void Damage(int value)
     {
-        _hpModel.AddPlayerHP(value);
+        _hpModel.AddPlayerHP(-value);
     }
 }

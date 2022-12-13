@@ -46,6 +46,10 @@ public class Player : ISequence
         _lineReader.OnUpdate(_ballPresenter);
     }
 
+    public void Damage(int value)
+    {
+        _playerHP.Damage(value);
+    }
     private T GetMonoBehaviorInstansInScene<T>() where T : MonoBehaviour
     {
         T instans = GameObject.FindObjectOfType<T>();
