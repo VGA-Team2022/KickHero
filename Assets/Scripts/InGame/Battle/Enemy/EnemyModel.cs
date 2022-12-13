@@ -13,17 +13,32 @@ public class EnemyModel
     int _maxHP = 0;
 
     /// <summary>ìGÇÃí èÌéûÇÃçUåÇóÕ</summary>
-    [SerializeField] public int _normalEnemyPower;
+    int _normalAttack;
 
-    /// <summary></summary>
-    [SerializeField] public int _specialEnemyPower;
-    float _attackTime = 0;
+    int _specialAttack;
+    float _timer = 0f;
+    float _attackInterval = 0f;
 
-    public EnemyModel(int maxHp, System.Action<int>action, GameObject gameObject)
+    public EnemyModel(int maxHp,int normalAttack,int specialAttack, System.Action<int>action, GameObject gameObject)
     {
         _maxHP = maxHp;
+        _normalAttack = normalAttack;
+        _specialAttack = specialAttack;
         _enemyHpProperty = new ReactiveProperty<int>(maxHp);     
         _enemyHpProperty.Subscribe(action).AddTo(gameObject);
+    }
+
+    public bool IsAttack(float deltaTime)
+    {
+        if (_timer<_attackInterval)
+        {
+            _timer += deltaTime;          
+        }
+        else
+        {
+            _timer = 0f;
+        }
+        return _timer < _attackInterval;
     }
 
     /// <summary>

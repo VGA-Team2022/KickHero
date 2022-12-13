@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : ISequence
 {
     EnemyPresenter _presenter;
-
+    public EnemyPresenter EnemyPresenter => _presenter;
     public Enemy(System.Action<InGameCycle.EventEnum> action)
     {
         Initialize(action);

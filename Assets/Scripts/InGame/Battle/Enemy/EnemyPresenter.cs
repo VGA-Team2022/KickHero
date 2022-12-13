@@ -18,8 +18,11 @@ public class EnemyPresenter : MonoBehaviour,IAttack,IDamage
     /// <summary>敵の最大HP</summary>
     [SerializeField] int _enemyHp = 20;
 
-    /// <summary>通常攻撃かどうか判定するフラグ</summary>
-    bool _normalAttack = true;
+    /// <summary>敵の通常攻撃力</summary>
+    [SerializeField] int _enemyNormalAttack = 3;
+
+    /// <summary>敵の大攻撃力</summary>
+    [SerializeField] int _enemySpecialAttack = 8;
 
     /// <summary>シーケンスに返すイベント</summary>
     ReactiveProperty<InGameCycle.EventEnum>  _eventEnumProperty;
@@ -34,6 +37,8 @@ public class EnemyPresenter : MonoBehaviour,IAttack,IDamage
 
         _enemyModel = new EnemyModel(
             _enemyHp,
+            _enemyNormalAttack,
+            _enemySpecialAttack,
             x =>
             {
                 _enemyView.ChangeSliderValue(_enemyHp, x);
@@ -47,25 +52,17 @@ public class EnemyPresenter : MonoBehaviour,IAttack,IDamage
             _enemyView.gameObject);
     }
 
+    public void OnUpdate()
+    {
+        
+    }
 
     /// <summary>
     ///     攻撃するときによばれる関数
     /// </summary>
     public void Attack()
     {
-        if(_normalAttack == true)
-        {
-            //プレイヤーのダメージ関数を呼ぶ
-            //Damage(_enemyModel._enemyPower);
-            _enemyView.NormalAttackMove();
-        }
-        else
-        {
-            //プレイヤーのダメージ関数を呼ぶ
-            //Damage(_enemyModel._specialEnemyPower);
-            _enemyView.SpecialAttackMove();
-        }
-
+        _enemyView.NormalAttackMove();
     }
 
     /// <summary>
