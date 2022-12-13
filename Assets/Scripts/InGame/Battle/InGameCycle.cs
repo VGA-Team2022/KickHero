@@ -32,9 +32,9 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         _stateMachine = new StateMachine<EventEnum, InGameCycle>(this);
 
         //遷移を定義
-        _stateMachine.AddTransition<StartState, ReceptionInputState>(EventEnum.GameStart);
-        _stateMachine.AddTransition<ReceptionInputState, ThrowState>(EventEnum.Throw);
-        _stateMachine.AddTransition<ThrowState, ReceptionInputState>(EventEnum.BallRespawn);
+        _stateMachine.AddTransition<StartState, IdleState>(EventEnum.GameStart);
+        _stateMachine.AddTransition<IdleState, AttackChargeState>(EventEnum.Throw);
+        _stateMachine.AddTransition<AttackChargeState, IdleState>(EventEnum.BallRespawn);
         _stateMachine.AddAnyTransitionTo<ResultState>(EventEnum.GameOver);
 
         //最初のStateを設定
@@ -43,6 +43,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         _enemy = new Enemy(ChangeState);
 
         _resultPanel = GameObject.Find("ResultPanel");
+ 
         _stateMachine.Owner._resultPanel?.SetActive(false);
     }
 
@@ -77,11 +78,11 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         }
     }
 
-    private class ReceptionInputState : State
+    private class IdleState : State
     {
         protected override void OnEnter(State prevState)
         {          
-            Debug.Log("入力受付ステートに入った");
+            Debug.Log("Idleステートに入った");
         }
         protected override void OnUpdate()
         {
@@ -89,19 +90,65 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         }
         protected override void OnExit(State nextState)
         {
-            Debug.Log("入力受付ステートを抜けた");
+            Debug.Log("Idleステートを抜けた");
         }
     }
 
-    private class ThrowState : State
+    private class AttackChargeState : State
     {
         protected override void OnEnter(State prevState)
         {
-            Debug.Log("Throwステートに入った");
+            Debug.Log("AttackChargeステートに入った");
+        }
+
+        protected override void OnUpdate()
+        {
+            _stateMachine.Owner._player.OnUpdate();
         }
         protected override void OnExit(State nextState)
         {
-            Debug.Log("Throwステートを抜けた");
+            Debug.Log("AttackChargeステートを抜けた");
+        }
+    }
+
+    private class AttackState : State
+    {
+        protected override void OnEnter(State prevState)
+        {
+            Debug.Log("こうげきステートに入った");
+        }
+
+        protected override void OnExit(State nextState)
+        {
+            Debug.Log("こうげきステートを抜けた");
+        }
+    }
+
+    private class UltimateChargeState : State
+    {
+        protected override void OnEnter(State prevState)
+        {
+            Debug.Log("必殺技待機ステートに入った");
+        }
+        protected override void OnUpdate()
+        {
+            _stateMachine.Owner._player.OnUpdate();
+        }
+        protected override void OnExit(State nextState)
+        {
+            Debug.Log("必殺技待機ステートを抜けた");
+        }
+    }
+
+    private class UltimateAttackState : State
+    {
+        protected override void OnEnter(State prevState)
+        {
+            Debug.Log("必殺技ステートに入った");
+        }
+        protected override void OnExit(State nextState)
+        {
+            Debug.Log("必殺技ステートを抜けた");
         }
     }
 
