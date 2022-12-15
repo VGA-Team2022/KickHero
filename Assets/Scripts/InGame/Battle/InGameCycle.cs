@@ -19,8 +19,9 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     public enum EventEnum
     {
         GameStart,
-        Throw,
-        BallRespawn,
+        NormalCharge,
+        SpecialCharge,
+        Attack,
         GameOver,
         Pause,
         None
@@ -32,9 +33,11 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         _stateMachine = new StateMachine<EventEnum, InGameCycle>(this);
 
         //遷移を定義
-        _stateMachine.AddTransition<StartState, ReceptionInputState>(EventEnum.GameStart);
-        _stateMachine.AddTransition<ReceptionInputState, ThrowState>(EventEnum.Throw);
-        _stateMachine.AddTransition<ThrowState, ReceptionInputState>(EventEnum.BallRespawn);
+        _stateMachine.AddTransition<StartState, IdleState>(EventEnum.GameStart);
+        _stateMachine.AddTransition<IdleState, NormalAttackChargeState>(EventEnum.NormalCharge);
+        _stateMachine.AddTransition<NormalAttackChargeState, NormalAttackState>(EventEnum.SpecialCharge);
+        _stateMachine.AddTransition<IdleState, SpecialAttackChargeState>(EventEnum.Attack);
+        _stateMachine.AddTransition<SpecialAttackChargeState, SpecialAttackState>(EventEnum.Attack);
         _stateMachine.AddAnyTransitionTo<ResultState>(EventEnum.GameOver);
 
         //最初のStateを設定
@@ -77,7 +80,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         }
     }
 
-    private class ReceptionInputState : State
+    private class IdleState : State
     {
         protected override void OnEnter(State prevState)
         {          
@@ -94,7 +97,43 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         }
     }
 
-    private class ThrowState : State
+    private class NormalAttackChargeState : State
+    {
+        protected override void OnEnter(State prevState)
+        {
+            Debug.Log("Throwステートに入った");
+        }
+        protected override void OnExit(State nextState)
+        {
+            Debug.Log("Throwステートを抜けた");
+        }
+    }
+
+    private class NormalAttackState : State
+    {
+        protected override void OnEnter(State prevState)
+        {
+            Debug.Log("Throwステートに入った");
+        }
+        protected override void OnExit(State nextState)
+        {
+            Debug.Log("Throwステートを抜けた");
+        }
+    }
+
+    private class SpecialAttackChargeState : State
+    {
+        protected override void OnEnter(State prevState)
+        {
+            Debug.Log("Throwステートに入った");
+        }
+        protected override void OnExit(State nextState)
+        {
+            Debug.Log("Throwステートを抜けた");
+        }
+    }
+
+    private class SpecialAttackState : State
     {
         protected override void OnEnter(State prevState)
         {
@@ -128,14 +167,6 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     public void GameStart()
     {
         _stateMachine.Dispatch(EventEnum.GameStart);
-    }
-    public void Throw()
-    {
-        _stateMachine.Dispatch(EventEnum.Throw);
-    }
-    public void BallRespawn()
-    {
-        _stateMachine.Dispatch(EventEnum.BallRespawn);
     }
     public void GameOver()
     {

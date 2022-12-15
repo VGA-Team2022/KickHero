@@ -54,9 +54,9 @@ public class EnemyHPPresenter : MonoBehaviour,IDamage
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.TryGetComponent(out BallView ballView))
+        if (collision.TryGetComponent(out BallPresenter ballPresenter))
         {
-            _eventEnumProperty.Value = InGameCycle.EventEnum.BallRespawn;
+            ballPresenter.Collection();
             Damage(1);
         }
     }
