@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 584154651643240984}
   - component: {fileID: 584154651643240983}
-  - component: {fileID: 530800717848223904}
   m_Layer: 0
   m_Name: Sound
   m_TagString: Untagged
@@ -48,26 +47,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d265e98435699f548bbab1b2958844c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _view: {fileID: 530800717848223904}
+  _view: {fileID: 0}
   _atomSESource: {fileID: 584154652806895787}
   _atomBGMSource: {fileID: 584154653280243445}
   _atomVoiceSorce: {fileID: 584154653061654075}
   _changeSpeed: 0.5
---- !u!114 &530800717848223904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 584154651643240985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d916d278abac0b949b3da2f1a5ff72d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bgmSlider: {fileID: 0}
-  _seSlider: {fileID: 0}
-  _voiceSlider: {fileID: 0}
 --- !u!1 &584154651686638083
 GameObject:
   m_ObjectHideFlags: 0

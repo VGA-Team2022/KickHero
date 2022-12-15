@@ -16,6 +16,15 @@ public class SoundManagerView : MonoBehaviour
     public Slider SESlider { get => _seSlider; }
     public Slider VoiceSlider { get => _voiceSlider; }
 
+    private void Start()
+    {
+        SoundManagerPresenter presenter = FindObjectOfType<SoundManagerPresenter>();
+        presenter.SetView(this);
+    }
+    public void OnSound(string name)
+    {
+        SoundManagerPresenter.Instance.CriAtomBGMPlay(name);
+    }
     public void SetMaxValue()
     {
         _bgmSlider.maxValue = 1;

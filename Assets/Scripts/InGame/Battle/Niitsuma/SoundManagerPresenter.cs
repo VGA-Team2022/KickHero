@@ -20,9 +20,31 @@ public class SoundManagerPresenter : MonoBehaviour
 
     SoundManagerModel _model = new SoundManagerModel();
 
+    static private SoundManagerPresenter _instance;
+    static public SoundManagerPresenter Instance => _instance;
+
     private void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
+    }
+
+    private void Start()
+    {
         Init();
+    }
+
+    public void SetView(SoundManagerView view)
+    {
+        _view = view;
     }
 
     public void Init(System.Action<InGameCycle.EventEnum> eventAction)
@@ -61,6 +83,7 @@ public class SoundManagerPresenter : MonoBehaviour
 
     public void SetVolume()
     {
+        if (_model == null || _view == null) { return; }
         _model.SetVolume(_model.AtomBGMSource, _view.BGMSlider.value);
         _model.SetVolume(_model.AtomSESource, _view.SESlider.value);
         _model.SetVolume(_model.AtomVoiceSorce, _view.VoiceSlider.value);

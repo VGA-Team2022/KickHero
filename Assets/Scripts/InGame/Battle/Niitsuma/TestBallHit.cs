@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TestBallHit : MonoBehaviour
 {
@@ -19,6 +20,11 @@ public class TestBallHit : MonoBehaviour
             Instantiate(_prefab, transform.position, Quaternion.identity);
             StartCoroutine(OnAttackHit());
         }
+    }
+
+    public void TestSceneChange(string name)
+    {
+        SceneManager.LoadScene(name);
     }
 
     IEnumerator OnAttackHit()
