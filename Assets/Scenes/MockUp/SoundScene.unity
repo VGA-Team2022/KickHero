@@ -931,6 +931,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 337478099531358155, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 337478099531358155, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 584154651643240984, guid: 6bd055b89a5496e4f9271c7992b74161,
         type: 3}
       propertyPath: m_RootOrder
@@ -939,17 +949,17 @@ PrefabInstance:
     - target: {fileID: 584154651643240984, guid: 6bd055b89a5496e4f9271c7992b74161,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.1061647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 584154651643240984, guid: 6bd055b89a5496e4f9271c7992b74161,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.99049747
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 584154651643240984, guid: 6bd055b89a5496e4f9271c7992b74161,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.6860256
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 584154651643240984, guid: 6bd055b89a5496e4f9271c7992b74161,
         type: 3}
@@ -990,6 +1000,71 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sound
+      objectReference: {fileID: 0}
+    - target: {fileID: 3834416140180485766, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3834416140180485766, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3924718157384502942, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3924718157384502942, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3924718157384502942, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080027175141326573, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080027175141326573, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080027175141326573, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5384003060538044463, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5384003060538044463, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6338353966998321032, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6338353966998321032, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6338353966998321032, guid: 6bd055b89a5496e4f9271c7992b74161,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bd055b89a5496e4f9271c7992b74161, type: 3}

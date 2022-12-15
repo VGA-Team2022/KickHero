@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class SoundManagerPresenter : MonoBehaviour
+public class SoundManagerPresenter : DDOLSingleton<SoundManagerPresenter>
 {
     [Header("View")]
     [SerializeField] SoundManagerView _view;
@@ -20,33 +20,10 @@ public class SoundManagerPresenter : MonoBehaviour
 
     SoundManagerModel _model = new SoundManagerModel();
 
-    static private SoundManagerPresenter _instance;
-    static public SoundManagerPresenter Instance => _instance;
-
-    private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        
-    }
-
     private void Start()
     {
         Init();
     }
-
-    public void SetView(SoundManagerView view)
-    {
-        _view = view;
-    }
-
     public void Init(System.Action<InGameCycle.EventEnum> eventAction)
     {
         //シーケンスの遷移を指定。
