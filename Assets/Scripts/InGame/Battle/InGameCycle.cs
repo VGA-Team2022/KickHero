@@ -40,7 +40,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         //ç≈èâÇÃStateÇê›íË
         _stateMachine.StartSetUp<StartState>();
         _player = new Player(ChangeState);
-        _enemy = new Enemy(ChangeState);
+        _enemy = new Enemy(ChangeState, _player);
 
         _resultPanel = GameObject.Find("ResultPanel");
         _stateMachine.Owner._resultPanel?.SetActive(false);
@@ -86,6 +86,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         protected override void OnUpdate()
         {
             _stateMachine.Owner._player.OnUpdate();
+            _stateMachine.Owner._enemy.OnUpdate();
         }
         protected override void OnExit(State nextState)
         {

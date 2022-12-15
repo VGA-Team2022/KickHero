@@ -9,22 +9,22 @@ public class AudioManager : MonoBehaviour
     [Header("AtomSorce")]
     [SerializeField] CriAtomSource _atomSESource;
     [SerializeField] CriAtomSource _atomBGMSource;
+    [SerializeField] CriAtomSource _atomVoiceSorce;
+
+    [Header("BGMのCueSheet")]
+    [SerializeField] string _bgmCueName = "";
 
     [SerializeField] float _changeSpeed = 0.5f;
 
-    ///<summary>
-    ///仮SEを再生する為の関数
-    /// </summary>
-    public void CriAtomSEPlay(string cueName)
-    {
-        CriAtomPlay("CueSheet_0",cueName);
-    }
+    const string BGMCueSheet = "BGM";
+    const string VoiceCueSheet = "Voice";
+
     /// <summary>
     /// SE/MEを再生する為の関数
     /// </summary>
     /// <param name="cueSheet"></param>
     /// <param name="cueName"></param>
-    public void CriAtomPlay(string cueSheet, string cueName)
+    public void CriAtomPlay(CueSheet cueSheet, string cueName)
     {
         if (!_atomSESource)
         {
@@ -66,10 +66,30 @@ public class AudioManager : MonoBehaviour
         }
 
         //CueSheetがBGMで無ければ設定
-        //if (_atomBGMSource.cueSheet != BGMCueSheet)
-        //    _atomBGMSource.cueSheet = BGMCueSheet;
+        if (_atomBGMSource.cueSheet != BGMCueSheet)
+            _atomBGMSource.cueSheet = BGMCueSheet;
 
         ChangeBGM(cueName);
+    }
+
+    /// <summary>
+    /// Voiceを再生する
+    /// </summary>
+    /// <param name="cueName"></param>
+    public void CriAtomVoicePlay(string cueName)
+    {
+        if (!_atomVoiceSorce)
+        {
+            Debug.Log("CriAtomVoiceSorceがありません");
+            return;
+        }
+
+        //CueSheetがVoiceで無ければ設定
+        if (_atomVoiceSorce.cueSheet != VoiceCueSheet)
+            _atomVoiceSorce.cueSheet = VoiceCueSheet;
+
+        _atomBGMSource.cueName = cueName;
+        _atomBGMSource.Play();
     }
 
     //どこかのタイミングで音を止める必要が出てくるかもなので、必要なときにコメント解除・コードの更新
@@ -82,4 +102,9 @@ public class AudioManager : MonoBehaviour
         }
         cri.Stop();
     }
+}
+public enum CueSheet
+{
+    SE,
+    ME,
 }
