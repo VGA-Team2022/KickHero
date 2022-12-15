@@ -12,7 +12,7 @@ public class PlayerHP : MonoBehaviour
     PlayerHPGauge _hpGauge;
     PlayerHPModel _hpModel;
 
-    public void Init()
+    public void Init(System.Action<InGameCycle.EventEnum> changeStateAction)
     {
         _hpGauge = GetComponent<PlayerHPGauge>();
         _hpGauge.Init();
@@ -20,6 +20,10 @@ public class PlayerHP : MonoBehaviour
             (value =>
             {
                 _hpGauge.SetSliderValue(value, _maxHP);
+                if (value <=0)
+                {
+                    changeStateAction.Invoke(InGameCycle.EventEnum.GameOver);
+                }            
             },
             this.gameObject, _initHP);
     }

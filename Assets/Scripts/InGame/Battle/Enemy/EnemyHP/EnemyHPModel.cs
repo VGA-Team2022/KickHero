@@ -6,23 +6,16 @@ using UniRx;
 /// <summary>
 /// 敵のデータに関してのスクリプト
 /// </summary>
-public class EnemyModel 
+public class EnemyHPModel
 {
     /// <summary>敵キャラクターのHPの変化を管理する変数</summary>
-     ReactiveProperty<int> _enemyHpProperty;
+    ReactiveProperty<int> _enemyHpProperty;
     int _maxHP = 0;
 
-    /// <summary>敵の通常時の攻撃力</summary>
-    [SerializeField] public int _normalEnemyPower;
-
-    /// <summary></summary>
-    [SerializeField] public int _specialEnemyPower;
-    float _attackTime = 0;
-
-    public EnemyModel(int maxHp, System.Action<int>action, GameObject gameObject)
+    public EnemyHPModel(int maxHp, System.Action<int> action, GameObject gameObject)
     {
         _maxHP = maxHp;
-        _enemyHpProperty = new ReactiveProperty<int>(maxHp);     
+        _enemyHpProperty = new ReactiveProperty<int>(maxHp);
         _enemyHpProperty.Subscribe(action).AddTo(gameObject);
     }
 
@@ -32,6 +25,7 @@ public class EnemyModel
     /// <param name="damage">ダメージ</param>
     public void Damage(int damage)　//これはボール側が呼ぶ
     {
-        _enemyHpProperty.Value -= damage;
+        int value = Mathf.Clamp(_enemyHpProperty.Value - damage, 0, _maxHP);
+        _enemyHpProperty.Value = value;
     }
 }
