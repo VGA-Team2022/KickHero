@@ -35,16 +35,25 @@ public class EnemyBehaviorPresenter : MonoBehaviour
         _behaviorView.Down();
     }
 
-    public async UniTask Charge()
+    public async UniTask<bool> Charge()
     {
+        _behaviorView.ActiveWeakPoint(true);
         _behaviorView.PlayChargeAnimation();
         await _behaviorModel.Charge();
+        bool isTrigger = _behaviorView.IsTriggerWeakPoint();
+        _behaviorView.ActiveWeakPoint(false);
+        return isTrigger;
     }
 
     public async UniTask Attack(IDamage damage)
     {     
         await _behaviorView.PlayAttackAnimation();
         _behaviorModel.Attack(damage);
+    }
+
+    public async UniTask Damage()
+    {
+        await _behaviorView.PlayDamageAnimation();
     }
 
     public async UniTask Stan()

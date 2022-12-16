@@ -40,6 +40,8 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         _stateMachine.AddTransition<NormalAttackChargeState, NormalAttackState>(EventEnum.Attack);
         _stateMachine.AddTransition<SpecialAttackChargeState, SpecialAttackState>(EventEnum.Attack);
 
+        _stateMachine.AddTransition<NormalAttackChargeState, IdleState>(EventEnum.Idle);
+
         _stateMachine.AddTransition<NormalAttackState, IdleState>(EventEnum.Idle);
         _stateMachine.AddTransition<SpecialAttackState, IdleState>(EventEnum.Idle);
 
@@ -108,9 +110,17 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         protected override async void OnEnter(State prevState)
         {
             Debug.Log("チャージ中");
-            await _stateMachine.Owner._enemy.Charge();
+            bool isTrigger = await _stateMachine.Owner._enemy.Charge();
             Debug.Log("チャージ終わり");
-            _stateMachine.Dispatch(EventEnum.Attack);
+            if (isTrigger)
+            {
+                await _stateMachine.Owner._enemy.Damage();
+                _stateMachine.Dispatch(EventEnum.Idle);
+            }
+            else
+            {
+                _stateMachine.Dispatch(EventEnum.Attack);
+            }         
         }
 
         protected override void OnUpdate()
@@ -137,7 +147,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         }
         protected override void OnExit(State nextState)
         {
-                     
+
         }
     }
 

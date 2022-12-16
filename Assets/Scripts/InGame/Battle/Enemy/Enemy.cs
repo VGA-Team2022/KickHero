@@ -28,14 +28,19 @@ public class Enemy
         _behaviorPresenter.Init();
     }
 
-    public async UniTask Charge()
+    public async UniTask<bool> Charge()
     {
-        await _behaviorPresenter.Charge();
+       return  await  _behaviorPresenter.Charge();
     }
 
     public async UniTask Attack(IDamage player)
     {
         await _behaviorPresenter.Attack(player);
+    }
+
+    public async UniTask Damage()
+    {
+       await _behaviorPresenter.Damage();
     }
 
     public void Down()
