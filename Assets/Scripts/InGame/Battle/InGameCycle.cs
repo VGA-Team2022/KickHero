@@ -49,11 +49,11 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
 
         //最初のStateを設定
         _stateMachine.StartSetUp<StartState>();
-        _player = new Player(ChangeState);
-        _enemy = new Enemy(ChangeState, _player);
+        _player = new Player();
+        _enemy = new Enemy( _player);
 
         _resultPanel = GameObject.Find("ResultPanel");
-        _stateMachine.Owner._resultPanel?.SetActive(false);
+        _resultPanel?.SetActive(false);
     }
 
     private void Update()
@@ -98,6 +98,10 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         protected override void OnUpdate()
         {
             _stateMachine.Owner._player.OnUpdate();
+            if (_stateMachine.Owner._enemy.IsDead)
+            {
+                _stateMachine.Dispatch(EventEnum.GameOver);
+            }
         }
         protected override void OnExit(State nextState)
         {
@@ -126,6 +130,10 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         protected override void OnUpdate()
         {
             _stateMachine.Owner._player.OnUpdate();
+            if (_stateMachine.Owner._enemy.IsDead)
+            {
+                _stateMachine.Dispatch(EventEnum.GameOver);
+            }
         }
         protected override void OnExit(State nextState)
         {
@@ -139,11 +147,14 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         {
             Debug.Log("NormalAttackステートに入った");
             await _stateMachine.Owner._enemy.Attack(_stateMachine.Owner._player);
-            _stateMachine.Dispatch(EventEnum.Idle);
-        }
-
-        protected override void OnUpdate()
-        {
+            if (_stateMachine.Owner._player.IsDead)
+            {
+                _stateMachine.Dispatch(EventEnum.GameOver);
+            }
+            else
+            {
+                _stateMachine.Dispatch(EventEnum.Idle);
+            }
         }
         protected override void OnExit(State nextState)
         {
@@ -157,6 +168,13 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         {
             Debug.Log("SpecialAttackChargeステートに入った");
         }
+        protected override void OnUpdate()
+        {
+            if (_stateMachine.Owner._enemy.IsDead)
+            {
+                _stateMachine.Dispatch(EventEnum.GameOver);
+            }
+        }
         protected override void OnExit(State nextState)
         {
             Debug.Log("SpecialAttackChargeステートを抜けた");
@@ -168,6 +186,14 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         protected override void OnEnter(State prevState)
         {
             Debug.Log("SpecialAttackステートに入った");
+            if (_stateMachine.Owner._player.IsDead)
+            {
+                _stateMachine.Dispatch(EventEnum.GameOver);
+            }
+            else
+            {
+                _stateMachine.Dispatch(EventEnum.Idle);
+            }
         }
         protected override void OnExit(State nextState)
         {
@@ -181,10 +207,6 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         {
             _stateMachine.Owner._resultPanel?.SetActive(true);
             Debug.Log("リザルトステートに入った");
-        }
-        protected override void OnUpdate()
-        {
-            Debug.Log("リザルトステート実行中");
         }
         protected override void OnExit(State nextState)
         {

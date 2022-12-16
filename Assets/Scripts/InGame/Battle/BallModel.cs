@@ -97,13 +97,6 @@ public class BallModel
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
-    {
-        _startPosition = startPosition;
-        _position = new ReactiveProperty<Vector3>(_startPosition);
-        _position.Subscribe(position).AddTo(gameObject);
-    }
-
     public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
     {
         _startPosition = startPosition;

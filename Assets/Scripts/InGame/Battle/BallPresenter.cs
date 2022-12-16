@@ -160,15 +160,6 @@ public class BallPresenter : MonoBehaviour
         Init();
     }
 
-    public void Init(System.Action<InGameCycle.EventEnum> action)
-    {
-        if (View)
-        {
-            BallModel = new BallModel(value => View.Position = value, View.gameObject, View.transform.position, action); ;
-        }
-        ValueSet();
-    }
-
     public void Init()
     {
         if (View)
