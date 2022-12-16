@@ -1,27 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class Enemy : ISequence
+public class Enemy
 {
-    EnemyPresenter _presenter;
+    EnemyHPPresenter _hpPresenter;
+    EnemyBehaviorPresenter _behaviorPresenter;
 
-    public Enemy(System.Action<InGameCycle.EventEnum> action)
+    IDamage _playerDamage;
+    public Enemy(System.Action<InGameCycle.EventEnum> action, IDamage playerDamage)
     {
         Initialize(action);
+        _playerDamage = playerDamage;
     }
     public void Initialize(System.Action<InGameCycle.EventEnum> action)
     {
-        if (!_presenter)
+        if (!_hpPresenter)
         {
-            _presenter = GetMonoBehaviorInstansInScene<EnemyPresenter>();
+            _hpPresenter = GetMonoBehaviorInstansInScene<EnemyHPPresenter>();
         }
-        _presenter.Init(action);
+        if (!_behaviorPresenter)
+        {
+            _behaviorPresenter = GetMonoBehaviorInstansInScene<EnemyBehaviorPresenter>();
+        }
+        _hpPresenter.Init(action);
+        _behaviorPresenter.Init();
     }
 
-    public void OnUpdate()
+    public async UniTask<bool> Charge()
     {
-        
+       return  await  _behaviorPresenter.Charge();
+    }
+
+    public async UniTask Attack(IDamage player)
+    {
+        await _behaviorPresenter.Attack(player);
+    }
+
+    public async UniTask Damage()
+    {
+       await _behaviorPresenter.Damage();
+    }
+
+    public void Down()
+    {
+        _behaviorPresenter?.Down();
     }
     private T GetMonoBehaviorInstansInScene<T>() where T : MonoBehaviour
     {

@@ -106,6 +106,7 @@ public class BallView : MonoBehaviour
     /// <param name="radius"></param>
     void HitDetermine(Vector3 start, Vector3 end, float radius)
     {
+        Debug.Log($"{start}, {end}");
         Ray ray = new Ray(start, (end - start).normalized);
         var pHits = Physics.SphereCastAll(ray, radius, Vector3.Distance(end, start), Physics.AllLayers, QueryTriggerInteraction.Collide);
         if (pHits.Length != 0)
