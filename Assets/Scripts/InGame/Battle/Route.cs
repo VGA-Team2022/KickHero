@@ -99,6 +99,10 @@ public class BallRoute
         {
             point = _nodrs.FirstOrDefault().Point;
         }
+        else if(time == MaxTime)
+        {
+            point = _nodrs.LastOrDefault().Point;
+        }
         else
         {
             for (int i = 1; i < _nodrs.Count; i++)
