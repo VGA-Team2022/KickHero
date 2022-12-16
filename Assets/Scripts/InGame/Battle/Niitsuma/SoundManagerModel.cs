@@ -2,22 +2,24 @@ using CriWare;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class SoundManagerModel
 {
-    [Header("AtomSorce")]
-    [SerializeField] CriAtomSource _atomSESource;
-    [SerializeField] CriAtomSource _atomBGMSource;
-    [SerializeField] CriAtomSource _atomVoiceSorce;
+    public CriAtomSource AtomSESource;
+    public CriAtomSource AtomBGMSource;
+    public CriAtomSource AtomVoiceSorce;
 
-    [Header("BGMのCueSheet")]
-    [SerializeField] string _bgmCueName = "";
-
-    [SerializeField] float _changeSpeed = 0.5f;
+    public float ChangeSpeed = 0.5f;
 
     const string BGMCueSheet = "BGM";
     const string VoiceCueSheet = "Voice";
+
+    public void SetVolume(CriAtomSource cri , float volume)
+    {
+        cri.volume = volume;
+    }
 
     /// <summary>
     /// SE/MEを再生する為の関数
@@ -26,30 +28,30 @@ public class AudioManager : MonoBehaviour
     /// <param name="cueName"></param>
     public void CriAtomPlay(CueSheet cueSheet, string cueName)
     {
-        if (!_atomSESource)
+        if (!AtomSESource)
         {
             Debug.Log("CriAtomSorceがありません");
             return;
         }
 
         //設定して再生
-        _atomSESource.cueSheet = cueSheet.ToString();
-        _atomSESource.cueName = cueName;
-        _atomSESource.Play();
+        AtomSESource.cueSheet = cueSheet.ToString();
+        AtomSESource.cueName = cueName;
+        AtomSESource.Play();
     }
 
     void ChangeBGM(string cueName)
     {
         //Volumeのフェードアウト
-        DOVirtual.Float(_atomBGMSource.volume, 0, _changeSpeed / 2, value => _atomBGMSource.volume = value)
+        DOVirtual.Float(AtomBGMSource.volume, 0, ChangeSpeed / 2, value => AtomBGMSource.volume = value)
             .OnComplete(() =>
             {
                 //設定して再生
-                _atomBGMSource.cueName = cueName;
-                _atomBGMSource.Play();
+                AtomBGMSource.cueName = cueName;
+                AtomBGMSource.Play();
 
                 //Volumeのフェードイン
-                DOVirtual.Float(_atomBGMSource.volume, 1, _changeSpeed / 2, value => _atomBGMSource.volume = value);
+                DOVirtual.Float(AtomBGMSource.volume, 1, ChangeSpeed / 2, value => AtomBGMSource.volume = value);
             });
     }
 
@@ -59,15 +61,15 @@ public class AudioManager : MonoBehaviour
     /// <param name="cueName"></param>
     public void CriAtomBGMPlay(string cueName)
     {
-        if (!_atomBGMSource)
+        if (!AtomBGMSource)
         {
             Debug.Log("CriAtomBGMSorceがありません");
             return;
         }
 
         //CueSheetがBGMで無ければ設定
-        if (_atomBGMSource.cueSheet != BGMCueSheet)
-            _atomBGMSource.cueSheet = BGMCueSheet;
+        if (AtomBGMSource.cueSheet != BGMCueSheet)
+            AtomBGMSource.cueSheet = BGMCueSheet;
 
         ChangeBGM(cueName);
     }
@@ -78,18 +80,18 @@ public class AudioManager : MonoBehaviour
     /// <param name="cueName"></param>
     public void CriAtomVoicePlay(string cueName)
     {
-        if (!_atomVoiceSorce)
+        if (!AtomVoiceSorce)
         {
             Debug.Log("CriAtomVoiceSorceがありません");
             return;
         }
 
         //CueSheetがVoiceで無ければ設定
-        if (_atomVoiceSorce.cueSheet != VoiceCueSheet)
-            _atomVoiceSorce.cueSheet = VoiceCueSheet;
+        if (AtomVoiceSorce.cueSheet != VoiceCueSheet)
+            AtomVoiceSorce.cueSheet = VoiceCueSheet;
 
-        _atomBGMSource.cueName = cueName;
-        _atomBGMSource.Play();
+        AtomBGMSource.cueName = cueName;
+        AtomBGMSource.Play();
     }
 
     //どこかのタイミングで音を止める必要が出てくるかもなので、必要なときにコメント解除・コードの更新
