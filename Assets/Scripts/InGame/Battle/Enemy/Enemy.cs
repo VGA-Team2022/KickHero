@@ -9,12 +9,13 @@ public class Enemy
     EnemyBehaviorPresenter _behaviorPresenter;
 
     IDamage _playerDamage;
-    public Enemy(System.Action<InGameCycle.EventEnum> action, IDamage playerDamage)
+    public bool IsDead => _hpPresenter.IsDead;
+    public Enemy(IDamage playerDamage)
     {
-        Initialize(action);
+        Initialize();
         _playerDamage = playerDamage;
     }
-    public void Initialize(System.Action<InGameCycle.EventEnum> action)
+    public void Initialize()
     {
         if (!_hpPresenter)
         {
@@ -24,7 +25,7 @@ public class Enemy
         {
             _behaviorPresenter = GetMonoBehaviorInstansInScene<EnemyBehaviorPresenter>();
         }
-        _hpPresenter.Init(action);
+        _hpPresenter.Init();
         _behaviorPresenter.Init();
     }
 
