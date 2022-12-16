@@ -1234,7 +1234,7 @@ MonoBehaviour:
   _mode: 0
   _startTransform: {fileID: 2008706649}
   _groundTag: 
-  _physicMaterial: {fileID: 0}
+  _missBoundSpeed: 0
 --- !u!4 &815900983
 Transform:
   m_ObjectHideFlags: 0
@@ -1834,7 +1834,7 @@ MonoBehaviour:
   _mode: 0
   _startTransform: {fileID: 2008706649}
   _groundTag: 
-  _physicMaterial: {fileID: 13400000, guid: 19e1775e0162387408a846a5e92cc2c2, type: 2}
+  _missBoundSpeed: 0
 --- !u!1 &1160234425
 GameObject:
   m_ObjectHideFlags: 0
@@ -4486,6 +4486,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerGauge
+      objectReference: {fileID: 0}
+    - target: {fileID: 7373491057632916881, guid: 59a50864d318eb84d8d49b9b1a7aea02,
+        type: 3}
+      propertyPath: _initHP
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59a50864d318eb84d8d49b9b1a7aea02, type: 3}

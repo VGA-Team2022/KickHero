@@ -18,7 +18,6 @@ public class BallModel
     /// <summary>ボールのPosition</summary>
     ReactiveProperty<Vector3> _position;
     ReactiveProperty<bool> _isKinematic;
-    ReactiveProperty<InGameCycle.EventEnum> _eventProperty;
     /// <summary>処理のトークン</summary>
     CancellationTokenSource _tokenSource = new CancellationTokenSource();
     /// <summary>進行状況</summary>
@@ -98,17 +97,6 @@ public class BallModel
 
     //public ReactiveProperty<Vector3> Position { get => _position;}
 
-    public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition, System.Action<InGameCycle.EventEnum> eventAction)
-    {
-        _startPosition = startPosition;
-        _position = new ReactiveProperty<Vector3>(_startPosition);
-        _position.Subscribe(position).AddTo(gameObject);
-
-        //シーケンスの遷移を指定。
-        _eventProperty = new ReactiveProperty<InGameCycle.EventEnum>(InGameCycle.EventEnum.None);
-        _eventProperty.Subscribe(eventAction).AddTo(gameObject);
-    }
-
     public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
     {
         _startPosition = startPosition;
@@ -136,10 +124,6 @@ public class BallModel
     /// <returns></returns>
     public bool Shoot()
     {
-        if (!_isDebug)
-        {
-            _eventProperty.Value = InGameCycle.EventEnum.Throw;
-        }
         if (_rb)
         {
             Debug.Log(1);

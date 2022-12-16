@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player : ISequence,IDamage
+public class Player : IDamage
 {
     [Header("コンポーネント")]
     [SerializeField]
@@ -12,9 +12,10 @@ public class Player : ISequence,IDamage
     [SerializeField]
     LineReader _lineReader;
 
-    public Player(System.Action<InGameCycle.EventEnum> action)
+    public bool IsDead => _playerHP.IsDead;
+    public Player()
     {
-        Initialize(action);
+        Initialize();
     }
 
     public void Damage(int value)
@@ -22,7 +23,7 @@ public class Player : ISequence,IDamage
         _playerHP.AddHPValue(value);
     }
 
-    public void Initialize(System.Action<InGameCycle.EventEnum> action)
+    public void Initialize()
     {
         if (!_playerHP)
         {
@@ -40,9 +41,9 @@ public class Player : ISequence,IDamage
         {
             _lineReader = GetMonoBehaviorInstansInScene<LineReader>();
         }
-        _playerHP.Init(action);
+        _playerHP.Init();
         _ultimatePresenter.Init();
-        _ballPresenter.Init(action);
+        _ballPresenter.Init();
         _lineReader.Init();
     }
 
