@@ -21,8 +21,6 @@ public class EnemyBehaviorPresenter : MonoBehaviour
     int _enemyHp = 20;
     [SerializeField]
     float _attackTimeLimit = 2f;
-
-    float _timer = 0f;
     public void Init()
     {
         _behaviorModel = new EnemyBehaviorModel(_attack, _chargeTime, _stanTime);
@@ -37,18 +35,16 @@ public class EnemyBehaviorPresenter : MonoBehaviour
         _behaviorView.Down();
     }
 
-    public void Attack(IDamage damage)
+    public async UniTask Charge()
     {
-        if (_attackTimeLimit > _timer)
-        {
-            _timer += Time.deltaTime;
-        }
-        else
-        {
-            _behaviorView.PlayAttackAnimation();
-            _behaviorModel.Attack(damage);
-            _timer = 0f;
-        }
+        _behaviorView.PlayChargeAnimation();
+        await _behaviorModel.Charge();
+    }
+
+    public async UniTask Attack(IDamage damage)
+    {     
+        await _behaviorView.PlayAttackAnimation();
+        _behaviorModel.Attack(damage);
     }
 
     public async UniTask Stan()

@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using State = StateMachine<InGameCycle.EventEnum, InGameCycle>.State;
 using UnityEngine;
-using Unity.VisualScripting;
-using Zenject;
+using System;
+using Cysharp.Threading.Tasks;
 
 public class InGameCycle : MonoBehaviour, IReceivableGameData
 {
@@ -13,7 +11,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     Enemy _enemy;
     bool[] _isClearedStage;
 
-    [SerializeField,Tooltip("デバッグ用")]
+    [SerializeField, Tooltip("デバッグ用")]
     GameObject _resultPanel = null;
 
     public enum EventEnum
@@ -22,6 +20,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         NormalCharge,
         SpecialCharge,
         Attack,
+        Idle,
         GameOver,
         Pause,
         None
@@ -34,10 +33,16 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
 
         //遷移を定義
         _stateMachine.AddTransition<StartState, IdleState>(EventEnum.GameStart);
+
         _stateMachine.AddTransition<IdleState, NormalAttackChargeState>(EventEnum.NormalCharge);
-        _stateMachine.AddTransition<NormalAttackChargeState, NormalAttackState>(EventEnum.SpecialCharge);
-        _stateMachine.AddTransition<IdleState, SpecialAttackChargeState>(EventEnum.Attack);
+        _stateMachine.AddTransition<IdleState, SpecialAttackChargeState>(EventEnum.SpecialCharge);
+
+        _stateMachine.AddTransition<NormalAttackChargeState, NormalAttackState>(EventEnum.Attack);
         _stateMachine.AddTransition<SpecialAttackChargeState, SpecialAttackState>(EventEnum.Attack);
+
+        _stateMachine.AddTransition<NormalAttackState, IdleState>(EventEnum.Idle);
+        _stateMachine.AddTransition<SpecialAttackState, IdleState>(EventEnum.Idle);
+
         _stateMachine.AddAnyTransitionTo<ResultState>(EventEnum.GameOver);
 
         //最初のStateを設定
@@ -82,42 +87,57 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
 
     private class IdleState : State
     {
-        protected override void OnEnter(State prevState)
-        {          
-            Debug.Log("入力受付ステートに入った");
+        protected override async void OnEnter(State prevState)
+        {
+            Debug.Log("Idleステートに入った");
+            await UniTask.Delay(TimeSpan.FromSeconds(2f));
+            _stateMachine.Dispatch(EventEnum.NormalCharge);
         }
         protected override void OnUpdate()
         {
             _stateMachine.Owner._player.OnUpdate();
-            _stateMachine.Owner._enemy.OnUpdate();
         }
         protected override void OnExit(State nextState)
         {
-            Debug.Log("入力受付ステートを抜けた");
+            Debug.Log("Idleステートを抜けた");
         }
     }
 
     private class NormalAttackChargeState : State
     {
-        protected override void OnEnter(State prevState)
+        protected override async void OnEnter(State prevState)
         {
-            Debug.Log("Throwステートに入った");
+            Debug.Log("チャージ中");
+            await _stateMachine.Owner._enemy.Charge();
+            Debug.Log("チャージ終わり");
+            _stateMachine.Dispatch(EventEnum.Attack);
+        }
+
+        protected override void OnUpdate()
+        {
+            _stateMachine.Owner._player.OnUpdate();
         }
         protected override void OnExit(State nextState)
         {
-            Debug.Log("Throwステートを抜けた");
+            Debug.Log("NormalAttackChargeステートを抜けた");
         }
     }
 
     private class NormalAttackState : State
     {
-        protected override void OnEnter(State prevState)
+        protected override async void OnEnter(State prevState)
         {
-            Debug.Log("Throwステートに入った");
+            Debug.Log("NormalAttackステートに入った");
+            await _stateMachine.Owner._enemy.Attack(_stateMachine.Owner._player);
+            _stateMachine.Dispatch(EventEnum.Idle);
+        }
+
+        protected override void OnUpdate()
+        {
         }
         protected override void OnExit(State nextState)
         {
-            Debug.Log("Throwステートを抜けた");
+                     
         }
     }
 
@@ -125,11 +145,11 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     {
         protected override void OnEnter(State prevState)
         {
-            Debug.Log("Throwステートに入った");
+            Debug.Log("SpecialAttackChargeステートに入った");
         }
         protected override void OnExit(State nextState)
         {
-            Debug.Log("Throwステートを抜けた");
+            Debug.Log("SpecialAttackChargeステートを抜けた");
         }
     }
 
@@ -137,11 +157,11 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     {
         protected override void OnEnter(State prevState)
         {
-            Debug.Log("Throwステートに入った");
+            Debug.Log("SpecialAttackステートに入った");
         }
         protected override void OnExit(State nextState)
         {
-            Debug.Log("Throwステートを抜けた");
+            Debug.Log("SpecialAttackステートを抜けた");
         }
     }
 

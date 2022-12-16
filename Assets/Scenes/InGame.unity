@@ -902,6 +902,12 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &355306187 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1246124052381611816, guid: 5d316641f46e2354581e55ca5dd7cfa5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1147033594}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &371666629
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,6 +1619,9 @@ MonoBehaviour:
   _acceleration: 0
   _calculationTime: 0.01
   _mode: 0
+  _startTransform: {fileID: 0}
+  _groundTag: 
+  _physicMaterial: {fileID: 0}
 --- !u!4 &815900983
 Transform:
   m_ObjectHideFlags: 0
@@ -1992,7 +2001,7 @@ PrefabInstance:
     - target: {fileID: 1246124052381611989, guid: 5d316641f46e2354581e55ca5dd7cfa5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.209
       objectReference: {fileID: 0}
     - target: {fileID: 1246124052381611989, guid: 5d316641f46e2354581e55ca5dd7cfa5,
         type: 3}
@@ -2043,12 +2052,32 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1147033594}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 355306187}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62e0173f74141dd4a869ebc18e3fde17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1147033602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355306187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd5bbfefebff9b42aa4712c104096a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _view: {fileID: 1147033595}
+  _speed: 1
+  _acceleration: 0
+  _calculationTime: 0
+  _mode: 0
+  _startTransform: {fileID: 2008706649}
+  _groundTag: 
+  _physicMaterial: {fileID: 13400000, guid: 19e1775e0162387408a846a5e92cc2c2, type: 2}
 --- !u!1 &1160234425
 GameObject:
   m_ObjectHideFlags: 0
@@ -3010,6 +3039,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Text: {fileID: 1750292409}
+  _Hp: 0
 --- !u!114 &1848253691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3320,6 +3350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -4167,6 +4198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _behaviorView: {fileID: 3235404486600539139}
   _attack: 1
+  _chargeTime: 3
   _stanTime: 3
   _enemyHp: 20
   _attackTimeLimit: 5

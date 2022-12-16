@@ -16,9 +16,13 @@ public class EnemyBehaviorModel
         _stanTime = stanTime;
     }
 
-    public async UniTask Attack(IDamage damage)
+    public async UniTask Charge()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(_chargeTime));
+    }
+
+    public void Attack(IDamage damage)
+    {
         damage.Damage(-_attack);
     }
 
