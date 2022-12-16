@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class Enemy : ISequence
+public class Enemy
 {
     EnemyHPPresenter _hpPresenter;
     EnemyBehaviorPresenter _behaviorPresenter;
@@ -27,9 +28,19 @@ public class Enemy : ISequence
         _behaviorPresenter.Init();
     }
 
-    public void OnUpdate()
+    public async UniTask<bool> Charge()
     {
-        _behaviorPresenter.Attack(_playerDamage);
+       return  await  _behaviorPresenter.Charge();
+    }
+
+    public async UniTask Attack(IDamage player)
+    {
+        await _behaviorPresenter.Attack(player);
+    }
+
+    public async UniTask Damage()
+    {
+       await _behaviorPresenter.Damage();
     }
 
     public void Down()
