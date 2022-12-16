@@ -14,6 +14,8 @@ public class EnemyBehaviorPresenter : MonoBehaviour
     [SerializeField]
     int _attack = 5;
     [SerializeField]
+    float _chargeTime = 3f;
+    [SerializeField]
     float _stanTime = 3f;
     [SerializeField]
     int _enemyHp = 20;
@@ -23,7 +25,7 @@ public class EnemyBehaviorPresenter : MonoBehaviour
     float _timer = 0f;
     public void Init()
     {
-        _behaviorModel = new EnemyBehaviorModel(_attack, _stanTime);
+        _behaviorModel = new EnemyBehaviorModel(_attack, _chargeTime, _stanTime);
         _behaviorView?.Init();
     }
 

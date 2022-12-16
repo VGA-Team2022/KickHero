@@ -17,9 +17,19 @@ public class EnemyBehaviorView : MonoBehaviour
         _animator.SetTrigger(AnimationName.EnemyAnimationNames.Attack);
     }
 
+    public void PlayChargeAnimation()
+    {
+        _animator.SetTrigger(AnimationName.EnemyAnimationNames.Charge);
+    }
+
+    public void PlayDamageAnimation()
+    {
+        _animator.SetTrigger(AnimationName.EnemyAnimationNames.HitRight);
+    }
+
     public void PlayStanAnimation(bool value)
     {
-        _animator.SetBool(AnimationName.EnemyAnimationNames.StanRight,value);
+        _animator.SetTrigger(AnimationName.EnemyAnimationNames.Down);
     }
 
     public void Down()
