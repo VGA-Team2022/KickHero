@@ -52,7 +52,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         _player = new Player();
         _enemy = new Enemy( _player);
 
-        _resultPanel = GameObject.Find("ResultPanel");
+        _resultPanel = GameObject.Find("ResultCanvas");
         _resultPanel?.SetActive(false);
     }
 
