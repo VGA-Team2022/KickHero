@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class Enemy : ISequence
+public class Enemy
 {
     EnemyHPPresenter _hpPresenter;
     EnemyBehaviorPresenter _behaviorPresenter;
 
     IDamage _playerDamage;
-    public Enemy(System.Action<InGameCycle.EventEnum> action, IDamage playerDamage)
+    public bool IsDead => _hpPresenter.IsDead;
+    public Enemy(IDamage playerDamage)
     {
-        Initialize(action);
+        Initialize();
         _playerDamage = playerDamage;
     }
-    public void Initialize(System.Action<InGameCycle.EventEnum> action)
+    public void Initialize()
     {
         if (!_hpPresenter)
         {
@@ -23,13 +25,23 @@ public class Enemy : ISequence
         {
             _behaviorPresenter = GetMonoBehaviorInstansInScene<EnemyBehaviorPresenter>();
         }
-        _hpPresenter.Init(action);
+        _hpPresenter.Init();
         _behaviorPresenter.Init();
     }
 
-    public void OnUpdate()
+    public async UniTask<bool> Charge()
     {
-        _behaviorPresenter.Attack(_playerDamage);
+       return  await  _behaviorPresenter.Charge();
+    }
+
+    public async UniTask Attack(IDamage player)
+    {
+        await _behaviorPresenter.Attack(player);
+    }
+
+    public async UniTask Damage()
+    {
+       await _behaviorPresenter.Damage();
     }
 
     public void Down()

@@ -7,22 +7,23 @@ public class PlayerHP : MonoBehaviour
 {
     [SerializeField]
     int _initHP = 10;
-    [SerializeField]
-    int _maxHP = 10;
     PlayerHPGauge _hpGauge;
     PlayerHPModel _hpModel;
 
-    public void Init(System.Action<InGameCycle.EventEnum> changeStateAction)
+    bool _isDead = false;
+    public bool IsDead => _isDead;
+
+    public void Init()
     {
         _hpGauge = GetComponent<PlayerHPGauge>();
         _hpGauge.Init();
         _hpModel = new PlayerHPModel
             (value =>
             {
-                _hpGauge.SetSliderValue(value, _maxHP);
+                _hpGauge.SetSliderValue(value, _initHP);
                 if (value <=0)
                 {
-                    changeStateAction.Invoke(InGameCycle.EventEnum.GameOver);
+                    _isDead = true;
                 }            
             },
             this.gameObject, _initHP);

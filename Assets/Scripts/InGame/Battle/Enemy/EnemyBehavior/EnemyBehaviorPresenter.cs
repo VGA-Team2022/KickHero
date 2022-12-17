@@ -14,16 +14,16 @@ public class EnemyBehaviorPresenter : MonoBehaviour
     [SerializeField]
     int _attack = 5;
     [SerializeField]
+    float _chargeTime = 3f;
+    [SerializeField]
     float _stanTime = 3f;
     [SerializeField]
     int _enemyHp = 20;
     [SerializeField]
     float _attackTimeLimit = 2f;
-
-    float _timer = 0f;
     public void Init()
     {
-        _behaviorModel = new EnemyBehaviorModel(_attack, _stanTime);
+        _behaviorModel = new EnemyBehaviorModel(_attack, _chargeTime, _stanTime);
         _behaviorView?.Init();
     }
 
@@ -35,18 +35,25 @@ public class EnemyBehaviorPresenter : MonoBehaviour
         _behaviorView.Down();
     }
 
-    public void Attack(IDamage damage)
+    public async UniTask<bool> Charge()
     {
-        if (_attackTimeLimit > _timer)
-        {
-            _timer += Time.deltaTime;
-        }
-        else
-        {
-            _behaviorView.PlayAttackAnimation();
-            _behaviorModel.Attack(damage);
-            _timer = 0f;
-        }
+        _behaviorView.ActiveWeakPoint(true);
+        _behaviorView.PlayChargeAnimation();
+        await _behaviorModel.Charge();
+        bool isTrigger = _behaviorView.IsTriggerWeakPoint();
+        _behaviorView.ActiveWeakPoint(false);
+        return isTrigger;
+    }
+
+    public async UniTask Attack(IDamage damage)
+    {     
+        await _behaviorView.PlayAttackAnimation();
+        _behaviorModel.Attack(damage);
+    }
+
+    public async UniTask Damage()
+    {
+        await _behaviorView.PlayDamageAnimation();
     }
 
     public async UniTask Stan()

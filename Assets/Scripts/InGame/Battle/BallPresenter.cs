@@ -26,7 +26,8 @@ public class BallPresenter : MonoBehaviour
     [SerializeField] Transform _startTransform;
     [Tooltip("地面のタグの名前")]
     [SerializeField] string _groundTag = "";
-    [SerializeField] PhysicMaterial _physicMaterial;
+    [Tooltip("地面にぶつかった時の跳ねる速さ")]
+    [SerializeField] float _missBoundSpeed;
     [Header("デバッグ用項目")]
 
     BallModel _ballModel;
@@ -68,7 +69,7 @@ public class BallPresenter : MonoBehaviour
 
     public Vector3 Position { get => BallModel.Position; }
 
-    public Rigidbody Rigidbody { get => View.Rigidbody; }
+    //public Rigidbody Rigidbody { get => View.Rigidbody; }
 
     /// <summary>ボールの初期位置</summary>
     public Vector3 StartPosition
@@ -159,15 +160,6 @@ public class BallPresenter : MonoBehaviour
         Init();
     }
 
-    public void Init(System.Action<InGameCycle.EventEnum> action)
-    {
-        if (View)
-        {
-            BallModel = new BallModel(value => View.Position = value, View.gameObject, View.transform.position, action); ;
-        }
-        ValueSet();
-    }
-
     public void Init()
     {
         if (View)
@@ -187,7 +179,11 @@ public class BallPresenter : MonoBehaviour
         BallModel.Acceleration = _acceleration;
         BallModel.Speed = _speed;
         BallModel.CalculationTime = _calculationTime;
-        BallModel.PhysicMaterial = _physicMaterial;
-        BallModel.Rigidbody = View.Rigidbody;
+        BallModel.MissBoundSpeed = _missBoundSpeed;
+        if (View)
+        {
+            BallModel.Rigidbody = View.Rigidbody;
+            BallModel.Collider = View.Collider;
+        }
     }
 }
