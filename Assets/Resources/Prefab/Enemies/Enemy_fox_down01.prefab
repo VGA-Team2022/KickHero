@@ -2991,7 +2991,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1830110560493528359}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.52, y: 1.22, z: 3.59}
+  m_LocalPosition: {x: -12.93, y: 1.22, z: 3.59}
   m_LocalScale: {x: 3.26, y: 2.91, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6853,7 +6853,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4162189720533378891}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.41, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8525,8 +8525,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 14.485889, y: 8.488543, z: 5.6186686}
-  m_Center: {x: -0.6312361, y: 3.7442708, z: -2.3093343}
+  m_Size: {x: 14.049578, y: 8.636681, z: 0.2829113}
+  m_Center: {x: -8.495803, y: 3.8183403, z: 0.35854435}
 --- !u!1 &5214577995029133787
 GameObject:
   m_ObjectHideFlags: 0
@@ -9837,7 +9837,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6039295816534357055}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9, y: 7.63, z: 3.59}
+  m_LocalPosition: {x: -4.51, y: 7.63, z: 3.59}
   m_LocalScale: {x: 3.26, y: 2.91, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11141,7 +11141,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6785471398878498509}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.41, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12801,8 +12801,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7701612404735219941}
-  m_LocalRotation: {x: 0, y: 0.3175512, z: -0, w: 0.9482411}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.41, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15634,6 +15634,27 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EnemyCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 712952031359973817, guid: c58886071c9613241a6a89860719c5fa,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b0f6aa62a045a1b49a6da0981e4c75b0,
+        type: 3}
+    - target: {fileID: 712952031359973817, guid: c58886071c9613241a6a89860719c5fa,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 712952031359973817, guid: c58886071c9613241a6a89860719c5fa,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 712952031359973817, guid: c58886071c9613241a6a89860719c5fa,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c58886071c9613241a6a89860719c5fa, type: 3}

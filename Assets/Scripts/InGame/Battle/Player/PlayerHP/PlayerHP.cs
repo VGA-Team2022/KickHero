@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(PlayerHPGauge))]
 public class PlayerHP : MonoBehaviour
 {
     [SerializeField]
-    int _initHP = 10;
+    int _initHP = 100;
     PlayerHPGauge _hpGauge;
     PlayerHPModel _hpModel;
 
@@ -24,9 +25,10 @@ public class PlayerHP : MonoBehaviour
                 if (value <=0)
                 {
                     _isDead = true;
-                }            
+                }
             },
             this.gameObject, _initHP);
+        _hpGauge.SetSliderValue(_initHP, _initHP);
     }
 
     /// <summary>
