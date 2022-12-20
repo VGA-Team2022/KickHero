@@ -37,7 +37,7 @@ Shader "Unlit/NewUnlitShader"
 						fixed4 color : COLOR;
 						float2 texcoord : TEXCOORD0;
 						float2 texcoord2 : TEXCOORD1;
-						UNITY_FOG_COORDS(1)
+						UNITY_FOG_COORDS(2)
 						UNITY_VERTEX_OUTPUT_STEREO
 					};
 
