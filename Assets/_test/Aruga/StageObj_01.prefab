@@ -4861,6 +4861,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GozyuTower
       objectReference: {fileID: 0}
+    - target: {fileID: 6390490315473663715, guid: 39abacb9c89c4994aaf11dcd475589b3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9a603978786112845b642c3c57887c2f, type: 2}
     - target: {fileID: 6390490315473663725, guid: 39abacb9c89c4994aaf11dcd475589b3,
         type: 3}
       propertyPath: m_RootOrder
