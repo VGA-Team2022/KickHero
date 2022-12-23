@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using UnityEditor.Purchasing;
 
 public class ButtonBase : MonoBehaviour, IPointerClickHandler
 {
