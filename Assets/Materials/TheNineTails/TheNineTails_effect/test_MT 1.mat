@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Base_Map:
-        m_Texture: {fileID: 2800000, guid: 74cb27ddd7a35434db6ad2da74b8af74, type: 3}
+        m_Texture: {fileID: 2800000, guid: c72b5425f8b874a4ca45e7ebdcf9a246, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -67,7 +67,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emission_Map:
-        m_Texture: {fileID: 2800000, guid: 74cb27ddd7a35434db6ad2da74b8af74, type: 3}
+        m_Texture: {fileID: 2800000, guid: c72b5425f8b874a4ca45e7ebdcf9a246, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -139,7 +139,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Power: 0.28
+    - _Power: -2
     - _QueueControl: 0
     - _QueueOffset: 1
     - _ReceiveShadows: 1
@@ -160,7 +160,7 @@ Material:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 1}
-    - _Emission_Color: {r: 3.7775362, g: 1.7810472, b: 1.0869324, a: 0}
+    - _Emission_Color: {r: 6.7332106, g: 6.7332106, b: 6.7332106, a: 0}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
