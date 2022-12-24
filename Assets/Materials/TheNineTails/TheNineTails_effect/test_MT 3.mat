@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: test_MT 1
+  m_Name: test_MT 3
   m_Shader: {fileID: -6465566751694194690, guid: 9e646312cd4e688429e62075bcee104a,
     type: 3}
   m_ValidKeywords: []
@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Base_Map:
-        m_Texture: {fileID: 2800000, guid: 74cb27ddd7a35434db6ad2da74b8af74, type: 3}
+        m_Texture: {fileID: 2800000, guid: c72b5425f8b874a4ca45e7ebdcf9a246, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -67,7 +67,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emission_Map:
-        m_Texture: {fileID: 2800000, guid: 74cb27ddd7a35434db6ad2da74b8af74, type: 3}
+        m_Texture: {fileID: 2800000, guid: c72b5425f8b874a4ca45e7ebdcf9a246, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
