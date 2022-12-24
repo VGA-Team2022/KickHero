@@ -90,8 +90,8 @@ public class SoundManagerModel
         if (AtomVoiceSorce.cueSheet != VoiceCueSheet)
             AtomVoiceSorce.cueSheet = VoiceCueSheet;
 
-        AtomBGMSource.cueName = cueName;
-        AtomBGMSource.Play();
+        AtomVoiceSorce.cueName = cueName;
+        AtomVoiceSorce.Play();
     }
 
     //どこかのタイミングで音を止める必要が出てくるかもなので、必要なときにコメント解除・コードの更新

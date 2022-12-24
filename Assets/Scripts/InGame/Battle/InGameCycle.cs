@@ -53,7 +53,12 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         _enemy = new Enemy( _player);
 
         _resultPanel = GameObject.Find("ResultCanvas");
-        _resultPanel?.SetActive(false);
+        _resultPanel?.SetActive(false);       
+    }
+
+    private void Start()
+    {
+        SoundManagerPresenter.Instance.CriAtomBGMPlay("BGM_Battle");
     }
 
     private void Update()
@@ -75,6 +80,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     {
         protected override void OnEnter(State prevState)
         {
+            
             Debug.Log("スタートステートに入った");
         }
         protected override void OnUpdate()
@@ -118,7 +124,8 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
             Debug.Log("チャージ終わり");
             if (isTrigger)
             {
-                await _stateMachine.Owner._enemy.Damage();
+                SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Hit");
+                await _stateMachine.Owner._enemy.Damage();            
                 _stateMachine.Dispatch(EventEnum.Idle);
             }
             else
@@ -146,6 +153,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         protected override async void OnEnter(State prevState)
         {
             Debug.Log("NormalAttackステートに入った");
+            SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Nurikabe_Attack");
             await _stateMachine.Owner._enemy.Attack(_stateMachine.Owner._player);
             if (_stateMachine.Owner._player.IsDead)
             {
