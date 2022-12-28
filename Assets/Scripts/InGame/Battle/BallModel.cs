@@ -95,7 +95,7 @@ public class BallModel
     public float MissBoundSpeed { get => _missBoundSpeed; set => _missBoundSpeed = value; }
 
 
-    //public ReactiveProperty<Vector3> Position { get => _position;}
+    //public ReactiveProperty<Vector3> Position { get => _position; }
 
     public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
     {
@@ -127,7 +127,8 @@ public class BallModel
         if (_rb)
         {
             Debug.Log(1);
-            _rb.isKinematic = false;
+            //_rb.isKinematic = false;
+            _rb.Sleep();
         }
         Cancel();
         _tokenSource = new CancellationTokenSource();
@@ -305,6 +306,7 @@ public class BallModel
         if (_rb)
         {
             _rb.isKinematic = false;
+            _rb.WakeUp();
         }
         CallOnCarryEnd();
     }

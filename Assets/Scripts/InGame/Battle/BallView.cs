@@ -11,7 +11,7 @@ using static UnityEngine.Rendering.DebugUI;
 /// <summary>
 /// ボールの表面的な処理を行うクラス
 /// </summary>
-[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
+[RequireComponent(typeof(SphereCollider)/*, typeof(Rigidbody)*/)]
 public class BallView : MonoBehaviour
 {
     /// <summary>何かに当たった時に発行するイベント</summary>
@@ -24,6 +24,8 @@ public class BallView : MonoBehaviour
     /// <summary>接触中のコライダーのリスト</summary>
     List<Collider> _stayColliders = new List<Collider>();
     bool _isCollide = false;
+
+    bool _isKinematic;
 
     public Rigidbody Rigidbody
     {
@@ -62,6 +64,11 @@ public class BallView : MonoBehaviour
         {
             Vector3 pos = transform.position;
             transform.position = value;
+            Debug.Log($"{pos}, {value}");
+            if (Rigidbody.IsSleeping())
+            {
+                Debug.Log(2);
+            }
             if (_isCollide)
             {
                 HitDetermine(pos, value, Collider.radius);
@@ -87,6 +94,15 @@ public class BallView : MonoBehaviour
         _collider = GetComponent<SphereCollider>();
     }
 
+    private void Update()
+    {
+        if (_isKinematic != Rigidbody.isKinematic)
+        {
+            Debug.Log($"isKinematic = {Rigidbody.isKinematic}");
+            _isKinematic = !_isKinematic;
+        }
+    }
+
     public void OnHit(Action<Collider> action)
     {
         _onHitActionCollider += action;
@@ -106,7 +122,6 @@ public class BallView : MonoBehaviour
     /// <param name="radius"></param>
     void HitDetermine(Vector3 start, Vector3 end, float radius)
     {
-        Debug.Log($"{start}, {end}");
         Ray ray = new Ray(start, (end - start).normalized);
         var pHits = Physics.SphereCastAll(ray, radius, Vector3.Distance(end, start), Physics.AllLayers, QueryTriggerInteraction.Collide);
         if (pHits.Length != 0)
