@@ -11,19 +11,22 @@ using static UnityEngine.Rendering.DebugUI;
 /// <summary>
 /// ボールの表面的な処理を行うクラス
 /// </summary>
-[RequireComponent(typeof(SphereCollider)/*, typeof(Rigidbody)*/)]
+[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
 public class BallView : MonoBehaviour
 {
     /// <summary>何かに当たった時に発行するイベント</summary>
     Action<Collider> _onHitActionCollider;
-    /// <summary>何かに当たった時にそのRaycastHitを渡すイベント</summary>
+    /// <summary>何かに当たった時にそのRaycastHitを渡すイベント(Positionによる移動時限定)</summary>
     Action<RaycastHit> _onHitActionRaycastHit;
+    /// <summary>何かに当たった時にそのCollisionを渡すイベント(Rigidbodyによる移動時限定)</summary>
+    Action<Collision> _onHitActionCollision;
 
     SphereCollider _collider;
     Rigidbody _rb;
     /// <summary>接触中のコライダーのリスト</summary>
     List<Collider> _stayColliders = new List<Collider>();
     bool _isCollide = false;
+    Vector3 _lastPosition;
 
     bool _isKinematic;
 
@@ -62,13 +65,10 @@ public class BallView : MonoBehaviour
         get => transform.position;
         set
         {
+            if(_lastPosition != transform.position) { Debug.Log($"{value - transform.position}, {Rigidbody.velocity}, {Rigidbody.isKinematic}"); _lastPosition= value; }
             Vector3 pos = transform.position;
             transform.position = value;
-            Debug.Log($"{pos}, {value}");
-            if (Rigidbody.IsSleeping())
-            {
-                Debug.Log(2);
-            }
+
             if (_isCollide)
             {
                 HitDetermine(pos, value, Collider.radius);
@@ -91,16 +91,8 @@ public class BallView : MonoBehaviour
     private void Start()
     {
         Rigidbody.isKinematic = true;
+        //Rigidbody.Sleep();
         _collider = GetComponent<SphereCollider>();
-    }
-
-    private void Update()
-    {
-        if (_isKinematic != Rigidbody.isKinematic)
-        {
-            Debug.Log($"isKinematic = {Rigidbody.isKinematic}");
-            _isKinematic = !_isKinematic;
-        }
     }
 
     public void OnHit(Action<Collider> action)
@@ -132,7 +124,6 @@ public class BallView : MonoBehaviour
                 {
                     if (!_stayColliders.Contains(co.collider))
                     {
-                        Debug.Log(co.collider.name);
                         CallOnHit(co.collider);
                         CallOnHit(co);
                         _stayColliders.Add(co.collider);
@@ -154,6 +145,15 @@ public class BallView : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (_isCollide)
+        {
+            CallOnHit(collision.collider);
+            CallOnHit(collision);
+        }
+    }
+
     void CallOnHit(Collider c)
     {
         _onHitActionCollider?.Invoke(c);
@@ -161,6 +161,10 @@ public class BallView : MonoBehaviour
     void CallOnHit(RaycastHit r)
     {
         _onHitActionRaycastHit?.Invoke(r);
+    }
+    void CallOnHit(Collision c)
+    {
+        _onHitActionCollision?.Invoke(c);
     }
 
     public void Hide()

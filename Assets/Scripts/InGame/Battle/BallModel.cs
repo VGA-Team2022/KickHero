@@ -70,10 +70,9 @@ public class BallModel
     {
         get
         {
-            if (_rb)
+            if (_rb && !_rb.isKinematic)
             {
                 return _rb.velocity;
-
             }
             else
             {
@@ -83,7 +82,7 @@ public class BallModel
         set
         {
             _velocity = value;
-            if (_rb)
+            if (_rb && !_rb.isKinematic)
             {
                 _rb.velocity = value;
             }
@@ -127,8 +126,9 @@ public class BallModel
         if (_rb)
         {
             Debug.Log(1);
-            //_rb.isKinematic = false;
-            _rb.Sleep();
+            _rb.velocity = Vector3.zero;
+            _rb.isKinematic = true;
+            //_rb.Sleep();
         }
         Cancel();
         _tokenSource = new CancellationTokenSource();
@@ -145,7 +145,9 @@ public class BallModel
         _tokenSource?.Cancel();
         _isCarry = false;
         _accele = 0;
-        Velocity = Vector3.zero;
+        _isCarryEnd = true;
+        CallOnCarryEnd();
+        //Velocity = Vector3.zero;
     }
 
     public BallModel OnCarryEnd(System.Action action)
@@ -197,13 +199,18 @@ public class BallModel
     /// </summary>
     public void Collection()
     {
+        _position.Value = _startPosition;
         if (_rb)
         {
             _rb.isKinematic = true;
+            _rb.velocity = Vector3.zero;
+            //_rb.Sleep();
+            Debug.Log("sleep");
         }
-        _position.Value = _startPosition;
         Cancel();
     }
+
+
     /// <summary>
     /// ƒ‹[ƒg‚ÌÝ’è‚ðŽŽ‚Ý‚é
     /// ”òs’†‚ÍÄÝ’è‚Å‚«‚È‚¢
@@ -224,22 +231,41 @@ public class BallModel
     {
         if (hit.collider.tag == _groundTag)
         {
-            _isCarryEnd = true;
-            float bounciness = GetBounciness(_collider.material, hit.collider.material);
-            float x = UnityEngine.Random.Range(0f, 1);
-            float y = UnityEngine.Random.Range(-1f, 1);
-            float z = UnityEngine.Random.Range(-1f, 1);
-            Vector3 up = hit.normal * y;
-            Vector3 f = Vector3.Cross(hit.normal, Vector3.right).normalized;
-            Vector3 right = f * x;
-            Vector3 forward = Vector3.Cross(hit.normal, f).normalized * z;
-            Velocity = (right + up + forward).normalized * _missBoundSpeed;
-            _position.Value = hit.point + hit.normal * _radius;
-            CallOnCarryEnd();
+            MissBound(hit.point, hit.normal);
+        }
+    }
+    public void OnCollision(Collision collision)
+    {
+        if (collision.collider.tag == _groundTag)
+        {
+            MissBound(collision.contacts[0].point, collision.contacts[0].normal);
         }
     }
 
+    void MissBound( Vector3 point, Vector3 normal)
+    {
+        Debug.Log(3);
+        _isCarryEnd = true;
+        //if (_rb.IsSleeping())
+        //_rb.WakeUp();
+        _rb.isKinematic = false;
+        float x = UnityEngine.Random.Range(0f, 1);
+        float y = UnityEngine.Random.Range(-1f, 1);
+        float z = UnityEngine.Random.Range(-1f, 1);
+        Vector3 up = normal * y;
+        Vector3 f = Vector3.Cross(normal, Vector3.right).normalized;
+        Vector3 right = f * x;
+        Vector3 forward = Vector3.Cross(normal, f).normalized * z;
+        Velocity = (right + up + forward).normalized * _missBoundSpeed;
+        _position.Value = point + normal * _radius;
+        Debug.DrawRay(Position, Velocity * 10, Color.black);
+        Debug.DrawRay(point, normal * 10, Color.white);
+        Debug.DrawRay(Position, up, Color.green);
+        UnityEditor.EditorApplication.isPaused = true;
+        Cancel();
+    }
 
+    
     async UniTask Carry()
     {
         _isCarry = true;
@@ -292,6 +318,7 @@ public class BallModel
                 {
                     if (_progressStatus > _route.AllWay - _progressStatus)
                     {
+                        Debug.Log(4);
                         Vector3 pos = _route.Positons.Last();
                         Velocity = pos - _position.Value;
                         _position.Value = pos;
@@ -305,8 +332,9 @@ public class BallModel
         }
         if (_rb)
         {
+            //if (_rb.IsSleeping())
+            //_rb.WakeUp();
             _rb.isKinematic = false;
-            _rb.WakeUp();
         }
         CallOnCarryEnd();
     }
