@@ -65,7 +65,6 @@ public class BallView : MonoBehaviour
         get => transform.position;
         set
         {
-            if(_lastPosition != transform.position) { Debug.Log($"{value - transform.position}, {Rigidbody.velocity}, {Rigidbody.isKinematic}"); _lastPosition= value; }
             Vector3 pos = transform.position;
             transform.position = value;
 

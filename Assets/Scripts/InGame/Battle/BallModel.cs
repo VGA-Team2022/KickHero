@@ -125,7 +125,6 @@ public class BallModel
     {
         if (_rb)
         {
-            Debug.Log(1);
             _rb.velocity = Vector3.zero;
             _rb.isKinematic = true;
             //_rb.Sleep();
@@ -147,7 +146,6 @@ public class BallModel
         _accele = 0;
         _isCarryEnd = true;
         CallOnCarryEnd();
-        //Velocity = Vector3.zero;
     }
 
     public BallModel OnCarryEnd(System.Action action)
@@ -204,8 +202,6 @@ public class BallModel
         {
             _rb.isKinematic = true;
             _rb.velocity = Vector3.zero;
-            //_rb.Sleep();
-            Debug.Log("sleep");
         }
         Cancel();
     }
@@ -244,12 +240,9 @@ public class BallModel
 
     void MissBound( Vector3 point, Vector3 normal)
     {
-        Debug.Log(3);
         _isCarryEnd = true;
-        //if (_rb.IsSleeping())
-        //_rb.WakeUp();
         _rb.isKinematic = false;
-        float x = UnityEngine.Random.Range(0f, 1);
+        float x = UnityEngine.Random.value;
         float y = UnityEngine.Random.Range(-1f, 1);
         float z = UnityEngine.Random.Range(-1f, 1);
         Vector3 up = normal * y;
@@ -258,10 +251,6 @@ public class BallModel
         Vector3 forward = Vector3.Cross(normal, f).normalized * z;
         Velocity = (right + up + forward).normalized * _missBoundSpeed;
         _position.Value = point + normal * _radius;
-        Debug.DrawRay(Position, Velocity * 10, Color.black);
-        Debug.DrawRay(point, normal * 10, Color.white);
-        Debug.DrawRay(Position, up, Color.green);
-        UnityEditor.EditorApplication.isPaused = true;
         Cancel();
     }
 
@@ -318,7 +307,6 @@ public class BallModel
                 {
                     if (_progressStatus > _route.AllWay - _progressStatus)
                     {
-                        Debug.Log(4);
                         Vector3 pos = _route.Positons.Last();
                         Velocity = pos - _position.Value;
                         _position.Value = pos;
@@ -332,8 +320,6 @@ public class BallModel
         }
         if (_rb)
         {
-            //if (_rb.IsSleeping())
-            //_rb.WakeUp();
             _rb.isKinematic = false;
         }
         CallOnCarryEnd();
