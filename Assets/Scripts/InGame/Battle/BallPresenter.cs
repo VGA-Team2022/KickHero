@@ -65,7 +65,7 @@ public class BallPresenter : MonoBehaviour
     }
 
     /// <summary>“–‚½‚è”»’è‚ðŽæ‚é‚©”Û‚©</summary>
-    public bool IsCollide { get => View.IsCollide; set { View.IsCollide = value;} }
+    public bool IsCollide { get => View.IsCollide; set { View.IsCollide = value; } }
 
     public Vector3 Position { get => BallModel.Position; }
 
@@ -164,7 +164,13 @@ public class BallPresenter : MonoBehaviour
     {
         if (View)
         {
-            BallModel = new BallModel(value => View.Position = value, View.gameObject, View.transform.position);
+            BallModel = new BallModel(value =>
+            {
+                bool isCollide = View.IsCollide;
+                View.IsCollide = false;
+                View.Position = value;
+                View.IsCollide = isCollide;
+            }, View.gameObject, View.transform.position);
             _ballModel.GroundTag = _groundTag;
             _ballModel.Radius = View.Collider.radius;
             View.OnHit(_ballModel.OnRaycastHit);

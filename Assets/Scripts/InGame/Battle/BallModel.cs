@@ -127,7 +127,6 @@ public class BallModel
         {
             _rb.velocity = Vector3.zero;
             _rb.isKinematic = true;
-            //_rb.Sleep();
         }
         Cancel();
         _tokenSource = new CancellationTokenSource();
@@ -269,10 +268,10 @@ public class BallModel
                 float buf = _progressStatus;
                 _progressStatus += Time.deltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.deltaTime;
-                if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
+                if (_route.TryGetVelocityInCaseTime(buf, _progressStatus, out Vector3 velocity))
                 {
-                    Velocity = _route.GetVelocityInCaseTime(buf, _progressStatus).Value;
-                    _position.Value = point;
+                    Velocity = velocity;
+                    _position.Value = _route.GetPointInCaseTime(buf).Value;
                 }
                 else
                 {
