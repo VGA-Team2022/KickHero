@@ -166,14 +166,11 @@ public class BallPresenter : MonoBehaviour
         {
             BallModel = new BallModel(value =>
             {
-                bool isCollide = View.IsCollide;
-                View.IsCollide = false;
                 View.Position = value;
-                View.IsCollide = isCollide;
             }, View.gameObject, View.transform.position);
             _ballModel.GroundTag = _groundTag;
             _ballModel.Radius = View.Collider.radius;
-            View.OnHit(_ballModel.OnRaycastHit);
+            View.OnHit(_ballModel.OnCollision);
         }
         ValueSet();
     }

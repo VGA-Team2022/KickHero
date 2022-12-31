@@ -89,7 +89,14 @@ public class BallModel
         }
     }
 
-    public Rigidbody Rigidbody { get => _rb; set => _rb = value; }
+    public Rigidbody Rigidbody
+    {
+        get => _rb; set
+        {
+            _rb = value;
+            _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        }
+    }
     public Collider Collider { get => _collider; set => _collider = value; }
     public float MissBoundSpeed { get => _missBoundSpeed; set => _missBoundSpeed = value; }
 
@@ -126,7 +133,7 @@ public class BallModel
         if (_rb)
         {
             _rb.velocity = Vector3.zero;
-            _rb.isKinematic = true;
+            //_rb.isKinematic = true;
         }
         Cancel();
         _tokenSource = new CancellationTokenSource();
@@ -199,8 +206,10 @@ public class BallModel
         _position.Value = _startPosition;
         if (_rb)
         {
-            _rb.isKinematic = true;
-            _rb.velocity = Vector3.zero;
+            //_rb.isKinematic = true;
+            //_rb.velocity = Vector3.zero;
+            _rb.useGravity = false;
+            _rb.Sleep();
         }
         Cancel();
     }
@@ -237,10 +246,10 @@ public class BallModel
         }
     }
 
-    void MissBound( Vector3 point, Vector3 normal)
+    void MissBound(Vector3 point, Vector3 normal)
     {
         _isCarryEnd = true;
-        _rb.isKinematic = false;
+        //_rb.isKinematic = false;
         float x = UnityEngine.Random.value;
         float y = UnityEngine.Random.Range(-1f, 1);
         float z = UnityEngine.Random.Range(-1f, 1);
@@ -253,7 +262,7 @@ public class BallModel
         Cancel();
     }
 
-    
+
     async UniTask Carry()
     {
         _isCarry = true;
@@ -268,10 +277,10 @@ public class BallModel
                 float buf = _progressStatus;
                 _progressStatus += Time.deltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.deltaTime;
-                if (_route.TryGetVelocityInCaseTime(buf, _progressStatus, out Vector3 velocity))
+                if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
                 {
-                    Velocity = velocity;
-                    _position.Value = _route.GetPointInCaseTime(buf).Value;
+                    Velocity = (point - _rb.position) / (_progressStatus - buf);
+                    //_position.Value = _route.GetPointInCaseTime(buf).Value;
                 }
                 else
                 {
@@ -319,7 +328,7 @@ public class BallModel
         }
         if (_rb)
         {
-            _rb.isKinematic = false;
+            //_rb.isKinematic = false;
         }
         CallOnCarryEnd();
     }

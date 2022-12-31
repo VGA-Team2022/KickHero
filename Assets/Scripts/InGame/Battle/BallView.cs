@@ -67,11 +67,6 @@ public class BallView : MonoBehaviour
         {
             Vector3 pos = transform.position;
             transform.position = value;
-
-            if (_isCollide)
-            {
-                HitDetermine(pos, value, Collider.radius);
-            }
         }
     }
 
@@ -89,7 +84,7 @@ public class BallView : MonoBehaviour
 
     private void Start()
     {
-        Rigidbody.isKinematic = true;
+        //Rigidbody.isKinematic = true;
         //Rigidbody.Sleep();
         _collider = GetComponent<SphereCollider>();
     }
@@ -98,10 +93,17 @@ public class BallView : MonoBehaviour
     {
         _onHitActionCollider += action;
     }
+    public void OnHit(Action<Collision> action)
+    {
+        _onHitActionCollision += action;
+    }
+
+#if false
     public void OnHit(Action<RaycastHit> action)
     {
         _onHitActionRaycastHit += action;
     }
+#endif
 
     /// <summary>
     /// “ñ“_ŠÔ‚ðˆÚ“®‚µ‚½Žž‚Ì“–‚½‚è”»’è‚ðŽæ‚é
@@ -123,8 +125,9 @@ public class BallView : MonoBehaviour
                 {
                     if (!_stayColliders.Contains(co.collider))
                     {
-                        CallOnHit(co.collider);
-                        CallOnHit(co);
+                        Debug.Log(_isCollide);
+                        //CallOnHit(co.collider);
+                        //CallOnHit(co);
                         _stayColliders.Add(co.collider);
                     }
                     for (int i = 0; i < _stayColliders.Count; i++)
@@ -144,14 +147,17 @@ public class BallView : MonoBehaviour
         }
     }
 
+
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(_isCollide);
         if (_isCollide)
         {
             CallOnHit(collision.collider);
             CallOnHit(collision);
         }
     }
+
 
     void CallOnHit(Collider c)
     {
