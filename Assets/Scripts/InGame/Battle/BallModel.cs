@@ -274,8 +274,8 @@ public class BallModel
             {
                 if (_isCarryEnd) { break; }
                 float buf = _progressStatus;
-                _progressStatus += Time.deltaTime * (_speed + _accele);
-                _accele += _acceleration * Time.deltaTime;
+                _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
+                _accele += _acceleration * Time.fixedDeltaTime;
                 if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
                 {
                     Velocity = (point - _rb.position) / (_progressStatus - buf);
@@ -294,7 +294,7 @@ public class BallModel
                         _position.Value = _route.Positons.First();
                     }
                 }
-                await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
+                await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
             }
         }
         else if (_mode == CarryMode.Distance)
