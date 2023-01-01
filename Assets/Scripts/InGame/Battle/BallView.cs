@@ -77,6 +77,7 @@ public class BallView : MonoBehaviour
         get => _isCollide;
         set
         {
+            Debug.Log($"chenge{value}");
             _isCollide = value;
             _stayColliders.Clear();
         }

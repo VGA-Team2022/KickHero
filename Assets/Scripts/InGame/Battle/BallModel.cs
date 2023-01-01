@@ -272,7 +272,6 @@ public class BallModel
             _progressStatus = _route.MinTime;
             while (_progressStatus <= _route.MaxTime)
             {
-                await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
                 if (_isCarryEnd) { break; }
                 float buf = _progressStatus;
                 _progressStatus += Time.deltaTime * (_speed + _accele);
@@ -295,6 +294,7 @@ public class BallModel
                         _position.Value = _route.Positons.First();
                     }
                 }
+                await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
             }
         }
         else if (_mode == CarryMode.Distance)
