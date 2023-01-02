@@ -95,6 +95,7 @@ public class BallModel
         {
             _rb = value;
             _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            Collection();
         }
     }
     public Collider Collider { get => _collider; set => _collider = value; }
