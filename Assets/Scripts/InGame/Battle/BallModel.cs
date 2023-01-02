@@ -276,10 +276,10 @@ public class BallModel
                 float buf = _progressStatus;
                 _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
                 _accele += _acceleration * Time.fixedDeltaTime;
-                if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
+                if (_route.TryGetVelocityInCaseTime(buf, _progressStatus, out Vector3 velosity))
                 {
-                    Velocity = (point - _rb.position) / (_progressStatus - buf);
-                    //_position.Value = _route.GetPointInCaseTime(buf).Value;
+                    Velocity = velosity;
+                    _position.Value = _route.GetPointInCaseTime(buf).Value;
                 }
                 else
                 {
