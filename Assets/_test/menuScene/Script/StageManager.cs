@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,12 +22,12 @@ public class StageManager
                 count++;
             }
         }
-        if (count < isCleared.Length)   //エラー:OutOfIndex　にならないための制限
+        for (int i = 1; i <= count; i++)
         {
-            for (int i = 1; i <= count; i++)
+            //stage[0]は一番最初の常にアクティブなステージを想定している。
+            //なので、アクティブにしていくステージはstage[1]からにしている。
+            if(i != 6)  //stage[6] は存在しないので制限をかける
             {
-                //stage[0]は一番最初の常にアクティブなステージを想定している。
-                //なので、アクティブにしていくステージはstage[1]からにしている。
                 stage[i].interactable = true;
             }
         }
