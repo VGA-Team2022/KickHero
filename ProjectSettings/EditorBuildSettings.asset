@@ -5,46 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-
+  - enabled: 0
+    path: Assets/Scenes/theninetails_effect.unity
+    guid: ffb899ea98eb298469d2e82e61f51a9b
+  - enabled: 0
+    path: Assets/_test/Aruga/Stage_02.unity
+    guid: 7377842e3f0f1b542b337b378b875594
   - enabled: 1
-    path: Assets/Scenes/MockUp/SampleInGame.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
-    path: Assets/Scenes/InGame.unity
-    guid: 86539028d8dc931459801a6bf7dce76a
-  - enabled: 1
-    path: Assets/Scenes/Menu.unity
-    guid: baeae25d7504f1544814d2f0bce79fce
-  - enabled: 1
-    path: Assets/Scenes/MockUp/SampleMenu.unity
-    guid: c2446dfcc999a9b488af6e1ab3a2bfde
-
-  - enabled: 1
-    path: Assets/Scenes/MockUp/SampleTitle.unity
-    guid: ed0d1746e28a2ff4c8883da05324af87
-  - enabled: 1
-    path: Assets/menuScene/menuScene.unity
-    guid: 41344254b4b59d24c97f6aed2fc4cff1
-  - enabled: 1
-    path: Assets/menuScene/DebugScene/DebugInGameScene.unity
-    guid: 0da428bafdaca964085894f64791e1ad
-  - enabled: 1
-    path: Assets/menuScene/DebugScene/DebugInGameScene 1.unity
-    guid: 059362b9a6a1e6d4184a3ac0a50c250c
-  - enabled: 1
-    path: Assets/menuScene/DebugScene/DebugInGameScene 2.unity
-    guid: f4143961e53e8fb4b8546cb56bef1811
-  - enabled: 1
-    path: Assets/menuScene/DebugScene/DebugInGameScene 3.unity
-    guid: ec425a2b415ae2b48ae9bfd8bbb06cf6
-  - enabled: 1
-    path: Assets/menuScene/DebugScene/DebugInGameScene 4.unity
-    guid: 0ddab59ba8b34294e8fb99c213166092
-  - enabled: 1
-    path: Assets/menuScene/DebugScene/DebugInGameScene 5.unity
-    guid: 1cb6ffc2ab5471f41acb7c8936d28c83
-  - enabled: 1
-    path: Assets/menuScene/DebugScene/DebugInGameScene 6.unity
-    guid: 3dd6220f820e3944e97dd838436a5e3c
-
-  m_configObjects: {}
+    path: Assets/_test/Aruga/Stage_01.unity
+    guid: 4f9e4f9405abb84459de36dad1898dd9
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 04a2cd281d3ec5b41b5ba68bef6a8dca,
+      type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000,
+      guid: 55adc310edc350e4d81385d4a5e4564d, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
+      guid: 4e91a04773245ce428fb25b69dacaaf3, type: 2}
