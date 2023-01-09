@@ -15,9 +15,9 @@ TagManager:
   - 
   - Character
   - 
+  - IgnorLight
   - 
-  - 
-  - 
+  - PostProcess
   - 
   - 
   - 

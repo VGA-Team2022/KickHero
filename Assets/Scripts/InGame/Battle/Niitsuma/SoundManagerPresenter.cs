@@ -58,12 +58,13 @@ public class SoundManagerPresenter : DDOLSingleton<SoundManagerPresenter>
         _model.CriAtomStop(cri);
     }
 
-    public void SetVolume()
+    public void SetVolume(CriAtomSource cri)
     {
         if (_model == null || _view == null) { return; }
-        _model.SetVolume(_model.AtomBGMSource, _view.BGMSlider.value);
-        _model.SetVolume(_model.AtomSESource, _view.SESlider.value);
-        _model.SetVolume(_model.AtomVoiceSorce, _view.VoiceSlider.value);
+
+        if (cri == _model.AtomBGMSource) { _model.SetVolume(_model.AtomBGMSource, _view.BGMSlider.value); }
+        else if (cri == _model.AtomSESource) { _model.SetVolume(_model.AtomSESource, _view.SESlider.value); }
+        else { _model.SetVolume(_model.AtomVoiceSorce, _view.VoiceSlider.value); }
     }
     void ValueSet()
     {
@@ -71,6 +72,5 @@ public class SoundManagerPresenter : DDOLSingleton<SoundManagerPresenter>
         _model.AtomSESource = _atomSESource;
         _model.AtomVoiceSorce = _atomVoiceSorce;
         _model.ChangeSpeed = _changeSpeed;
-        SetVolume();
     }
 }
