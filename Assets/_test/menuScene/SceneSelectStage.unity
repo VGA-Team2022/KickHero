@@ -3169,7 +3169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 0.1
-  _sceneName: 
+  _sceneName: SceneTitle
   _canvasGroup: {fileID: 1636272322}
   _fade: {fileID: 1821711330}
   _fadeTime: 0.5
