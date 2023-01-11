@@ -106,7 +106,10 @@ public class LineReader : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            DrawFinish();
+            if (_isDrawing)
+            {
+                DrawFinish();
+            }
         }
     }
 
@@ -189,6 +192,7 @@ public class LineReader : MonoBehaviour
                 }
             }
         }
+        _points.Clear();
         CallOnDrawEnd();
     }
 

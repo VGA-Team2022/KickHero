@@ -70,10 +70,9 @@ public class BallModel
     {
         get
         {
-            if (_rb)
+            if (_rb && !_rb.isKinematic)
             {
                 return _rb.velocity;
-
             }
             else
             {
@@ -83,19 +82,27 @@ public class BallModel
         set
         {
             _velocity = value;
-            if (_rb)
+            if (_rb && !_rb.isKinematic)
             {
                 _rb.velocity = value;
             }
         }
     }
 
-    public Rigidbody Rigidbody { get => _rb; set => _rb = value; }
+    public Rigidbody Rigidbody
+    {
+        get => _rb; set
+        {
+            _rb = value;
+            _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            Collection();
+        }
+    }
     public Collider Collider { get => _collider; set => _collider = value; }
     public float MissBoundSpeed { get => _missBoundSpeed; set => _missBoundSpeed = value; }
 
 
-    //public ReactiveProperty<Vector3> Position { get => _position;}
+    //public ReactiveProperty<Vector3> Position { get => _position; }
 
     public BallModel(Action<Vector3> position, GameObject gameObject, Vector3 startPosition)
     {
@@ -126,8 +133,8 @@ public class BallModel
     {
         if (_rb)
         {
-            Debug.Log(1);
-            _rb.isKinematic = false;
+            _rb.velocity = Vector3.zero;
+            //_rb.isKinematic = true;
         }
         Cancel();
         _tokenSource = new CancellationTokenSource();
@@ -144,7 +151,8 @@ public class BallModel
         _tokenSource?.Cancel();
         _isCarry = false;
         _accele = 0;
-        Velocity = Vector3.zero;
+        _isCarryEnd = true;
+        CallOnCarryEnd();
     }
 
     public BallModel OnCarryEnd(System.Action action)
@@ -196,13 +204,18 @@ public class BallModel
     /// </summary>
     public void Collection()
     {
+        _position.Value = _startPosition;
         if (_rb)
         {
-            _rb.isKinematic = true;
+            //_rb.isKinematic = true;
+            //_rb.velocity = Vector3.zero;
+            _rb.useGravity = false;
+            _rb.Sleep();
         }
-        _position.Value = _startPosition;
         Cancel();
     }
+
+
     /// <summary>
     /// ÉãÅ[ÉgÇÃê›íËÇééÇ›ÇÈ
     /// îÚçsíÜÇÕçƒê›íËÇ≈Ç´Ç»Ç¢
@@ -223,19 +236,31 @@ public class BallModel
     {
         if (hit.collider.tag == _groundTag)
         {
-            _isCarryEnd = true;
-            float bounciness = GetBounciness(_collider.material, hit.collider.material);
-            float x = UnityEngine.Random.Range(0f, 1);
-            float y = UnityEngine.Random.Range(-1f, 1);
-            float z = UnityEngine.Random.Range(-1f, 1);
-            Vector3 up = hit.normal * y;
-            Vector3 f = Vector3.Cross(hit.normal, Vector3.right).normalized;
-            Vector3 right = f * x;
-            Vector3 forward = Vector3.Cross(hit.normal, f).normalized * z;
-            Velocity = (right + up + forward).normalized * _missBoundSpeed;
-            _position.Value = hit.point + hit.normal * _radius;
-            CallOnCarryEnd();
+            MissBound(hit.point, hit.normal);
         }
+    }
+    public void OnCollision(Collision collision)
+    {
+        if (collision.collider.tag == _groundTag)
+        {
+            MissBound(collision.contacts[0].point, collision.contacts[0].normal);
+        }
+    }
+
+    void MissBound(Vector3 point, Vector3 normal)
+    {
+        _isCarryEnd = true;
+        //_rb.isKinematic = false;
+        float x = UnityEngine.Random.value;
+        float y = UnityEngine.Random.Range(-1f, 1);
+        float z = UnityEngine.Random.Range(-1f, 1);
+        Vector3 up = normal * y;
+        Vector3 f = Vector3.Cross(normal, Vector3.right).normalized;
+        Vector3 right = f * x;
+        Vector3 forward = Vector3.Cross(normal, f).normalized * z;
+        Velocity = (right + up + forward).normalized * _missBoundSpeed;
+        _position.Value = point + normal * _radius;
+        Cancel();
     }
 
 
@@ -248,15 +273,14 @@ public class BallModel
             _progressStatus = _route.MinTime;
             while (_progressStatus <= _route.MaxTime)
             {
-                await UniTask.Yield(PlayerLoopTiming.Update, _tokenSource.Token);
                 if (_isCarryEnd) { break; }
                 float buf = _progressStatus;
-                _progressStatus += Time.deltaTime * (_speed + _accele);
-                _accele += _acceleration * Time.deltaTime;
-                if (_route.TryGetPointInCaseTime(_progressStatus, out Vector3 point))
+                _progressStatus += Time.fixedDeltaTime * (_speed + _accele);
+                _accele += _acceleration * Time.fixedDeltaTime;
+                if (_route.TryGetVelocityInCaseTime(buf, _progressStatus, out Vector3 velosity))
                 {
-                    Velocity = _route.GetVelocityInCaseTime(buf, _progressStatus).Value;
-                    _position.Value = point;
+                    Velocity = velosity;
+                    _position.Value = _route.GetPointInCaseTime(buf).Value;
                 }
                 else
                 {
@@ -271,6 +295,7 @@ public class BallModel
                         _position.Value = _route.Positons.First();
                     }
                 }
+                await UniTask.Yield(PlayerLoopTiming.FixedUpdate, _tokenSource.Token);
             }
         }
         else if (_mode == CarryMode.Distance)
@@ -304,7 +329,7 @@ public class BallModel
         }
         if (_rb)
         {
-            _rb.isKinematic = false;
+            //_rb.isKinematic = false;
         }
         CallOnCarryEnd();
     }
