@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 0.1
-  _sceneName: DebugInGameScene 1
+  _sceneName: Stage_01
   _canvasGroup: {fileID: 1636272322}
   _fade: {fileID: 1821711330}
   _fadeTime: 0.5
@@ -1743,7 +1743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 0.1
-  _sceneName: DebugInGameScene 1
+  _sceneName: Stage_01
   _canvasGroup: {fileID: 1636272322}
   _fade: {fileID: 1821711330}
   _fadeTime: 0.5
@@ -1837,7 +1837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 0.1
-  _sceneName: DebugInGameScene 1
+  _sceneName: theninetails_effect
   _canvasGroup: {fileID: 1636272322}
   _fade: {fileID: 1821711330}
   _fadeTime: 0.5
@@ -3639,7 +3639,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 0.1
-  _sceneName: DebugInGameScene 1
+  _sceneName: Stage_04
   _canvasGroup: {fileID: 1636272322}
   _fade: {fileID: 1821711330}
   _fadeTime: 0.5
@@ -3672,7 +3672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b97a74e21342df941bb6828735cf5386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isCleared: 010101000000
+  _isCleared: 010101010100
   _stages:
   - {fileID: 1121267337}
   - {fileID: 1780248209}
@@ -4076,7 +4076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 0.1
-  _sceneName: DebugInGameScene 1
+  _sceneName: Stage_02
   _canvasGroup: {fileID: 1636272322}
   _fade: {fileID: 1821711330}
   _fadeTime: 0.5
@@ -4249,7 +4249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 0.1
-  _sceneName: DebugInGameScene 1
+  _sceneName: Stage_03
   _canvasGroup: {fileID: 1636272322}
   _fade: {fileID: 1821711330}
   _fadeTime: 0.5
