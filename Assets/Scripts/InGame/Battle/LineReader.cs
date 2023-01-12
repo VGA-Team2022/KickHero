@@ -19,6 +19,7 @@ public class LineReader : MonoBehaviour
     [SerializeField] Vector2 _startErea;
     [Tooltip("線を引ける時間")]
     [SerializeField] float _drawTime = 1f;
+    [SerializeField] float _drawInterval = 1f;
 
     [Header("デバッグ時設定項目")]
     [Tooltip("単体テスト時true")]
@@ -35,6 +36,8 @@ public class LineReader : MonoBehaviour
     float _time = 0;
     Action _onDrawStartAction;
     Action _onDrawEndAction;
+
+    float _drawIntervalTimer = 0f;
 
     public BallPresenter BallPresenter { get => _ballPresenter; set => _ballPresenter = value; }
 
@@ -71,7 +74,8 @@ public class LineReader : MonoBehaviour
 
     public void OnUpdate()
     {
-        if (!_ballPresenter) { return; }
+        _drawIntervalTimer += Time.deltaTime;
+        if (!_ballPresenter || _drawInterval>_drawIntervalTimer) { return; }
         if (Input.GetMouseButtonDown(0))
         {
             if (StartEreaCheck())
@@ -109,6 +113,7 @@ public class LineReader : MonoBehaviour
             if (_isDrawing)
             {
                 DrawFinish();
+                _drawIntervalTimer = 0f;
             }
         }
     }

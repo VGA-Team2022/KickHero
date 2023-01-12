@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
@@ -11,24 +10,13 @@ public class ButtonBase : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField,Tooltip("アニメーションの全体時間")] private float _duration = 0.1f;
 
-    Button _button;
-
     private bool _onClick = false;   //押下時かどうかを管理
-
-    private void Start()
-    {
-        _button = GetComponent<Button>();
-    }
-
 
     public async void OnPointerClick(PointerEventData eventData)
     {
-        if (_button == null || _button.interactable == true) //ボタンがアクティブのとき、またはButtonコンポーネントがないとき
+        if (!_onClick)  //ボタン連打を防ぐ条件分岐
         {
-            if (!_onClick)  //ボタン連打を防ぐ条件分岐
-            {
-                _onClick = await UniTaskAnimation(this.GetCancellationTokenOnDestroy());
-            }
+            _onClick = await UniTaskAnimation(this.GetCancellationTokenOnDestroy());
         }
     }
 

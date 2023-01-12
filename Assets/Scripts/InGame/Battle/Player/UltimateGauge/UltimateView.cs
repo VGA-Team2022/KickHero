@@ -2,18 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using UniRx;
 
 public class UltimateView : MonoBehaviour
 {
     [SerializeField]
     Slider _ulitimateGauge = null;
     [SerializeField]
-    Image _ultimateLamp;
+    Button _ultimateLamp;
 
-    public void Init(int maxValue)
+    public void Init(Action onButtonClick)
     {
         //íºê⁄êGÇÍÇ»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
         _ulitimateGauge.interactable = false;
+
+        _ulitimateGauge.interactable = false;
+        _ultimateLamp.onClick.AddListener(() => { onButtonClick.Invoke(); });
     }
 
     /// <summary>
@@ -21,17 +26,18 @@ public class UltimateView : MonoBehaviour
     /// </summary>
     /// <param name="maxValue">ç≈ëÂíl</param>
     /// <param name="currentValue">åªç›ÇÃíl</param>
-    public void ChangeGaugeValue(int maxValue,int currentValue)
+    public void ChangeGaugeValue(int maxValue, int currentValue)
     {
         _ulitimateGauge.maxValue = maxValue;
-        _ulitimateGauge.value = Mathf.Clamp(currentValue,0,maxValue);
-        if (currentValue>=maxValue)
+        _ulitimateGauge.value = Mathf.Clamp(currentValue, 0, maxValue);
+        if (currentValue >= maxValue)
         {
-            _ultimateLamp.color = Color.red;
+            _ulitimateGauge.interactable = true;
+            _ultimateLamp.image.color = Color.white;
         }
         else
         {
-            _ultimateLamp.color = Color.gray;
+            _ultimateLamp.image.color = Color.gray;
         }
     }
 }

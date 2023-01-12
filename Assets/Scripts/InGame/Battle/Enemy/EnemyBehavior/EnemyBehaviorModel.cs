@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Threading;
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 public class EnemyBehaviorModel
 {
@@ -16,14 +15,26 @@ public class EnemyBehaviorModel
         _stanTime = stanTime;
     }
 
-    public async UniTask Charge()
-    {
-        await UniTask.Delay(TimeSpan.FromSeconds(_chargeTime));
-    }
-
     public void Attack(IDamage damage)
     {
         damage.Damage(-_attack);
+    }
+
+    float _timer = 0f;
+    public bool Charge()
+    {
+        _timer += Time.deltaTime;
+        if(_timer < _chargeTime)
+        {
+            return false;
+        }
+        ResetTimer();
+        return true;
+    }
+
+    public void ResetTimer()
+    {
+        _timer = 0f;
     }
 
     public async UniTask Stan()
