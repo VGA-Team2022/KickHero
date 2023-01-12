@@ -22,3 +22,11 @@ public class AnimationName
         public static readonly string Ultimate = "Ultimate";
     }
 }
+
+public class InGameConst
+{
+    /// <summary>
+    /// •KE‹ZƒQ[ƒW‚ª’™‚Ü‚é1‰ñ‚ ‚½‚è‚Ì’l
+    /// </summary>
+    public const int ALTIMATE_GAUGE_POINT = 2;
+}

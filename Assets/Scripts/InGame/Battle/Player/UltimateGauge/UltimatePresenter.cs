@@ -11,10 +11,6 @@ public class UltimatePresenter : MonoBehaviour
     UltimateModel _ultimateModel = null;
     [SerializeField,Tooltip("アルティメットの最大値")]
     int _maxUltimateValue = 10;
-    void Start()
-    {
-        Init();
-    }
 
     public void Init()
     {
@@ -26,6 +22,8 @@ public class UltimatePresenter : MonoBehaviour
                 _ultimateView.ChangeGaugeValue(_maxUltimateValue,x);
             },
             _ultimateView.gameObject);
+
+        _ultimateView.Init(() => { TimeLineController.Instance.EventPlay(TimeLineState.Ult); });
     }
 
     /// <summary>

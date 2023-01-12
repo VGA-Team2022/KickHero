@@ -1,6 +1,7 @@
 using UniRx;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 public class EnemyBehaviorPresenter : MonoBehaviour
 {
@@ -17,10 +18,8 @@ public class EnemyBehaviorPresenter : MonoBehaviour
     float _chargeTime = 3f;
     [SerializeField]
     float _stanTime = 3f;
-    [SerializeField]
-    int _enemyHp = 20;
-    [SerializeField]
-    float _attackTimeLimit = 2f;
+
+
     public void Init()
     {
         _behaviorModel = new EnemyBehaviorModel(_attack, _chargeTime, _stanTime);
@@ -35,24 +34,38 @@ public class EnemyBehaviorPresenter : MonoBehaviour
         _behaviorView.Down();
     }
 
-    public async UniTask<bool> Charge()
+    public void Charge()
     {
+        _behaviorModel.ResetTimer();
         _behaviorView.ActiveWeakPoint(true);
-        _behaviorView.PlayChargeAnimation();
-        await _behaviorModel.Charge();
-        bool isTrigger = _behaviorView.IsTriggerWeakPoint();
+        _behaviorView.PlayChargeAnimation();       
+    }
+
+    public bool IsTriggerWeakPoint()
+    {
+        return _behaviorView.IsTriggerWeakPoint();
+    }
+
+    public bool IsEndCharge()
+    {
+        if (_behaviorModel.Charge() == false)
+        {
+            return false;
+        }
         _behaviorView.ActiveWeakPoint(false);
-        return isTrigger;
+        return true;
     }
 
     public async UniTask Attack(IDamage damage)
-    {     
+    {
         await _behaviorView.PlayAttackAnimation();
         _behaviorModel.Attack(damage);
     }
 
     public async UniTask Damage()
     {
+        _behaviorModel.ResetTimer();
+        _behaviorView.ActiveWeakPoint(false);
         await _behaviorView.PlayDamageAnimation();
     }
 

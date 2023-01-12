@@ -8,7 +8,7 @@ public class OperationScreen : ButtonBase
 {
     [SerializeField,Tooltip("スクリーンを開いているかどうかの判定")] private bool _isOpen;
     [SerializeField,Tooltip("スクリーンの親")] private GameObject _panel;
-    [SerializeField,Tooltip("DoTweenのアニメーションにかかる時間")] private float _time = 0.1f;
+    [SerializeField,Tooltip("DoTweenのアニメーションにかかる時間")] private float _animationTime = 0.1f;
 
     public override void Process()
     {
@@ -17,12 +17,15 @@ public class OperationScreen : ButtonBase
         if (!_isOpen) //スクリーンを開いていないとき
         {
             rectTransform.anchoredPosition = new Vector2(Screen.width, 0);
-            rectTransform.DOAnchorPosX(0, _time).OnStart(() => _panel.SetActive(true)); //画面外から左方向に画面中央に向かう
-
+            rectTransform.DOAnchorPosX(0, _animationTime)
+                .OnStart(() => _panel.SetActive(true)); //画面外から左方向に画面中央に向かう
+            SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Select");
         }
         else //スクリーンを開いているとき
         {
-            rectTransform.DOAnchorPosX(Screen.width,_time).OnComplete(() => _panel.SetActive(false)); //画面中央から右方向に画面外へ出ていく
+            rectTransform.DOAnchorPosX(Screen.width,_animationTime)
+                .OnComplete(() => _panel.SetActive(false)); //画面中央から右方向に画面外へ出ていく
+            SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Select");
         }
     }
 }

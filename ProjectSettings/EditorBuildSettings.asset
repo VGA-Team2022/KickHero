@@ -5,15 +5,30 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/theninetails_effect.unity
     guid: ffb899ea98eb298469d2e82e61f51a9b
-  - enabled: 0
+  - enabled: 1
+    path: Assets/_test/Make_Stage/Stage_04/Stage_04.unity
+    guid: 7d776bae51bac0a4fb24fbd313a0c593
+  - enabled: 1
+    path: Assets/_test/Make_Stage/Stage_03/Stage_03.unity
+    guid: 198eead816c0bd24da494b35b92b1643
+  - enabled: 1
     path: Assets/_test/Aruga/Stage_02.unity
     guid: 7377842e3f0f1b542b337b378b875594
   - enabled: 1
     path: Assets/_test/Aruga/Stage_01.unity
     guid: 4f9e4f9405abb84459de36dad1898dd9
+  - enabled: 1
+    path: Assets/_test/Aruga/Stage_01_01.unity
+    guid: 60b66682529ea424291e837337be7cc6
+  - enabled: 1
+    path: Assets/_test/menuScene/SceneSelectStage.unity
+    guid: 6a234676da93bab49b1bde4cf49beb7c
+  - enabled: 1
+    path: Assets/_test/menuScene/SceneTitle.unity
+    guid: 4ce81690e4afa474d928adde645cfe6a
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 04a2cd281d3ec5b41b5ba68bef6a8dca,
       type: 2}

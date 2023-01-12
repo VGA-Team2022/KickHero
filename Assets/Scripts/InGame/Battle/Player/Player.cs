@@ -23,6 +23,11 @@ public class Player : IDamage
         _playerHP.AddHPValue(value);
     }
 
+    public void AddUltimateGauge(int value)
+    {
+        _ultimatePresenter.ChangeValue(value);
+    }
+
     public void Initialize()
     {
         if (!_playerHP)

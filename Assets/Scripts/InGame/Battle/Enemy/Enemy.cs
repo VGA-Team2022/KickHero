@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -29,9 +29,19 @@ public class Enemy
         _behaviorPresenter.Init();
     }
 
-    public async UniTask<bool> Charge()
+    public void Charge()
     {
-       return  await  _behaviorPresenter.Charge();
+        _behaviorPresenter.Charge();
+    }
+
+    public bool IsTriggerWeakPoint()
+    {
+        return _behaviorPresenter.IsTriggerWeakPoint();
+    }
+
+    public bool IsChargeTimeUp()
+    {
+        return _behaviorPresenter.IsEndCharge();
     }
 
     public async UniTask Attack(IDamage player)
@@ -41,7 +51,8 @@ public class Enemy
 
     public async UniTask Damage()
     {
-       await _behaviorPresenter.Damage();
+        _hpPresenter.Damage(1);
+        await _behaviorPresenter.Damage();      
     }
 
     public void Down()

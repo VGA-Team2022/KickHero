@@ -60,11 +60,13 @@ public class EnemyBehaviorView : MonoBehaviour
             foreach (var weakpoint in _weakPoints)
             {
                 weakpoint.IsTrigger = false;
+                weakpoint.gameObject.SetActive(false);
             }
             return;
         }
         int rand = UnityEngine.Random.Range(0, _weakPoints.Length);
-        _weakPointUI.transform.position = Camera.main.WorldToScreenPoint(_weakPoints[rand].transform.position);
+        _weakPoints[rand].gameObject.SetActive(true);
+        _weakPointUI.transform.position = Camera.main.WorldToScreenPoint(_weakPoints[rand].transform.position);      
     }
 
     public bool IsTriggerWeakPoint()
@@ -79,15 +81,6 @@ public class EnemyBehaviorView : MonoBehaviour
             }
         }
         return isPrevent;
-    }
-
-    public void ResetWeakPoints()
-    {
-        foreach (var weakpoint in _weakPoints)
-        {
-            weakpoint.IsTrigger = false;
-            weakpoint.gameObject.SetActive(false);
-        }
     }
 
     public void Down()
