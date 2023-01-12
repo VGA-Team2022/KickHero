@@ -4546,10 +4546,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1427478152}
-        m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1454885859}
+        m_TargetAssemblyTypeName: TimeLineController, Assembly-CSharp
+        m_MethodName: EventPlay
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6586,12 +6586,6 @@ Transform:
   m_Father: {fileID: 8020666}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!320 &1427478152 stripped
-PlayableDirector:
-  m_CorrespondingSourceObject: {fileID: 1054069100200079823, guid: 2dd80e5af00f194459fb9a13d39d1ed9,
-    type: 3}
-  m_PrefabInstance: {fileID: 1054069101492807495}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1441921132
 GameObject:
   m_ObjectHideFlags: 0
@@ -6656,6 +6650,18 @@ Transform:
   m_Father: {fileID: 550597874}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 5.261215, y: -18.860611, z: 24.48631}
+--- !u!114 &1454885859 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3911097451448145608, guid: cc65b0964dd953e488358f4a7cbbe138,
+    type: 3}
+  m_PrefabInstance: {fileID: 3911097451838112162}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e3375546049dd4194282434eea4c4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1458645202
 GameObject:
   m_ObjectHideFlags: 0
