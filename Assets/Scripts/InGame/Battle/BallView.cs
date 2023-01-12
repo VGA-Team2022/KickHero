@@ -16,19 +16,14 @@ public class BallView : MonoBehaviour
 {
     /// <summary>何かに当たった時に発行するイベント</summary>
     Action<Collider> _onHitActionCollider;
-    /// <summary>何かに当たった時にそのRaycastHitを渡すイベント(Positionによる移動時限定)</summary>
+    /// <summary>何かに当たった時にそのRaycastHitを渡すイベント</summary>
     Action<RaycastHit> _onHitActionRaycastHit;
-    /// <summary>何かに当たった時にそのCollisionを渡すイベント(Rigidbodyによる移動時限定)</summary>
-    Action<Collision> _onHitActionCollision;
 
     SphereCollider _collider;
     Rigidbody _rb;
     /// <summary>接触中のコライダーのリスト</summary>
     List<Collider> _stayColliders = new List<Collider>();
     bool _isCollide = false;
-    Vector3 _lastPosition;
-
-    bool _isKinematic;
 
     public Rigidbody Rigidbody
     {
@@ -67,6 +62,10 @@ public class BallView : MonoBehaviour
         {
             Vector3 pos = transform.position;
             transform.position = value;
+            if (_isCollide)
+            {
+                HitDetermine(pos, value, Collider.radius);
+            }
         }
     }
 
@@ -77,7 +76,6 @@ public class BallView : MonoBehaviour
         get => _isCollide;
         set
         {
-            Debug.Log($"chenge{value}");
             _isCollide = value;
             _stayColliders.Clear();
         }
@@ -85,8 +83,7 @@ public class BallView : MonoBehaviour
 
     private void Start()
     {
-        //Rigidbody.isKinematic = true;
-        //Rigidbody.Sleep();
+        Rigidbody.isKinematic = true;
         _collider = GetComponent<SphereCollider>();
     }
 
@@ -94,17 +91,10 @@ public class BallView : MonoBehaviour
     {
         _onHitActionCollider += action;
     }
-    public void OnHit(Action<Collision> action)
-    {
-        _onHitActionCollision += action;
-    }
-
-#if false
     public void OnHit(Action<RaycastHit> action)
     {
         _onHitActionRaycastHit += action;
     }
-#endif
 
     /// <summary>
     /// 二点間を移動した時の当たり判定を取る
@@ -116,6 +106,7 @@ public class BallView : MonoBehaviour
     /// <param name="radius"></param>
     void HitDetermine(Vector3 start, Vector3 end, float radius)
     {
+        Debug.Log($"{start}, {end}");
         Ray ray = new Ray(start, (end - start).normalized);
         var pHits = Physics.SphereCastAll(ray, radius, Vector3.Distance(end, start), Physics.AllLayers, QueryTriggerInteraction.Collide);
         if (pHits.Length != 0)
@@ -126,9 +117,9 @@ public class BallView : MonoBehaviour
                 {
                     if (!_stayColliders.Contains(co.collider))
                     {
-                        Debug.Log(_isCollide);
-                        //CallOnHit(co.collider);
-                        //CallOnHit(co);
+                        Debug.Log(co.collider.name);
+                        CallOnHit(co.collider);
+                        CallOnHit(co);
                         _stayColliders.Add(co.collider);
                     }
                     for (int i = 0; i < _stayColliders.Count; i++)
@@ -148,18 +139,6 @@ public class BallView : MonoBehaviour
         }
     }
 
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(_isCollide);
-        if (_isCollide)
-        {
-            CallOnHit(collision.collider);
-            CallOnHit(collision);
-        }
-    }
-
-
     void CallOnHit(Collider c)
     {
         _onHitActionCollider?.Invoke(c);
@@ -167,10 +146,6 @@ public class BallView : MonoBehaviour
     void CallOnHit(RaycastHit r)
     {
         _onHitActionRaycastHit?.Invoke(r);
-    }
-    void CallOnHit(Collision c)
-    {
-        _onHitActionCollision?.Invoke(c);
     }
 
     public void Hide()

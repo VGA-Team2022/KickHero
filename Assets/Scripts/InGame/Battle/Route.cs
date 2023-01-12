@@ -157,17 +157,17 @@ public class BallRoute
     /// <param name="start"></param>
     /// <param name="end"></param>
     /// <returns></returns>
-    public bool TryGetVelocityInCaseTime(float start, float end, out Vector3 velocity)
+    public bool TryGetVelocityInCaseTime(float start, float end, out Vector3 point)
     {
         Vector3? buf = GetVelocityInCaseTime(start, end);
         if (buf == null)
         {
-            velocity = Vector3.zero;
+            point = Vector3.zero;
             return false;
         }
         else
         {
-            velocity = buf.Value;
+            point = buf.Value;
             return true;
         }
     }

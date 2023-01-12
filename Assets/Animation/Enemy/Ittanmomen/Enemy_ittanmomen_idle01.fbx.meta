@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b5b1b7d603b823b4ca55765d5cc07b5e
+guid: 735cda730f6d59642809f9c8c3fa97c3
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -89,15 +89,16 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: 
+    rootMotionBoneName: joint2
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: f43f39297755b924bbaf2a4a69fb5433,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
