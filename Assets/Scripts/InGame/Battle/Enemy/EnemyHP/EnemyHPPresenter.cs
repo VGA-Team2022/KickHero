@@ -52,7 +52,7 @@ public class EnemyHPPresenter : MonoBehaviour, IDamage
         if (collision.TryGetComponent(out BallPresenter ballPresenter))
         {
             ballPresenter.Collection();
-            Damage(1);
+            //Damage(1);
         }
     }
 }
