@@ -20,6 +20,7 @@ public class SceneChangeController : ButtonBase
             .OnStart(() =>
             {
                 _fade.enabled = true;
+                SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Pressed_2");
             })
             .OnComplete(() => 
             {

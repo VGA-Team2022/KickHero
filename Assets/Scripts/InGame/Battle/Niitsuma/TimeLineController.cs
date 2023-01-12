@@ -39,15 +39,19 @@ public class TimeLineController : MonoBehaviour
         switch (state)
         {
             case TimeLineState.Start:
+                Debug.Log("A");
                 director.Play(_startTimeLine);
                 break;
             case TimeLineState.Clear:
+                Debug.Log("B");
                 director.Play(_clearTimeLine);
                 break;
             case TimeLineState.GameOver:
+                Debug.Log("C");
                 director.Play(_gameOverTimeLine);
                 break;
             case TimeLineState.Ult:
+                Debug.Log("D");
                 director.Play(_ultTimeLine);
                 break;
             default:
