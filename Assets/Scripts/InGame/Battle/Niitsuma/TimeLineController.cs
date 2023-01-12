@@ -1,7 +1,4 @@
-using DG.Tweening.Core.Easing;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -16,9 +13,20 @@ public class TimeLineController : MonoBehaviour
     [SerializeField] TimelineAsset _gameOverTimeLine;
     [SerializeField] TimelineAsset _ultTimeLine;
 
-    static private TimeLineController _instance = new TimeLineController();
+    static private TimeLineController _instance = null;
     static public TimeLineController Instance => _instance;
 
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
     private void Start()
     {
         director = GetComponent<PlayableDirector>();
@@ -65,6 +73,11 @@ public class TimeLineController : MonoBehaviour
     {
         if (director || director.playableAsset) { return; }
         director.Stop();
+    }
+
+    private void OnDestroy()
+    {
+        _instance = null;
     }
 }
 

@@ -2,6 +2,7 @@ using State = StateMachine<InGameCycle.EventEnum, InGameCycle>.State;
 using UnityEngine;
 using System;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 public class InGameCycle : MonoBehaviour, IReceivableGameData
 {
@@ -117,29 +118,31 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
 
     private class NormalAttackChargeState : State
     {
-        protected override async void OnEnter(State prevState)
+        protected override void OnEnter(State prevState)
         {
-            Debug.Log("チャージ中");
-            bool isTrigger = await _stateMachine.Owner._enemy.Charge();
-            Debug.Log("チャージ終わり");
-            if (isTrigger)
-            {
-                SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Hit");
-                await _stateMachine.Owner._enemy.Damage();            
-                _stateMachine.Dispatch(EventEnum.Idle);
-            }
-            else
-            {
-                _stateMachine.Dispatch(EventEnum.Attack);
-            }         
+            Debug.Log("NormalAttackChargeStateに入った");
+            _stateMachine.Owner._enemy.Charge();        
         }
 
-        protected override void OnUpdate()
-        {
-            _stateMachine.Owner._player.OnUpdate();
+        protected override async void OnUpdate()
+        {                      
             if (_stateMachine.Owner._enemy.IsDead)
             {
                 _stateMachine.Dispatch(EventEnum.GameOver);
+            }
+            else if(_stateMachine.Owner._enemy.IsTriggerWeakPoint())
+            {
+                SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Hit");
+                await _stateMachine.Owner._enemy.Damage();
+                _stateMachine.Dispatch(EventEnum.Idle);
+            }
+            else if(_stateMachine.Owner._enemy.IsChargeTimeUp())
+            {
+                _stateMachine.Dispatch(EventEnum.Attack);
+            }
+            else
+            {
+                _stateMachine.Owner._player.OnUpdate();
             }
         }
         protected override void OnExit(State nextState)
