@@ -77,7 +77,6 @@ GameObject:
   - component: {fileID: 283026183798519984}
   - component: {fileID: 283026183798519990}
   - component: {fileID: 283026183798519989}
-  - component: {fileID: 7110812246448873334}
   m_Layer: 0
   m_Name: Enemy_nurikabe
   m_TagString: Untagged
@@ -188,19 +187,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slider: {fileID: 1093507199246085516}
   _sliderDuration: 0.3
---- !u!65 &7110812246448873334
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 283026183798519988}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.63, y: 2.41, z: 0.5}
-  m_Center: {x: 0, y: 1.69, z: 0}
 --- !u!1 &305601088959926368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1458,6 +1444,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1297340912744210918}
+  - component: {fileID: 3431565618933190414}
   m_Layer: 0
   m_Name: Waist_Con_fk
   m_TagString: Untagged
@@ -1486,6 +1473,19 @@ Transform:
   m_Father: {fileID: 6714316952190214080}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3431565618933190414
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4522721320104934009}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.63, y: 2.41, z: 0.5}
+  m_Center: {x: 0, y: 0.93, z: 0}
 --- !u!1 &4642304384836344290
 GameObject:
   m_ObjectHideFlags: 0
