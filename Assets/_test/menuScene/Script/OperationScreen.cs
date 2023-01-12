@@ -19,12 +19,13 @@ public class OperationScreen : ButtonBase
             rectTransform.anchoredPosition = new Vector2(Screen.width, 0);
             rectTransform.DOAnchorPosX(0, _animationTime)
                 .OnStart(() => _panel.SetActive(true)); //画面外から左方向に画面中央に向かう
-
+            SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Select");
         }
         else //スクリーンを開いているとき
         {
             rectTransform.DOAnchorPosX(Screen.width,_animationTime)
                 .OnComplete(() => _panel.SetActive(false)); //画面中央から右方向に画面外へ出ていく
+            SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Select");
         }
     }
 }
