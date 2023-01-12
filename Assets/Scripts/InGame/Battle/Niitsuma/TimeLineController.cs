@@ -6,22 +6,23 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-[RequireComponent(typeof(PlayableDirector))]
 public class TimeLineController : MonoBehaviour
 {
-    PlayableDirector director;
+    PlayableDirector _currentDirector;
 
-    [SerializeField] TimelineAsset _startTimeLine;
-    [SerializeField] TimelineAsset _clearTimeLine;
-    [SerializeField] TimelineAsset _gameOverTimeLine;
-    [SerializeField] TimelineAsset _ultTimeLine;
+    [SerializeField] PlayableDirector _startTimeLine;
+    [SerializeField] PlayableDirector _clearTimeLine;
+    [SerializeField] PlayableDirector _gameOverTimeLine;
+    [SerializeField] PlayableDirector _ultTimeLine;
 
     static private TimeLineController _instance = new TimeLineController();
     static public TimeLineController Instance => _instance;
 
     private void Start()
     {
-        director = GetComponent<PlayableDirector>();
+        _currentDirector = GetComponent<PlayableDirector>();
+
+        EventPlay(TimeLineState.Start);
     }
 
     /// <summary>
@@ -39,20 +40,20 @@ public class TimeLineController : MonoBehaviour
         switch (state)
         {
             case TimeLineState.Start:
-                Debug.Log("A");
-                director.Play(_startTimeLine);
+                _currentDirector = _startTimeLine;
+                _startTimeLine.Play();
                 break;
             case TimeLineState.Clear:
-                Debug.Log("B");
-                director.Play(_clearTimeLine);
+                _currentDirector = _clearTimeLine;
+                _clearTimeLine.Play();
                 break;
             case TimeLineState.GameOver:
-                Debug.Log("C");
-                director.Play(_gameOverTimeLine);
+                _currentDirector = _gameOverTimeLine;
+                _gameOverTimeLine.Play();
                 break;
             case TimeLineState.Ult:
-                Debug.Log("D");
-                director.Play(_ultTimeLine);
+                _currentDirector = _ultTimeLine;
+                _ultTimeLine.Play();
                 break;
             default:
                 break;
@@ -61,14 +62,14 @@ public class TimeLineController : MonoBehaviour
 
     public void EventPause()
     {
-        if (director || director.playableAsset) { return; }
-        director.Pause();
+        if (_currentDirector || _currentDirector.playableAsset) { return; }
+        _currentDirector.Pause();
     }
 
     public void EventStop()
     {
-        if (director || director.playableAsset) { return; }
-        director.Stop();
+        if (_currentDirector || _currentDirector.playableAsset) { return; }
+        _currentDirector.Stop();
     }
 }
 
