@@ -47,6 +47,7 @@ public abstract class AbstructScene : MonoBehaviour
         await _sceneOperator.LoadScene(sceneName);
     }
 
+
     /// <summary>
     /// ‘O‚ÌƒV[ƒ“‚©‚çSceneOperator‚ğˆø‚«Œp‚®‚½‚ß‚ÌŠÖ”
     /// </summary>
