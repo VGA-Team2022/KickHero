@@ -5,4 +5,5 @@ using UnityEngine;
 interface IReceivableGameData
 {
     void SetClearedStage(bool[] clearedStage);
+    public void SetCurrentStage(int index);
 }

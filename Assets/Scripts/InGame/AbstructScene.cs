@@ -16,6 +16,13 @@ public abstract class AbstructScene : MonoBehaviour
         }
     }
 
+    public void SetClearStage(int clearIndex)
+    {
+        bool[] clearedStages =ClearedStages;
+        clearedStages[clearIndex] = true;
+        ClearedStages = clearedStages;
+    }
+
     public void ResetStage()
     {
         _sceneOperator.ResetClearedStage();
@@ -30,7 +37,7 @@ public abstract class AbstructScene : MonoBehaviour
     /// <summary>
     /// SceneOperatorのLoadSceneを非同期で呼ぶ
     /// </summary>
-    public async void LoadScene(string sceneName,bool[] clearedStage)
+    public async UniTask LoadScene(string sceneName,bool[] clearedStage)
     {
         //最初に一度インスタンスを初期化
         if (_sceneOperator == null)

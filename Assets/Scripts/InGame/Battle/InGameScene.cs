@@ -8,6 +8,9 @@ public class InGameScene : AbstructScene
     [SerializeField]
     bool[] _startClearedStages;
 
+    [SerializeField,Range(0,4)]
+    int _stageIndex;
+
     [Header("デバッグ用")]
     [SerializeField,]
     Button _button;
@@ -28,7 +31,7 @@ public class InGameScene : AbstructScene
         }
         _receivableGameData.SetClearedStage(_sceneOperator.IsClearedStages);
 
-        _button.onClick.AddListener(() => { LoadScene(_sceneName,_sceneOperator.IsClearedStages); });
+        _button.onClick.AddListener(async () => { await LoadScene(_sceneName,ClearedStages); });
     }
     public override async UniTask Load()
     {
@@ -45,6 +48,7 @@ public class InGameScene : AbstructScene
 
     public override async UniTask UnLoad()
     {
+        SetClearStage(_stageIndex);
         await UniTask.Yield();
     }
 }
