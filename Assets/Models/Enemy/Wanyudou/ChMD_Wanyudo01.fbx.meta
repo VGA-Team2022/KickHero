@@ -3,7 +3,12 @@ guid: fad3662d7cd865645a0d53ca440c63cd
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MTTX_Enemy_Wanyudo
+    second: {fileID: 2100000, guid: 167f6a469bb40dc4bb2084eda8274693, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
