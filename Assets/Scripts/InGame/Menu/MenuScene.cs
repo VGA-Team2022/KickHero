@@ -6,11 +6,6 @@ public class MenuScene : AbstructScene
 {
     [SerializeField]
     bool[] _startClearedStages;
-    [Header("デバッグ用")]
-    [SerializeField,]
-    Button _button;
-    [SerializeField]
-    string _sceneName = "";
 
     protected override void OnAwake()
     {
@@ -18,7 +13,6 @@ public class MenuScene : AbstructScene
         {
             _sceneOperator = new SceneOperator(_startClearedStages);
         }
-        _button.onClick.AddListener(async () => { await LoadScene(_sceneName, _sceneOperator.IsClearedStages); });
     }
     public override async UniTask Load()
     {
@@ -34,6 +28,15 @@ public class MenuScene : AbstructScene
         }
     }
 
+    public async UniTask LoadScene(string sceneName)
+    {
+        //最初に一度インスタンスを初期化
+        if (_sceneOperator == null)
+        {
+            _sceneOperator = new SceneOperator(_startClearedStages);
+        }
+        await _sceneOperator.LoadScene(sceneName);
+    }
     public override async UniTask UnLoad()
     {
         await UniTask.Yield();
