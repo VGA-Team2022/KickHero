@@ -24,13 +24,9 @@ public class TimeLineController : MonoBehaviour
         else
         {
             _instance = this;
+            _currentDirector = GetComponent<PlayableDirector>();
+            EventPlay(TimeLineState.Start);
         }
-    }
-    private void Start()
-    {
-        _currentDirector = GetComponent<PlayableDirector>();
-
-        EventPlay(TimeLineState.Start);
     }
 
     /// <summary>

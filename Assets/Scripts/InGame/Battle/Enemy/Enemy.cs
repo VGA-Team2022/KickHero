@@ -55,6 +55,11 @@ public class Enemy
         await _behaviorPresenter.Damage();      
     }
 
+    public void Threat()
+    {
+        _behaviorPresenter?.Threat();
+    }
+
     public void Down()
     {
         _behaviorPresenter?.Down();

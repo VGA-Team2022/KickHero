@@ -14,6 +14,7 @@ public class AnimationName
         public static readonly string HitRight = "HitRight";
         public static readonly string HitLeft = "HitLeft";
         public static readonly string Down = "Down";
+        public static readonly string Threat = "Threat";
     }
     public struct PlayerAnimationNames
     {
