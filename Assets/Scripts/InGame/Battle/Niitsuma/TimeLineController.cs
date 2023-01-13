@@ -6,6 +6,7 @@ using UnityEngine.Timeline;
 public class TimeLineController : MonoBehaviour
 {
     PlayableDirector _currentDirector;
+    public PlayableDirector CurrentDirector => _currentDirector;
 
     [SerializeField] PlayableDirector _startTimeLine;
     [SerializeField] PlayableDirector _clearTimeLine;
@@ -24,13 +25,9 @@ public class TimeLineController : MonoBehaviour
         else
         {
             _instance = this;
+            _currentDirector = GetComponent<PlayableDirector>();
+            EventPlay(TimeLineState.Start);
         }
-    }
-    private void Start()
-    {
-        _currentDirector = GetComponent<PlayableDirector>();
-
-        EventPlay(TimeLineState.Start);
     }
 
     /// <summary>

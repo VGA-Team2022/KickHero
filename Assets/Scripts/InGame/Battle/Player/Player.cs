@@ -13,6 +13,9 @@ public class Player : IDamage
     LineReader _lineReader;
 
     public bool IsDead => _playerHP.IsDead;
+
+    public bool IsUltimate => _ultimatePresenter.IsUltimate;
+
     public Player()
     {
         Initialize();
@@ -20,11 +23,13 @@ public class Player : IDamage
 
     public void Damage(int value)
     {
+        SoundManagerPresenter.Instance.CriAtomVoicePlay("Voice_Damage");
         _playerHP.AddHPValue(value);
     }
 
     public void AddUltimateGauge(int value)
     {
+        SoundManagerPresenter.Instance.CriAtomVoicePlay("Voice_Block");
         _ultimatePresenter.ChangeValue(value);
     }
 
@@ -46,10 +51,14 @@ public class Player : IDamage
         {
             _lineReader = GetMonoBehaviorInstansInScene<LineReader>();
         }
-        _playerHP.Init();
-        _ultimatePresenter.Init();
+        _playerHP.Init();      
         _ballPresenter.Init();
         _lineReader.Init();
+    }
+
+    public void InitUltimate(IDamage enemy)
+    {
+        _ultimatePresenter.Init(enemy);
     }
 
     public void OnUpdate()

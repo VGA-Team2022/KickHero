@@ -20,7 +20,7 @@ public class LineReader : MonoBehaviour
     [Tooltip("線を引ける時間")]
     [SerializeField] float _drawTime = 1f;
     [SerializeField] float _drawInterval = 1f;
-
+    [SerializeField] Animator _animator;
     [Header("デバッグ時設定項目")]
     [Tooltip("単体テスト時true")]
     [SerializeField] bool _isDebug = false;
@@ -177,6 +177,8 @@ public class LineReader : MonoBehaviour
 
     void DrawFinish()
     {
+        _animator.SetTrigger("Attack");
+        SoundManagerPresenter.Instance.CriAtomVoicePlay("Voice_Kick");
         _isDrawing = false;
         BallRoute route = RouteConvert();
         if (route != null)

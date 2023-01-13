@@ -3,7 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class Enemy
+public class Enemy:IDamage
 {
     EnemyHPPresenter _hpPresenter;
     EnemyBehaviorPresenter _behaviorPresenter;
@@ -55,6 +55,11 @@ public class Enemy
         await _behaviorPresenter.Damage();      
     }
 
+    public void Threat()
+    {
+        _behaviorPresenter?.Threat();
+    }
+
     public void Down()
     {
         _behaviorPresenter?.Down();
@@ -71,5 +76,10 @@ public class Enemy
             GameObject go = new GameObject(nameof(T));
             return go.AddComponent<T>();
         }
+    }
+
+    public void Damage(int value)
+    {
+        _hpPresenter.Damage(value);
     }
 }
