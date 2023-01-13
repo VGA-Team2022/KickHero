@@ -18,7 +18,7 @@ public class PoolEffect
     public ObjectPool<EffectSetting> EffPool = new ObjectPool<EffectSetting>();
 }
 
-public class EffectManager : MonoBehaviour
+public class EffectManager : Singleton<EffectManager>
 {
     [SerializeField, Tooltip("生成するエフェクト")]
     PoolEffect[] Effects;

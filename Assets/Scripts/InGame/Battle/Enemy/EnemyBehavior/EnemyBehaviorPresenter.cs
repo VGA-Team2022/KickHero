@@ -37,6 +37,7 @@ public class EnemyBehaviorPresenter : MonoBehaviour
 
     public void Charge()
     {
+        EffectManager.Instance.InstancetiateEff(this.transform.position,Effects.Charge_01);
         _behaviorModel.ResetTimer();
         _behaviorView.ActiveWeakPoint(true);
         SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Enemy_Charge");
