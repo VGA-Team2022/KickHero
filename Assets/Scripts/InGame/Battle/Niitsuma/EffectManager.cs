@@ -62,5 +62,7 @@ public enum Effects
     Resurrection,
     StageClear,
     Vanish,
-    Guard
+    Guard,
+    Charge_01,
+    Charge_02,
 }

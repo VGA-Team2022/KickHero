@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8578910488748484791
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8578910488748484789}
+  - component: {fileID: 8578910488748484790}
+  m_Layer: 0
+  m_Name: EffectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8578910488748484789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8578910488748484791}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8578910488748484790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8578910488748484791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 291f2c6f24076884a81b854cd64bcbcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effects:
+  - Prefab: {fileID: 810060290850169373, guid: 530bbd676193ddd418caad93cbe0537f, type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 5
+    Name: 0
+  - Prefab: {fileID: 1249407622899787395, guid: b559aeb8077848e4cab54987739f90a2,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 5
+    Name: 1
+  - Prefab: {fileID: 4382414491374941258, guid: 3b7b1f2e1d693184ba17e6dcde41607f,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 2
+    Name: 2
+  - Prefab: {fileID: 6060621140790580526, guid: f100af7b5a0a2104daf7fc1481fbd16c,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 3
+    Name: 3
+  - Prefab: {fileID: 2869459140013905650, guid: 9992ed536786c22498d8b6564e05cf33,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 1
+    Name: 4
+  - Prefab: {fileID: 6249342274960117643, guid: 522ca0e2f787f0b41a1fb51770858e53,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 3
+    Name: 5
+  - Prefab: {fileID: 8826565105264531048, guid: 2a5115d7a8fe850408ba529b22b15ace,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 3
+    Name: 6
+  - Prefab: {fileID: 9022414812127187620, guid: 7ae8ec5f6e3ff5b4e966c3177f5643d1,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 2
+    Name: 7
+  - Prefab: {fileID: 4110067848486552950, guid: 1e727b526eb68954295437328e65faf9,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 1
+    Name: 8
+  - Prefab: {fileID: 6392819143997146997, guid: 87616a6ecf7f40644aa00ac3eafc8398,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 2
+    Name: 9
+  - Prefab: {fileID: 9127582014624926755, guid: 411c0e9a6e6924a4eb875f02ec853b4a,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 3
+    Name: 10
+  - Prefab: {fileID: 672678165119677016, guid: 51930e0aaecc10543885764c0f8d90f3, type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 3
+    Name: 11
+  - Prefab: {fileID: -5057485075919456319, guid: add43787e9ef19e4497e343cf0f1e2cd,
+      type: 3}
+    Parent: {fileID: 0}
+    CapacitySize: 3
+    Name: 12
