@@ -444,7 +444,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 215277381}
     - target: {fileID: 3358160994064228806, guid: 06470789ed502f54a9318a3df6c44d11,
         type: 3}
       propertyPath: _startErea.x
@@ -1164,7 +1164,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 215277381}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59a50864d318eb84d8d49b9b1a7aea02, type: 3}
 --- !u!224 &177272757 stripped
@@ -3095,7 +3095,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 475363661}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.7617998, y: -0.90999985, z: -16.5}
+  m_LocalPosition: {x: 0.7617998, y: -0.90999985, z: -16.25}
   m_LocalScale: {x: 2.0033453, y: 1, z: 1.7615}
   m_ConstrainProportionsScale: 0
   m_Children: []
