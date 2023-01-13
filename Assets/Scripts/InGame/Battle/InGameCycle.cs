@@ -59,7 +59,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
 
     private void Start()
     {
-        SoundManagerPresenter.Instance.CriAtomBGMPlay("BGM_Battle");
+        
     }
 
     private void Update()
@@ -79,14 +79,17 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
 
     private class StartState : State
     {
-        protected override void OnEnter(State prevState)
+        protected override async void OnEnter(State prevState)
         {
-            
+            await UniTask.Delay(TimeSpan.FromSeconds(3f));
+            _stateMachine.Owner._enemy.Threat();
+            SoundManagerPresenter.Instance.CriAtomBGMPlay("BGM_Battle");
+            _stateMachine.Dispatch(EventEnum.GameStart);
             Debug.Log("スタートステートに入った");
         }
         protected override void OnUpdate()
         {
-            _stateMachine.Dispatch(EventEnum.GameStart);
+            
         }
         protected override void OnExit(State nextState)
         {

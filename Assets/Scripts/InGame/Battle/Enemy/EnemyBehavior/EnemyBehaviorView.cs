@@ -39,6 +39,11 @@ public class EnemyBehaviorView : MonoBehaviour
         _animator.SetTrigger(AnimationName.EnemyAnimationNames.Charge);
     }
 
+    public void PlayThreatAnimation()
+    {
+        _animator.SetTrigger(AnimationName.EnemyAnimationNames.Threat);
+    }
+
     public async UniTask PlayDamageAnimation()
     {
         _animator.SetTrigger(AnimationName.EnemyAnimationNames.HitRight);

@@ -41,6 +41,11 @@ public class EnemyBehaviorPresenter : MonoBehaviour
         _behaviorView.PlayChargeAnimation();       
     }
 
+    public void Threat()
+    {
+        _behaviorView.PlayThreatAnimation();
+    }
+
     public bool IsTriggerWeakPoint()
     {
         return _behaviorView.IsTriggerWeakPoint();

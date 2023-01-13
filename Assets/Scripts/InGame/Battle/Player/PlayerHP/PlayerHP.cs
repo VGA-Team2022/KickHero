@@ -11,6 +11,9 @@ public class PlayerHP : MonoBehaviour
     PlayerHPGauge _hpGauge;
     PlayerHPModel _hpModel;
 
+    [SerializeField]
+    Animator _animator;
+
     bool _isDead = false;
     public bool IsDead => _isDead;
 
@@ -37,6 +40,7 @@ public class PlayerHP : MonoBehaviour
     /// <param name="value">‘«‚³‚ê‚é’l</param>
     public void AddHPValue(int value)
     {
+        _animator.SetTrigger("Damage");
         _hpModel.AddPlayerHP(value);
     }
 }
