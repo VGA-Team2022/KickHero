@@ -5940,7 +5940,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1857318737}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59a50864d318eb84d8d49b9b1a7aea02, type: 3}
 --- !u!224 &1387022060 stripped
@@ -6650,7 +6650,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1857318737}
     - target: {fileID: 3358160994064228806, guid: 06470789ed502f54a9318a3df6c44d11,
         type: 3}
       propertyPath: _startErea.x

@@ -5945,7 +5945,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1460812020}
     - target: {fileID: 3358160994064228806, guid: 06470789ed502f54a9318a3df6c44d11,
         type: 3}
       propertyPath: _startErea.x
