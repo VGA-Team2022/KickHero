@@ -51,16 +51,17 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         //最初のStateを設定
         _stateMachine.StartSetUp<StartState>();
         _player = new Player();
-        _enemy = new Enemy( _player);
+        _enemy = new Enemy(_player);
         _player.InitUltimate(_enemy);
 
         _resultPanel = GameObject.Find("ResultCanvas");
-        _resultPanel?.SetActive(false);       
+        _resultPanel?.SetActive(false);
     }
 
     private void Start()
     {
-        
+        SoundManagerPresenter.Instance.CriAtomStop();
+        SoundManagerPresenter.Instance.CriAtomMEPlay("ME_Battle");
     }
 
     private void Update()
@@ -89,6 +90,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         {
             await UniTask.Delay(TimeSpan.FromSeconds(3f));
             _stateMachine.Owner._enemy.Threat();
+            SoundManagerPresenter.Instance.CriAtomStop();
             SoundManagerPresenter.Instance.CriAtomBGMPlay("BGM_Battle");
             SoundManagerPresenter.Instance.CriAtomVoicePlay("Voice_Start");
             _stateMachine.Dispatch(EventEnum.GameStart);
@@ -96,7 +98,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         }
         protected override void OnUpdate()
         {
-            
+
         }
         protected override void OnExit(State nextState)
         {
@@ -135,12 +137,12 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         protected override void OnEnter(State prevState)
         {
             Debug.Log("NormalAttackChargeStateに入った");
-            _stateMachine.Owner._enemy.Charge();        
+            _stateMachine.Owner._enemy.Charge();
         }
 
         protected override async void OnUpdate()
         {
-            if(_stateMachine.Owner._player.IsUltimate)
+            if (_stateMachine.Owner._player.IsUltimate)
             {
                 return;
             }
@@ -148,14 +150,14 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
             {
                 _stateMachine.Dispatch(EventEnum.GameOver);
             }
-            else if(_stateMachine.Owner._enemy.IsTriggerWeakPoint())
+            else if (_stateMachine.Owner._enemy.IsTriggerWeakPoint())
             {
                 SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Hit");
                 await _stateMachine.Owner._enemy.Damage();
                 _stateMachine.Owner._player.AddUltimateGauge(InGameConst.ALTIMATE_GAUGE_POINT);
                 _stateMachine.Dispatch(EventEnum.Idle);
             }
-            else if(_stateMachine.Owner._enemy.IsChargeTimeUp())
+            else if (_stateMachine.Owner._enemy.IsChargeTimeUp())
             {
                 _stateMachine.Dispatch(EventEnum.Attack);
             }
@@ -174,7 +176,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     {
         protected override async void OnEnter(State prevState)
         {
-            Debug.Log("NormalAttackステートに入った");      
+            Debug.Log("NormalAttackステートに入った");
             await _stateMachine.Owner._enemy.Attack(_stateMachine.Owner._player);
             if (_stateMachine.Owner._player.IsDead)
             {
@@ -234,8 +236,17 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     {
         protected override void OnEnter(State prevState)
         {
-            _stateMachine.Owner._resultPanel?.SetActive(true);
+            _stateMachine.Owner._player.IsEndClear = true;
+            TimeLineController.Instance.EventPlay(TimeLineState.Clear);
+            
             Debug.Log("リザルトステートに入った");
+        }
+        protected override void OnUpdate()
+        {
+            if (_stateMachine.Owner._player.IsEndClear == false)
+            {
+                _stateMachine.Owner._resultPanel?.SetActive(true);
+            }        
         }
         protected override void OnExit(State nextState)
         {

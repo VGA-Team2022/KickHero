@@ -13,6 +13,7 @@ public class MenuScene : AbstructScene
         {
             _sceneOperator = new SceneOperator(_startClearedStages);
         }
+        SoundManagerPresenter.Instance.CriAtomBGMPlay("BGM_Stage");
     }
     public override async UniTask Load()
     {
