@@ -17,6 +17,8 @@ public class UltimatePresenter : MonoBehaviour
     bool _isUltimate = false;
     public bool IsUltimate => _isUltimate;
 
+    public bool IsClearTimeline { get => _isClearTimeline; set => _isClearTimeline = value; }
+
     IDamage _enemy;
 
     public void Init(IDamage enemy)
@@ -50,5 +52,13 @@ public class UltimatePresenter : MonoBehaviour
     public void ChangeValue(int value)
     {
         _ultimateModel.ChangeUltimateValue(value);
+    }
+
+    bool _isClearTimeline = false;
+
+
+    public void EndClearTimeLine()
+    {
+        IsClearTimeline = false;
     }
 }

@@ -53,9 +53,10 @@ public class SoundManagerPresenter : DDOLSingleton<SoundManagerPresenter>
     {
         _model.CriAtomVoicePlay(cueName);
     }
-    public void CriAtomStop(CriAtomSource cri)
+    public void CriAtomStop()
     {
-        _model.CriAtomStop(cri);
+        _model.CriAtomStop(_atomBGMSource);
+        _model.CriAtomStop(_atomSESource);
     }
 
     public void SetVolume(CriAtomSource cri)

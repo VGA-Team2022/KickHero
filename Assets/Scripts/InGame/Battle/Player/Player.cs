@@ -16,6 +16,7 @@ public class Player : IDamage
 
     public bool IsUltimate => _ultimatePresenter.IsUltimate;
 
+    public bool IsEndClear { get => _ultimatePresenter.IsClearTimeline; set => _ultimatePresenter.IsClearTimeline = value; }
     public Player()
     {
         Initialize();
