@@ -78,6 +78,11 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         _isClearedStage = clearedStage;
     }
 
+    public void SetCurrentStage(int index)
+    {
+        throw new NotImplementedException();
+    }
+
     private class StartState : State
     {
         protected override async void OnEnter(State prevState)

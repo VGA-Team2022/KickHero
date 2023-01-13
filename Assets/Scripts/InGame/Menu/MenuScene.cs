@@ -18,7 +18,7 @@ public class MenuScene : AbstructScene
         {
             _sceneOperator = new SceneOperator(_startClearedStages);
         }
-        _button.onClick.AddListener(() => { LoadScene(_sceneName, _sceneOperator.IsClearedStages); });
+        _button.onClick.AddListener(async () => { await LoadScene(_sceneName, _sceneOperator.IsClearedStages); });
     }
     public override async UniTask Load()
     {
@@ -27,7 +27,11 @@ public class MenuScene : AbstructScene
 
     public override void Open()
     {
-        
+        Debug.Log($"”z—ñ’·{ClearedStages.Length}");
+        foreach (var i in ClearedStages)
+        {
+            Debug.Log(i);
+        }
     }
 
     public override async UniTask UnLoad()
