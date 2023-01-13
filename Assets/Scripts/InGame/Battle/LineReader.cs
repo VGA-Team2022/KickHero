@@ -178,6 +178,7 @@ public class LineReader : MonoBehaviour
     void DrawFinish()
     {
         _animator.SetTrigger("Attack");
+        SoundManagerPresenter.Instance.CriAtomVoicePlay("Voice_Kick");
         _isDrawing = false;
         BallRoute route = RouteConvert();
         if (route != null)

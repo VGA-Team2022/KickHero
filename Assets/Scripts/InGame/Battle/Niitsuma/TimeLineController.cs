@@ -6,6 +6,7 @@ using UnityEngine.Timeline;
 public class TimeLineController : MonoBehaviour
 {
     PlayableDirector _currentDirector;
+    public PlayableDirector CurrentDirector => _currentDirector;
 
     [SerializeField] PlayableDirector _startTimeLine;
     [SerializeField] PlayableDirector _clearTimeLine;

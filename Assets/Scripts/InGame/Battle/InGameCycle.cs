@@ -52,6 +52,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         _stateMachine.StartSetUp<StartState>();
         _player = new Player();
         _enemy = new Enemy( _player);
+        _player.InitUltimate(_enemy);
 
         _resultPanel = GameObject.Find("ResultCanvas");
         _resultPanel?.SetActive(false);       
@@ -84,6 +85,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
             await UniTask.Delay(TimeSpan.FromSeconds(3f));
             _stateMachine.Owner._enemy.Threat();
             SoundManagerPresenter.Instance.CriAtomBGMPlay("BGM_Battle");
+            SoundManagerPresenter.Instance.CriAtomVoicePlay("Voice_Start");
             _stateMachine.Dispatch(EventEnum.GameStart);
             Debug.Log("スタートステートに入った");
         }
@@ -107,6 +109,10 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         }
         protected override void OnUpdate()
         {
+            if (_stateMachine.Owner._player.IsUltimate)
+            {
+                return;
+            }
             _stateMachine.Owner._player.OnUpdate();
             if (_stateMachine.Owner._enemy.IsDead)
             {
@@ -128,7 +134,11 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
         }
 
         protected override async void OnUpdate()
-        {                      
+        {
+            if(_stateMachine.Owner._player.IsUltimate)
+            {
+                return;
+            }
             if (_stateMachine.Owner._enemy.IsDead)
             {
                 _stateMachine.Dispatch(EventEnum.GameOver);
@@ -137,6 +147,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
             {
                 SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Hit");
                 await _stateMachine.Owner._enemy.Damage();
+                _stateMachine.Owner._player.AddUltimateGauge(InGameConst.ALTIMATE_GAUGE_POINT);
                 _stateMachine.Dispatch(EventEnum.Idle);
             }
             else if(_stateMachine.Owner._enemy.IsChargeTimeUp())
@@ -158,8 +169,7 @@ public class InGameCycle : MonoBehaviour, IReceivableGameData
     {
         protected override async void OnEnter(State prevState)
         {
-            Debug.Log("NormalAttackステートに入った");
-            SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Nurikabe_Attack");
+            Debug.Log("NormalAttackステートに入った");      
             await _stateMachine.Owner._enemy.Attack(_stateMachine.Owner._player);
             if (_stateMachine.Owner._player.IsDead)
             {

@@ -33,6 +33,7 @@ public class UltimateView : MonoBehaviour
         if (currentValue >= maxValue)
         {
             _ulitimateGauge.interactable = true;
+            SoundManagerPresenter.Instance.CriAtomVoicePlay("Voice_Charge");
             _ultimateLamp.image.color = Color.white;
         }
         else

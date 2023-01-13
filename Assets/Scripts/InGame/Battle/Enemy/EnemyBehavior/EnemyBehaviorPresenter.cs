@@ -18,7 +18,8 @@ public class EnemyBehaviorPresenter : MonoBehaviour
     float _chargeTime = 3f;
     [SerializeField]
     float _stanTime = 3f;
-
+    [SerializeField]
+    string _attackSEKey = "SE_Nurikabe_Attack";
 
     public void Init()
     {
@@ -38,6 +39,7 @@ public class EnemyBehaviorPresenter : MonoBehaviour
     {
         _behaviorModel.ResetTimer();
         _behaviorView.ActiveWeakPoint(true);
+        SoundManagerPresenter.Instance.CriAtomSEPlay("SE_Enemy_Charge");
         _behaviorView.PlayChargeAnimation();       
     }
 
@@ -64,6 +66,7 @@ public class EnemyBehaviorPresenter : MonoBehaviour
     public async UniTask Attack(IDamage damage)
     {
         await _behaviorView.PlayAttackAnimation();
+        SoundManagerPresenter.Instance.CriAtomSEPlay(_attackSEKey);
         _behaviorModel.Attack(damage);
     }
 
