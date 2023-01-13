@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/InGame.unity
     guid: 86539028d8dc931459801a6bf7dce76a
+  - enabled: 1
+    path: Assets/Scenes/Stage/Stage_06.unity
+    guid: a1361739d39f62347835ed58d14d86ab
+  - enabled: 1
+    path: Assets/Scenes/Stage/Stage_01.unity
+    guid: d27d686b3e2d8a448aa71386fa8c764e
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 04a2cd281d3ec5b41b5ba68bef6a8dca,
       type: 2}

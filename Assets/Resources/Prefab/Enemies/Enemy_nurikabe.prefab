@@ -114,7 +114,7 @@ Animator:
   m_GameObject: {fileID: 283026183798519988}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: aad6b058e70b1cc44a7c1ede0680a035, type: 2}
+  m_Controller: {fileID: 9100000, guid: c97144c1564cbde46bb82c0dae48d43d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -140,8 +140,7 @@ MonoBehaviour:
   _attack: 1
   _chargeTime: 3
   _stanTime: 3
-  _enemyHp: 20
-  _attackTimeLimit: 5
+  _attackSEKey: SE_Nurikabe_Attack
 --- !u!114 &283026183798519984
 MonoBehaviour:
   m_ObjectHideFlags: 0

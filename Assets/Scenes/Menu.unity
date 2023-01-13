@@ -340,7 +340,7 @@ MonoBehaviour:
   _stageImage: {fileID: 606310399}
   _startButton: {fileID: 1737089949}
   _imagePrefab: {fileID: 21300000, guid: d756150b51ebebb4e9b173621ee3c809, type: 3}
-  _sceneName: InGame
+  _sceneName: Stage_06
 --- !u!1 &119059525
 GameObject:
   m_ObjectHideFlags: 0
@@ -1534,7 +1534,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -11.5338745}
+  m_AnchoredPosition: {x: 0, y: -11.533936}
   m_SizeDelta: {x: 0, y: -715.0988}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &939128126
@@ -1978,7 +1978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c018c05bb515d72418b7508d65e4421e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startClearedStages: 010101000000
+  _startClearedStages: 010101010101
 --- !u!1 &1160234425
 GameObject:
   m_ObjectHideFlags: 0
