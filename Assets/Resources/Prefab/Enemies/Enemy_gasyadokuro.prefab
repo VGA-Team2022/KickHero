@@ -2785,8 +2785,7 @@ MonoBehaviour:
   _attack: 1
   _chargeTime: 3
   _stanTime: 3
-  _enemyHp: 100
-  _attackTimeLimit: 5
+  _attackSEKey: SE_Nurikabe_Attack
 --- !u!114 &-5761176986125627288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2925,6 +2924,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 712952030707978135, guid: c58886071c9613241a6a89860719c5fa,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 712952030707978135, guid: c58886071c9613241a6a89860719c5fa,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 712952030707978135, guid: c58886071c9613241a6a89860719c5fa,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1920
       objectReference: {fileID: 0}
     - target: {fileID: 712952030707978137, guid: c58886071c9613241a6a89860719c5fa,
         type: 3}

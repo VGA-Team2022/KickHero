@@ -909,7 +909,7 @@ MonoBehaviour:
   _stageImage: {fileID: 606310399}
   _startButton: {fileID: 1737089949}
   _imagePrefab: {fileID: 21300000, guid: db093606d58babc4dbe0306a6d239d6e, type: 3}
-  _sceneName: InGame
+  _sceneName: Stage_01
 --- !u!1 &466855509
 GameObject:
   m_ObjectHideFlags: 0
@@ -1742,10 +1742,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2522,7 +2522,7 @@ MonoBehaviour:
   _stageImage: {fileID: 606310399}
   _startButton: {fileID: 1737089949}
   _imagePrefab: {fileID: 21300000, guid: 468362d71856758469548dfb8f1c4f43, type: 3}
-  _sceneName: InGame
+  _sceneName: Stage_02
 --- !u!1 &1579920930
 GameObject:
   m_ObjectHideFlags: 0
@@ -2664,7 +2664,7 @@ MonoBehaviour:
   _stageImage: {fileID: 606310399}
   _startButton: {fileID: 1737089949}
   _imagePrefab: {fileID: 21300000, guid: b90e05bd4ed02684c9c7526255b4582b, type: 3}
-  _sceneName: InGame
+  _sceneName: Stage_03
 --- !u!1 &1737089944
 GameObject:
   m_ObjectHideFlags: 0
@@ -3016,7 +3016,7 @@ MonoBehaviour:
   _stageImage: {fileID: 606310399}
   _startButton: {fileID: 1737089949}
   _imagePrefab: {fileID: 21300000, guid: 37a5eab8b02072541af2299555e4673c, type: 3}
-  _sceneName: InGame
+  _sceneName: Stage_04
 --- !u!1 &1986480213
 GameObject:
   m_ObjectHideFlags: 0
@@ -3314,7 +3314,7 @@ MonoBehaviour:
   _stageImage: {fileID: 606310399}
   _startButton: {fileID: 1737089949}
   _imagePrefab: {fileID: 21300000, guid: 80f4b2842f9a71547928d8da7377c34e, type: 3}
-  _sceneName: InGame
+  _sceneName: Stage_05
 --- !u!1 &2144963209
 GameObject:
   m_ObjectHideFlags: 0
